@@ -1,0 +1,7 @@
+{
+    "name": "root/application",
+    "require-dev": {
+        "phpunit/phpunit": "^8.1"
+    },
+    "require": {}
+}
