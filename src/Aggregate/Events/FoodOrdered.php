@@ -12,4 +12,10 @@ final class FoodOrdered
 
     /** @var OrderedItem[] */
     public $items;
+
+    public function __construct($tabId, array $items)
+    {
+        $this->tabId = $tabId;
+        $this->items = $items;
+    }
 }

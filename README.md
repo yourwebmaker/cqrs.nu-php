@@ -19,3 +19,4 @@ marked as served or cancelled first.
 - [ ] Apply doctrine code standards
 - [ ] Mutation testing
 - [ ] Add to Scrutinizer
+- [ ] Type-hint all the constructors

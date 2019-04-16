@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cafe\Aggregate;
 
 use Cafe\Aggregate\Events\DrinksOrdered;
+use Cafe\Aggregate\Events\FoodOrdered;
 use Cafe\Aggregate\Events\TabOpened;
 use PHPUnit\Framework\TestCase;
 
@@ -24,11 +25,7 @@ class TabTests extends TestCase
         $this->drink1 = new OrderedItem('d-1', 'Vodka', true, 5.00);
         $this->drink2 = new OrderedItem('d-2', 'Beer', true, 3.00);
 
-        /*$this->food1 = new OrderedItem();
-        $this->food1->description = 'Pasta';
-        $this->food1->isDrink = false;
-        $this->food1->menuNumber = 'f-2';
-        $this->food1->price = 10.00;*/
+        $this->food1 = new OrderedItem('f-2', 'Pasta', false, 10.00);
     }
 
     public function testOpenTab() : void
@@ -61,7 +58,14 @@ class TabTests extends TestCase
     {
         $tab = Tab::open($this->tabId, $this->testTable, $this->testWaiter);
         $tab->order([$this->food1]);
-        //assert food ordered
+
+        self::assertEquals(
+            [
+                new TabOpened($this->tabId, $this->testTable, $this->testWaiter),
+                new FoodOrdered($this->tabId, [$this->food1]),
+            ],
+            $tab->getRecordedEvents()
+        );
     }
 
     public function testCanPlaceFoodAndDrinkOrder() : void
