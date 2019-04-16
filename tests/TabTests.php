@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Cafe\Aggregate;
 
+use Cafe\Aggregate\Exception\DrinksNotOutstanding;
 use Cafe\Aggregate\Events\DrinksOrdered;
+use Cafe\Aggregate\Events\DrinksServed;
 use Cafe\Aggregate\Events\FoodOrdered;
 use Cafe\Aggregate\Events\TabOpened;
 use PHPUnit\Framework\TestCase;
@@ -87,31 +89,33 @@ class TabTests extends TestCase
     {
         $tab = Tab::open($this->tabId, $this->testTable, $this->testWaiter);
         $tab->order([$this->drink1, $this->drink2]);
-        $tab->markDrinksServed(['d-1', 'd2']);
+        $menuNumbers = [$this->drink1->menuNumber, $this->drink2->menuNumber];
+        $tab->markDrinksServed($menuNumbers);
 
-        //assert DrinksServed("d-1"), DrinksServed("d-2") are recorded
+        self::assertEquals(
+            [
+                new TabOpened($this->tabId, $this->testTable, $this->testWaiter),
+                new DrinksOrdered($this->tabId, [$this->drink1, $this->drink2]),
+                new DrinksServed($this->tabId, $menuNumbers),
+            ],
+            $tab->getRecordedEvents()
+        );
     }
 
-    /**
-     * You can not mark a drink as served if it wasn't ordered in the first place
-     */
     public function testCanNotServeAnUnorderedDrink() : void
     {
+        $this->expectException(DrinksNotOutstanding::class);
         $tab = Tab::open($this->tabId, $this->testTable, $this->testWaiter);
         $tab->order([$this->drink1]);
-        $tab->markDrinksServed(['d2']);
-
-        //assert DrinksNotOutstanding is thrown
+        $tab->markDrinksServed([$this->drink2->menuNumber]);
     }
 
-    /**
-     * You can not mark a drink as served if you already served it
-     */
     public function testCanNotServeAnOrderedDrinkTwice() : void
     {
+        $this->expectException(DrinksNotOutstanding::class);
         $tab = Tab::open($this->tabId, $this->testTable, $this->testWaiter);
         $tab->order([$this->drink1]);
-        $tab->markDrinksServed(['d1']);
-        $tab->markDrinksServed(['d1']);
+        $tab->markDrinksServed([$this->drink1->menuNumber, $this->drink2->menuNumber]);
+        //$tab->markDrinksServed([$this->drink1->menuNumber]);
     }
 }

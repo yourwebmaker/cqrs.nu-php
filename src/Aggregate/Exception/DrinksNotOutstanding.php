@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Aggregate\Exception;
+namespace Cafe\Aggregate\Exception;
 
 use DomainException;
 

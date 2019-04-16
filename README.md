@@ -23,3 +23,5 @@ marked as served or cancelled first.
 - [ ] Persistence using Doctrine
 - [ ] Persistence using ES
 - [ ] Allow to Amend order
+- [ ] Installation and run guide
+- [ ] Use collections Instead of arrays (check .net example)

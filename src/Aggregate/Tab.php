@@ -8,6 +8,7 @@ use Cafe\Aggregate\Events\TabOpened;
 use Cafe\Aggregate\Events\DrinksOrdered;
 use Cafe\Aggregate\Events\DrinksServed;
 use Cafe\Aggregate\Events\FoodOrdered;
+use Cafe\Aggregate\Exception\DrinksNotOutstanding;
 
 final class Tab extends BaseAggregate
 {
@@ -38,7 +39,15 @@ final class Tab extends BaseAggregate
         });
 
         if ($drinks) {
-            $this->recordEvent(new DrinksOrdered($this->tabId, array_values($drinks)));
+
+            $itemsDrinks = array_values($drinks);
+
+            /** @var OrderedItem $drink */
+            foreach ($itemsDrinks as $drink) {
+                $this->outstandingDrinks[$drink->menuNumber] = $drink;
+            }
+
+            $this->recordEvent(new DrinksOrdered($this->tabId, $itemsDrinks));
         }
 
         $food = array_filter($items, static function (OrderedItem $item) {
@@ -55,10 +64,18 @@ final class Tab extends BaseAggregate
      */
     public function markDrinksServed(array $menuNumbers) : void
     {
-        $event = new DrinksServed();
-        $event->tabId = $this->tabId;
-        $event->menuNumbers = $menuNumbers;
+        foreach ($menuNumbers as $menuNumber) {
+            if (!isset($this->outstandingDrinks[$menuNumber])) {
+                throw new DrinksNotOutstanding("Trying to serve drink '$menuNumber' but it was not ordered yet");
+            }
+        }
 
+        foreach ($menuNumbers as $menuNumber) {
+            //todo, probably there is a bug here
+            unset($this->outstandingDrinks[$menuNumber]);
+        }
+
+        $event = new DrinksServed($this->tabId, $menuNumbers);
         $this->recordEvent($event);
     }
 }
