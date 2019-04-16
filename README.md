@@ -11,3 +11,8 @@ served to and accepted by them.
 Finally, the visitors close the tab by paying what is owed, possibly with a tip for the serving staff. 
 Upon closing a tab, it must be paid for in full. A tab with unserved items cannot be closed unless the items are either 
 marked as served or cancelled first.
+
+### Todo
+- [ ] Move classes to Cafe namespace
+- [ ] Create domain events assertion
+- [ ] Events must use constructors
