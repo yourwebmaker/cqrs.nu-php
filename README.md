@@ -16,3 +16,6 @@ marked as served or cancelled first.
 - [ ] Move classes to Cafe namespace
 - [ ] Create domain events assertion
 - [ ] Events must use constructors
+- [ ] Apply doctrine code standards
+- [ ] Mutation testing
+- [ ] Add to Scrutinizer

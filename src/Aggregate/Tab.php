@@ -14,7 +14,6 @@ final class Tab extends BaseAggregate
     public string $tabId;
     private array $outstandingDrinks = [];
 
-
     private function __construct()
     {
     }
@@ -34,15 +33,22 @@ final class Tab extends BaseAggregate
      */
     public function order(array $items) : void
     {
-        foreach ($items as $item) {
-            if ($item->isDrink) {
-                $this->recordEvent(new DrinksOrdered($this->tabId, $item));
-            } else {
-                //do not trigger one event per item, group them instead
-                $this->recordEvent(new FoodOrdered($this->tabId, $item));
-            }
+        $drinks = array_filter($items, function (OrderedItem $item) {
+            return $item->isDrink;
+        });
+
+        if ($drinks) {
+            $this->recordEvent(new DrinksOrdered($this->tabId, $drinks));
         }
 
+//        foreach ($items as $item) {
+//            if ($item->isDrink) {
+//                $this->recordEvent(new DrinksOrdered($this->tabId, $item));
+//            } else {
+//                //do not trigger one event per item, group them instead
+//                $this->recordEvent(new FoodOrdered($this->tabId, $item));
+//            }
+//        }
     }
 
     /**
