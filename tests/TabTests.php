@@ -71,10 +71,16 @@ class TabTests extends TestCase
     public function testCanPlaceFoodAndDrinkOrder() : void
     {
         $tab = Tab::open($this->tabId, $this->testTable, $this->testWaiter);
-        $tab->order([$this->food1]);
+        $tab->order([$this->food1, $this->drink2]);
 
-        // assert food ordered
-        // assert drink ordered
+        self::assertEquals(
+            [
+                new TabOpened($this->tabId, $this->testTable, $this->testWaiter),
+                new DrinksOrdered($this->tabId, [$this->drink2]),
+                new FoodOrdered($this->tabId, [$this->food1]),
+            ],
+            $tab->getRecordedEvents()
+        );
     }
 
     public function testOrderedDrinksCanBeServed() : void

@@ -20,3 +20,6 @@ marked as served or cancelled first.
 - [ ] Mutation testing
 - [ ] Add to Scrutinizer
 - [ ] Type-hint all the constructors
+- [ ] Persistence using Doctrine
+- [ ] Persistence using ES
+- [ ] Allow to Amend order

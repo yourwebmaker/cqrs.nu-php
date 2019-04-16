@@ -38,7 +38,7 @@ final class Tab extends BaseAggregate
         });
 
         if ($drinks) {
-            $this->recordEvent(new DrinksOrdered($this->tabId, $drinks));
+            $this->recordEvent(new DrinksOrdered($this->tabId, array_values($drinks)));
         }
 
         $food = array_filter($items, static function (OrderedItem $item) {
@@ -46,7 +46,7 @@ final class Tab extends BaseAggregate
         });
 
         if ($food) {
-            $this->recordEvent(new FoodOrdered($this->tabId, $food));
+            $this->recordEvent(new FoodOrdered($this->tabId, array_values($food)));
         }
     }
 
