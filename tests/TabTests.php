@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cafe\Aggregate;
 
+use Cafe\Aggregate\Events\TabClosed;
 use Cafe\Aggregate\Exception\DrinksNotOutstanding;
 use Cafe\Aggregate\Events\DrinksOrdered;
 use Cafe\Aggregate\Events\DrinksServed;
@@ -105,6 +106,10 @@ class TabTests extends TestCase
     public function testCanNotServeAnUnorderedDrink() : void
     {
         $this->expectException(DrinksNotOutstanding::class);
+
+        //todo this message must be produced
+        //$this->expectExceptionMessage("Trying to serve drink '{$this->drink2->menuNumber}' but it was not ordered yet");
+
         $tab = Tab::open($this->tabId, $this->testTable, $this->testWaiter);
         $tab->order([$this->drink1]);
         $tab->markDrinksServed([$this->drink2->menuNumber]);
@@ -113,9 +118,36 @@ class TabTests extends TestCase
     public function testCanNotServeAnOrderedDrinkTwice() : void
     {
         $this->expectException(DrinksNotOutstanding::class);
+
+        //todo this message must be produced
+        //$this->expectExceptionMessage("Trying to serve drink '{$this->drink1->menuNumber}' but it was already served");
+
         $tab = Tab::open($this->tabId, $this->testTable, $this->testWaiter);
         $tab->order([$this->drink1]);
-        $tab->markDrinksServed([$this->drink1->menuNumber, $this->drink2->menuNumber]);
-        //$tab->markDrinksServed([$this->drink1->menuNumber]);
+        $tab->markDrinksServed([$this->drink1->menuNumber]);
+        $tab->markDrinksServed([$this->drink1->menuNumber]);
     }
+
+    public function testCanCloseTabWithTip() : void
+    {
+        $tab = Tab::open($this->tabId, $this->testTable, $this->testWaiter);
+        $tab->order([$this->drink2]);
+        $menuNumbers = [$this->drink2->menuNumber];
+        $tab->markDrinksServed($menuNumbers);
+        $tab->close($this->drink2->price + 0.5);
+
+        self::assertEquals(
+            [
+                new TabOpened($this->tabId, $this->testTable, $this->testWaiter),
+                new DrinksOrdered($this->tabId, [$this->drink2]),
+                new DrinksServed($this->tabId, $menuNumbers),
+                new TabClosed($this->tabId, $this->drink2->price + 0.5, $this->drink2->price, 0.5)
+            ],
+            $tab->getRecordedEvents()
+        );
+    }
+
+    //todo test sad paths
+    //Upon closing a tab, it must be paid for in full.
+    //A tab with unserved items cannot be closed unless the items are either marked as served or cancelled first.
 }

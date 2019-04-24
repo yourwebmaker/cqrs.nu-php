@@ -25,3 +25,5 @@ marked as served or cancelled first.
 - [ ] Allow to Amend order
 - [ ] Installation and run guide
 - [ ] Use collections Instead of arrays (check .net example)
+- [ ] Replace strings by GUID
+- [ ] Allow to serve food

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cafe\Aggregate;
 
+use Cafe\Aggregate\Events\TabClosed;
 use Cafe\Aggregate\Events\TabOpened;
 use Cafe\Aggregate\Events\DrinksOrdered;
 use Cafe\Aggregate\Events\DrinksServed;
@@ -14,6 +15,7 @@ final class Tab extends BaseAggregate
 {
     public string $tabId;
     private array $outstandingDrinks = [];
+    private float $itemsServedValue = 0.0;
 
     private function __construct()
     {
@@ -45,6 +47,7 @@ final class Tab extends BaseAggregate
             /** @var OrderedItem $drink */
             foreach ($itemsDrinks as $drink) {
                 $this->outstandingDrinks[$drink->menuNumber] = $drink;
+                $this->itemsServedValue += $drink->price;
             }
 
             $this->recordEvent(new DrinksOrdered($this->tabId, $itemsDrinks));
@@ -77,5 +80,11 @@ final class Tab extends BaseAggregate
 
         $event = new DrinksServed($this->tabId, $menuNumbers);
         $this->recordEvent($event);
+    }
+
+    public function close(float $amountPaid) : void
+    {
+        $tip = $amountPaid - $this->itemsServedValue;
+        $this->recordEvent(new TabClosed($this->tabId, $amountPaid, $this->itemsServedValue, $tip));
     }
 }
