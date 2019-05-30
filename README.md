@@ -23,7 +23,7 @@ marked as served or cancelled first.
 - [ ] Persistence using Doctrine
 - [ ] Persistence using ES
 - [ ] Allow to Amend order
-- [ ] Installation and run guide
-- [ ] Use collections Instead of arrays (check .net example)
+- [ ] Installation and run guide using docker
+- [ ] Use collections Instead of arrays (check .net example) (Psalm?)
 - [ ] Replace strings by GUID
 - [ ] Allow to serve food
