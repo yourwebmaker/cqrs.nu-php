@@ -10,6 +10,7 @@ use Cafe\Aggregate\Events\DrinksOrdered;
 use Cafe\Aggregate\Events\DrinksServed;
 use Cafe\Aggregate\Events\FoodOrdered;
 use Cafe\Aggregate\Events\TabOpened;
+use Cafe\Aggregate\Exception\TabNotPaidInFull;
 use PHPUnit\Framework\TestCase;
 
 class TabTests extends TestCase
@@ -147,7 +148,18 @@ class TabTests extends TestCase
         );
     }
 
-    //todo test sad paths
+    public function testCannotCloseTabWithoutPayingInFull() : void
+    {
+        $this->expectException(TabNotPaidInFull::class);
+
+        $tab = Tab::open($this->tabId, $this->testTable, $this->testWaiter);
+        $tab->order([$this->drink2]);
+        $menuNumbers = [$this->drink2->menuNumber];
+        $tab->markDrinksServed($menuNumbers);
+        $tab->close(2.00);
+    }
+
+
     //Upon closing a tab, it must be paid for in full.
     //A tab with unserved items cannot be closed unless the items are either marked as served or cancelled first.
 }
