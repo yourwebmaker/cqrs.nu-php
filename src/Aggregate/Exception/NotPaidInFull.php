@@ -6,7 +6,7 @@ namespace Cafe\Aggregate\Exception;
 
 use DomainException;
 
-final class TabNotPaidInFull extends DomainException
+final class NotPaidInFull extends DomainException
 {
     public static function withTotals(float $amountPaid, float $totalServed) : self
     {

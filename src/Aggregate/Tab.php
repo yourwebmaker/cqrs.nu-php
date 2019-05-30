@@ -10,7 +10,8 @@ use Cafe\Aggregate\Events\DrinksOrdered;
 use Cafe\Aggregate\Events\DrinksServed;
 use Cafe\Aggregate\Events\FoodOrdered;
 use Cafe\Aggregate\Exception\DrinksNotOutstanding;
-use Cafe\Aggregate\Exception\TabNotPaidInFull;
+use Cafe\Aggregate\Exception\ItemsNotServed;
+use Cafe\Aggregate\Exception\NotPaidInFull;
 
 final class Tab extends BaseAggregate
 {
@@ -88,8 +89,14 @@ final class Tab extends BaseAggregate
         $tip = $amountPaid - $this->itemsServedValue;
 
         if ($amountPaid < $this->itemsServedValue) {
-            throw TabNotPaidInFull::withTotals($amountPaid, $this->itemsServedValue);
+            throw NotPaidInFull::withTotals($amountPaid, $this->itemsServedValue);
         }
+
+        $notServed = count($this->outstandingDrinks);
+        if ($notServed > 0) {
+            throw ItemsNotServed::withTotals($notServed);
+        }
+
         $this->recordEvent(new TabClosed($this->tabId, $amountPaid, $this->itemsServedValue, $tip));
     }
 }
