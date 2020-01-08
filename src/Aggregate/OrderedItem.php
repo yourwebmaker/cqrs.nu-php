@@ -6,7 +6,7 @@ namespace Cafe\Aggregate;
 
 final class OrderedItem
 {
-    public string $menuNumber;
+    public int $menuNumber;
     public string $description;
     public bool $isDrink;
     public float $price;

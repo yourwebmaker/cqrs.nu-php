@@ -17,7 +17,8 @@ marked as served or cancelled first.
 - [ ] Allow to serve food
 - [ ] Allow to Amend order
 ##### Misc
-- [ ] Create domain events assertion
+- [ ] PHPStan
+- [ ] Create domain events assertion for counts, data types, etc
 - [ ] Events must use constructors
 - [ ] Apply doctrine code standards
 - [ ] Mutation testing
