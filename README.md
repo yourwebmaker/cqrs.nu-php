@@ -13,17 +13,19 @@ Upon closing a tab, it must be paid for in full. A tab with unserved items canno
 marked as served or cancelled first.
 
 ### Todo
-- [ ] Move classes to Cafe namespace
+##### Domain
+- [ ] Allow to serve food
+- [ ] Allow to Amend order
+##### Misc
 - [ ] Create domain events assertion
 - [ ] Events must use constructors
 - [ ] Apply doctrine code standards
 - [ ] Mutation testing
 - [ ] Add to Scrutinizer
 - [ ] Type-hint all the constructors
-- [ ] Persistence using Doctrine
-- [ ] Persistence using ES
-- [ ] Allow to Amend order
-- [ ] Installation and run guide using docker
 - [ ] Use collections Instead of arrays (check .net example) (Psalm?)
 - [ ] Replace strings by GUID
-- [ ] Allow to serve food
+##### Infra
+- [ ] Persistence using Doctrine
+- [ ] Persistence using ES
+- [ ] Installation and run guide using docker
