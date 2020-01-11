@@ -24,7 +24,7 @@ marked as served or cancelled first.
 - [ ] Mutation testing
 - [ ] Add to Scrutinizer
 - [ ] Type-hint all the constructors
-- [ ] Use collections Instead of arrays (check .net example) (Psalm?)
+- [ ] Use collections Instead of arrays (check .net example) (Psalm?), ArrayCollection on $items
 - [ ] Replace strings by GUID
 ##### Infra
 - [ ] Persistence using Doctrine

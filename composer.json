@@ -3,7 +3,9 @@
     "require-dev": {
         "phpunit/phpunit": "^8.1"
     },
-    "require": {},
+    "require": {
+        "doctrine/collections": "^1.6"
+    },
     "autoload": {
         "psr-4": {
             "Cafe\\" : "src/"
