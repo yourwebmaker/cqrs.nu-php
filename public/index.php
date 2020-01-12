@@ -15,14 +15,7 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-$routes = new RouteCollection();
-$routes->add('hello', new Route('/hello/{name}', [
-        '_controller' => function (Request $request) {
-            return new Response(
-                sprintf("Hello %s", $request->get('name'))
-            );
-        }]
-));
+$routes = require_once __DIR__ . '/../config/routes.php';
 
 $request = Request::createFromGlobals();
 
