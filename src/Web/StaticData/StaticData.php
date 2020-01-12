@@ -6,7 +6,7 @@ namespace Cafe\Web\StaticData;
 
 final class StaticData
 {
-    public function getMenu() : array
+    public static function getMenu() : array
     {
         return [
             new MenuItem(1, 'Coke', 1.50, true),
@@ -22,7 +22,7 @@ final class StaticData
         ];
     }
 
-    public function getWaitStaff() : array
+    public static function getWaitStaff() : array
     {
         return ['Jack', 'Lena', 'Pedro', 'Anastasia'];
     }
