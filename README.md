@@ -17,6 +17,9 @@ marked as served or cancelled first.
 - [ ] Allow to serve food
 - [ ] Allow to Amend order
 ##### Misc
+- [ ] Create interface for TabRepository
+- [ ] Use Symfony forms
+- [ ] Install container
 - [ ] PHPStan
 - [ ] Create domain events assertion for counts, data types, etc
 - [ ] Events must use constructors
