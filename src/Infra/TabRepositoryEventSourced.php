@@ -23,6 +23,7 @@ final class TabRepositoryEventSourced implements TabRepository
 
     public function get(string $tabId): Tab
     {
-        // TODO: Implement get() method.
+        $events = $this->eventStore->getEventsForAggregate($tabId);
+        return Tab::fromEvents($events);
     }
 }

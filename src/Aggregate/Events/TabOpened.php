@@ -17,6 +17,11 @@ final class TabOpened extends DomainEvent
         $this->waiter = $waiter;
     }
 
+    public static function fromPayload(array $payload) : self
+    {
+        return new self($payload['tabId'], $payload['tableNumber'], $payload['waiter']);
+    }
+
     public function aggregateId() : string
     {
         return $this->tabId;

@@ -10,6 +10,7 @@ abstract class DomainEvent
 {
     abstract public function aggregateId() : string;
     abstract public function name() : string;
+    abstract public static function fromPayload(array $payload) : self;
 
     public function payload() : string
     {

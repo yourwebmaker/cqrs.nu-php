@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cafe\Aggregate;
 
+use Cafe\Aggregate\Events\DomainEvent;
 use Cafe\Aggregate\Events\TabClosed;
 use Cafe\Aggregate\Events\TabOpened;
 use Cafe\Aggregate\Events\DrinksOrdered;
@@ -29,6 +30,20 @@ final class Tab extends BaseAggregate
         $tab->tabId = $tabId;
 
         $tab->recordEvent(new TabOpened($tabId, $tableNumber, $waiter));
+
+        return $tab;
+    }
+
+    /**
+     * @param DomainEvent[] $events
+     * @return Tab
+     */
+    public static function fromEvents(array $events): Tab
+    {
+        $tab = new self();
+        foreach ($events as $event) {
+            $tab->apply($event);
+        }
 
         return $tab;
     }
@@ -98,5 +113,14 @@ final class Tab extends BaseAggregate
         }
 
         $this->recordEvent(new TabClosed($this->tabId, $amountPaid, $this->itemsServedValue, $tip));
+    }
+
+    protected function apply(DomainEvent $event) : void
+    {
+        switch ($event) {
+            case $event instanceof TabOpened:
+                $this->tabId = $event->tabId;
+                break;
+        }
     }
 }

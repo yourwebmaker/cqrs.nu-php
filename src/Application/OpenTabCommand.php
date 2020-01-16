@@ -16,6 +16,4 @@ final class OpenTabCommand
         $this->tableNumber = $tableNumber;
         $this->waiter = $waiter;
     }
-
-
 }

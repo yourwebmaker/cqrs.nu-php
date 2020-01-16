@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Cafe\Aggregate;
 
-class BaseAggregate
+use Cafe\Aggregate\Events\DomainEvent;
+
+abstract class BaseAggregate
 {
     private $recordedEvents;
 
@@ -17,4 +19,6 @@ class BaseAggregate
     {
         return $this->recordedEvents;
     }
+
+    abstract protected function apply(DomainEvent $domainEvent) : void;
 }

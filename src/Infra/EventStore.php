@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Cafe\Infra;
 
 use Cafe\Aggregate\Events\DomainEvent;
+use Cafe\Aggregate\Events\TabOpened;
 use Doctrine\DBAL\Connection;
+use RuntimeException;
 
 final class EventStore
 {
@@ -16,9 +18,29 @@ final class EventStore
         $this->connection = $connection;
     }
 
+    /**
+     * @param string $tabId
+     * @return DomainEvent[]
+     */
     public function getEventsForAggregate(string $tabId) : array
     {
-        return [];
+        $sql = 'select * from tab_events where aggregate_id = :tabId';
+        $eventsFromDb = $this->connection->fetchAll($sql, ['tabId' => $tabId]);
+        $events = [];
+        foreach ($eventsFromDb as $item) {
+            $payload = json_decode($item['payload'], true, 512, JSON_THROW_ON_ERROR);
+            switch ($item['type']) {
+                case 'tab_opened':
+                    $event = TabOpened::fromPayload($payload);
+                    break;
+                default:
+                    throw new RuntimeException('Not possible to create domain event from ' . $item['type']);
+            }
+
+            $events[] = $event;
+        }
+
+        return $events;
     }
 
     /**

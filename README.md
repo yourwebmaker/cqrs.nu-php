@@ -17,6 +17,7 @@ marked as served or cancelled first.
 - [ ] Allow to serve food
 - [ ] Allow to Amend order
 ##### Misc
+- [ ] Make event store to use different types of persistence (redis, etc). Make it an interface
 - [ ] Unify config from 'migrations-db.php' and Connection
 - [ ] Describe the project like this one: https://github.com/CodelyTV/php-ddd-example
 - [ ] Form Validation
