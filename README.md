@@ -17,6 +17,7 @@ marked as served or cancelled first.
 - [ ] Allow to serve food
 - [ ] Allow to Amend order
 ##### Misc
+- [ ] Unify config from 'migrations-db.php' and Connection
 - [ ] Describe the project like this one: https://github.com/CodelyTV/php-ddd-example
 - [ ] Form Validation
 - [ ] Use Symfony forms
