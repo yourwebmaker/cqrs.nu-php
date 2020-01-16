@@ -17,7 +17,7 @@ marked as served or cancelled first.
 - [ ] Allow to serve food
 - [ ] Allow to Amend order
 ##### Misc
-- [ ] Create interface for TabRepository
+- [ ] Form Validation
 - [ ] Use Symfony forms
 - [ ] Install container
 - [ ] PHPStan

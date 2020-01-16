@@ -12,7 +12,8 @@
         "league/tactician": "^1.0",
         "ramsey/uuid": "^3.9",
         "doctrine/dbal": "^2.10",
-        "doctrine/migrations": "^2.2"
+        "doctrine/migrations": "^2.2",
+        "ext-json": "*"
     },
     "autoload": {
         "psr-4": {

@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Cafe\Web\Controller;
 
 use Cafe\Application\OpenTabCommand;
+use Cafe\Application\TabHandler;
+use Cafe\Infra\EventStore;
+use Cafe\Infra\TabRepositoryEventSourced;
 use League\Tactician\CommandBus;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -36,7 +39,17 @@ final class TabController
             $request->get('waiter')
         );
 
-        $this->commandBus->handle($command);
+        $conn = \Doctrine\DBAL\DriverManager::getConnection([
+            'driver' => 'pdo_sqlite',
+            'path' => __DIR__ . '/../../../data/db.sqlite'
+        ]);
+        $handler = new TabHandler(new TabRepositoryEventSourced(
+            new EventStore($conn)
+        ));
+
+        $handler->handleOpenTab($command);
+
+        //$this->commandBus->handle($command);
 
         return new RedirectResponse('/tab/order/' . $command->tableNumber);
     }
