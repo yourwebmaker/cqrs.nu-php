@@ -10,7 +10,9 @@
         "symfony/routing": "^5.0",
         "twig/twig": "^3.0",
         "league/tactician": "^1.0",
-        "ramsey/uuid": "^3.9"
+        "ramsey/uuid": "^3.9",
+        "doctrine/dbal": "^2.10",
+        "doctrine/migrations": "^2.2"
     },
     "autoload": {
         "psr-4": {
