@@ -1,6 +1,6 @@
 build:
   environment:
-    php: 7.4.2-dev
+    php: 7.4.1
   nodes:
     coverage:
       tests:
