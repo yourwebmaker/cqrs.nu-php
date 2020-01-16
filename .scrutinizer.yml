@@ -1,0 +1,27 @@
+build:
+  nodes:
+    coverage:
+      tests:
+        override:
+          - command: ./vendor/bin/phpunit tests --coverage-clover coverage
+            coverage:
+              file: coverage
+
+              # These formats are supported:
+              # clover, cobertura, jacoco, python-cc, ruby-cc, go-cc, lcov
+              format: clover
+checks:
+  php: true
+tools:
+  php_cs_fixer: false
+filter:
+  excluded_paths:
+    - 'tests/'
+    - 'public/'
+    - 'data/'
+    - 'vendor/'
+    - 'config/'
+    - 'views/'
+    - 'migrations/'
+    - 'migrations.php'
+    - 'migrations-db.php'
