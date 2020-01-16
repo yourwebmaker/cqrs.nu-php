@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cafe\Infra;
 
+use Cafe\Aggregate\Events\DomainEvent;
 use Doctrine\DBAL\Connection;
 
 final class EventStore
@@ -20,6 +21,9 @@ final class EventStore
         return [];
     }
 
+    /**
+     * @param DomainEvent[] $events
+     */
     public function appendEvents(array $events) : void
     {
         foreach ($events as $event) {
