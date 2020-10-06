@@ -18,11 +18,9 @@ final class TabController extends AbstractController
     public function open(Request $request): Response
     {
         $form = $this->createForm(OpenTabType::class);
-
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $command = $form->getData();
 
+        if ($form->isSubmitted() && $form->isValid()) {
             return $this->redirectToRoute('home');
         }
 
