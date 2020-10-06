@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cafe\ReadModel\ChefTodoList;
+namespace Cafe\Application\ReadModel\ChefTodoList;
 
 use Cafe\Domain\Tab\Events\FoodOrdered;
 use Cafe\Domain\Tab\Events\FoodPrepared;

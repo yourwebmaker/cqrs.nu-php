@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cafe\ReadModel\OpenTabs;
+namespace Cafe\Application\ReadModel\OpenTabs;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

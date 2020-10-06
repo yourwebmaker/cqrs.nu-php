@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cafe\ReadModel\OpenTabs;
+namespace Cafe\Application\ReadModel\OpenTabs;
 
 final class TableTodoItem
 {
