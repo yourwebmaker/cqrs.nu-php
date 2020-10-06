@@ -4,20 +4,17 @@ declare(strict_types=1);
 
 namespace Cafe\UserInterface\Web\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Environment;
+use Symfony\Component\Routing\Annotation\Route;
 
-final class HomeController
+final class HomeController extends AbstractController
 {
-    private Environment $twig;
-
-    public function __construct(Environment $twig)
-    {
-        $this->twig = $twig;
-    }
-
+    /**
+     * @Route(name="home", path="/")
+     */
     public function index() : Response
     {
-        return new Response($this->twig->render('index/index.twig'));
+        return $this->render('home/home.html.twig');
     }
 }
