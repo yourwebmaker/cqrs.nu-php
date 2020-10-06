@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cafe\UserInterface\Web\Controller;
 
+use Cafe\UserInterface\Web\Form\CloseTabType;
 use Cafe\UserInterface\Web\Form\OpenTabType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +26,23 @@ final class TabController extends AbstractController
         }
 
         return $this->render('tab/open.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route(path="tab/close", name="tab_close")
+     */
+    public function close(Request $request): Response
+    {
+        $form = $this->createForm(CloseTabType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('tab/close.html.twig', [
             'form' => $form->createView(),
         ]);
     }
