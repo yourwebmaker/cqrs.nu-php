@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cafe\Web\StaticData;
+namespace Cafe\UserInterface\Web\StaticData;
 
 final class StaticData
 {

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Cafe\Infra;
 
-use Cafe\Aggregate\Tab;
-use Cafe\Aggregate\TabRepository;
+use Cafe\Domain\Tab\Tab;
+use Cafe\Domain\Tab\TabRepository;
 
 final class TabRepositoryEventSourced implements TabRepository
 {

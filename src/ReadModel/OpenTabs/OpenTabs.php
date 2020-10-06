@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Cafe\ReadModel\OpenTabs;
 
-use Cafe\Aggregate\Events\DrinksOrdered;
-use Cafe\Aggregate\Events\DrinksServed;
-use Cafe\Aggregate\Events\FoodOrdered;
-use Cafe\Aggregate\Events\FoodPrepared;
-use Cafe\Aggregate\Events\FoodServed;
-use Cafe\Aggregate\Events\TabClosed;
-use Cafe\Aggregate\Events\TabOpened;
+use Cafe\Domain\Tab\Events\DrinksOrdered;
+use Cafe\Domain\Tab\Events\DrinksServed;
+use Cafe\Domain\Tab\Events\FoodOrdered;
+use Cafe\Domain\Tab\Events\FoodPrepared;
+use Cafe\Domain\Tab\Events\FoodServed;
+use Cafe\Domain\Tab\Events\TabClosed;
+use Cafe\Domain\Tab\Events\TabOpened;
 use Doctrine\Common\Collections\Collection;
 use DomainException;
 use RuntimeException;

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Cafe\ReadModel\ChefTodoList;
 
-use Cafe\Aggregate\Events\FoodOrdered;
-use Cafe\Aggregate\Events\FoodPrepared;
+use Cafe\Domain\Tab\Events\FoodOrdered;
+use Cafe\Domain\Tab\Events\FoodPrepared;
 
 final class ChefTodoList
 {

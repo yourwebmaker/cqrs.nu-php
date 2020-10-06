@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Cafe\Aggregate;
+namespace Cafe\Domain\Tab;
 
-use Cafe\Aggregate\Events\DomainEvent;
-use Cafe\Aggregate\Events\TabClosed;
-use Cafe\Aggregate\Events\TabOpened;
-use Cafe\Aggregate\Events\DrinksOrdered;
-use Cafe\Aggregate\Events\DrinksServed;
-use Cafe\Aggregate\Events\FoodOrdered;
-use Cafe\Aggregate\Exception\DrinksNotOutstanding;
-use Cafe\Aggregate\Exception\ItemsNotServed;
-use Cafe\Aggregate\Exception\NotPaidInFull;
+use Cafe\Domain\Tab\Events\DomainEvent;
+use Cafe\Domain\Tab\Events\TabClosed;
+use Cafe\Domain\Tab\Events\TabOpened;
+use Cafe\Domain\Tab\Events\DrinksOrdered;
+use Cafe\Domain\Tab\Events\DrinksServed;
+use Cafe\Domain\Tab\Events\FoodOrdered;
+use Cafe\Domain\Tab\Exception\DrinksNotOutstanding;
+use Cafe\Domain\Tab\Exception\ItemsNotServed;
+use Cafe\Domain\Tab\Exception\NotPaidInFull;
 
 final class Tab extends BaseAggregate
 {

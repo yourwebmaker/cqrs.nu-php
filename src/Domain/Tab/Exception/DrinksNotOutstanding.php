@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cafe\Aggregate\Exception;
+namespace Cafe\Domain\Tab\Exception;
 
 use DomainException;
 

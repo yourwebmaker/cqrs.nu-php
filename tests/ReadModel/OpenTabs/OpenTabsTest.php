@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Cafe\ReadModel\OpenTabs;
 
-use Cafe\Aggregate\Events\DrinksOrdered;
-use Cafe\Aggregate\Events\DrinksServed;
-use Cafe\Aggregate\Events\TabClosed;
-use Cafe\Aggregate\Events\TabOpened;
-use Cafe\Aggregate\OrderedItem;
+use Cafe\Domain\Tab\Events\DrinksOrdered;
+use Cafe\Domain\Tab\Events\DrinksServed;
+use Cafe\Domain\Tab\Events\TabClosed;
+use Cafe\Domain\Tab\Events\TabOpened;
+use Cafe\Domain\Tab\OrderedItem;
 use PHPUnit\Framework\TestCase;
 
 class OpenTabsTest extends TestCase

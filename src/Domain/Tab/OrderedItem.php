@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cafe\Aggregate;
+namespace Cafe\Domain\Tab;
 
 final class OrderedItem
 {

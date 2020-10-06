@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Cafe\Aggregate;
+namespace Cafe\Domain\Tab;
 
-use Cafe\Aggregate\Events\DomainEvent;
+use Cafe\Domain\Tab\Events\DomainEvent;
 
 abstract class BaseAggregate
 {

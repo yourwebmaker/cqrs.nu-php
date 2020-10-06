@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cafe\Aggregate\Events;
+namespace Cafe\Domain\Tab\Events;
 
 final class TabClosed
 {

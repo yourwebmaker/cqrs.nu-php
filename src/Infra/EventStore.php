@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Cafe\Infra;
 
-use Cafe\Aggregate\Events\DomainEvent;
-use Cafe\Aggregate\Events\TabOpened;
+use Cafe\Domain\Tab\Events\DomainEvent;
+use Cafe\Domain\Tab\Events\TabOpened;
 use Doctrine\DBAL\Connection;
 use RuntimeException;
 
