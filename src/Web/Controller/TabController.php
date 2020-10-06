@@ -28,17 +28,17 @@ final class TabController
 
     public function open() : Response
     {
-        $conn = \Doctrine\DBAL\DriverManager::getConnection([
-            'driver' => 'pdo_sqlite',
-            'path' => __DIR__ . '/../../../data/db.sqlite'
-        ]);
-
-        $repo = new TabRepositoryEventSourced(
-            new EventStore($conn)
-        );
-
-        var_dump($repo->get('20044962-cefe-40a7-a9b2-a5bb1e9ca7e8'));
-        exit;
+//        $conn = \Doctrine\DBAL\DriverManager::getConnection([
+//            'driver' => 'pdo_sqlite',
+//            'path' => __DIR__ . '/../../../data/db.sqlite'
+//        ]);
+//
+//        $repo = new TabRepositoryEventSourced(
+//            new EventStore($conn)
+//        );
+//
+//        var_dump($repo->get('20044962-cefe-40a7-a9b2-a5bb1e9ca7e8'));
+//        exit;
 
         return new Response($this->twig->render('tab/open.twig'));
     }
