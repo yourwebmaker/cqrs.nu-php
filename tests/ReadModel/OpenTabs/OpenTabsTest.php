@@ -13,11 +13,11 @@ use PHPUnit\Framework\TestCase;
 
 class OpenTabsTest extends TestCase
 {
-    private OpenTabs $openTabs;
+    private OpenTabQueries $openTabs;
 
     protected function setUp() : void
     {
-        $this->openTabs = new OpenTabs();
+        $this->openTabs = new OpenTabQueries();
         $this->openTabs->handleTabOpened(new TabOpened('tab-id-1', 1, 'Daniel'));
         $this->openTabs->handleTabOpened(new TabOpened('tab-id-2', 2, 'Rachel'));
     }
