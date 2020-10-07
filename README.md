@@ -45,3 +45,13 @@ marked as served or cancelled first.
 - [ ] Persistence using Doctrine
 - [ ] Persistence using ES
 - [ ] Installation and run guide using docker
+
+
+- Implement Open tab
+    - Command
+    - Event
+    - Aggregate
+    - Persistence
+    - ReadModel
+    - Controller Post
+    - Controller Query
