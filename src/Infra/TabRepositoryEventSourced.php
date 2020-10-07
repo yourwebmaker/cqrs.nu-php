@@ -7,7 +7,7 @@ namespace Cafe\Infra;
 use Cafe\Domain\Tab\Tab;
 use Cafe\Domain\Tab\TabRepository;
 
-final class TabRepositoryEventSourced implements TabRepository
+final class TabRepositoryEventSourced// implements TabRepository
 {
     private EventStore $eventStore;
 

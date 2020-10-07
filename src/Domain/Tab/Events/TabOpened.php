@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace Cafe\Domain\Tab\Events;
 
-final class TabOpened extends DomainEvent
+use Cafe\Domain\Tab\TabId;
+use EventSauce\EventSourcing\Serialization\SerializablePayload;
+
+final class TabOpened implements SerializablePayload
 {
-    public string $tabId;
+    public TabId $tabId;
     public int $tableNumber;
     public string $waiter;
 
-    public function __construct($tabId, $tableNumber, $waiter)
+    //todo PHP 8 constructor promotion here.
+    public function __construct(TabId $tabId, $tableNumber, $waiter)
     {
         $this->tabId = $tabId;
         $this->tableNumber = $tableNumber;
@@ -19,16 +23,14 @@ final class TabOpened extends DomainEvent
 
     public static function fromPayload(array $payload) : self
     {
-        return new self($payload['tabId'], $payload['tableNumber'], $payload['waiter']);
+        return new self(TabId::fromString($payload['tabId']), $payload['tableNumber'], $payload['waiter']);
     }
 
-    public function aggregateId() : string
+    public function toPayload(): array
     {
-        return $this->tabId;
-    }
-
-    public function name() : string
-    {
-        return 'tab_opened';
+        return [
+            'tableNumber' => $this->tableNumber,
+            'waiter' => $this->waiter,
+        ];
     }
 }

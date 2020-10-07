@@ -27,5 +27,9 @@ services:
         resource: '../src/UserInterface/Web/Controller/'
         tags: ['controller.service_arguments']
 
+    Cafe\Domain\Tab\TabRepository:
+        # the first argument is the class and the second argument is the static method
+        factory: [ 'Cafe\Infra\ServiceFactory\TabRepositoryFactory', 'create' ]
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

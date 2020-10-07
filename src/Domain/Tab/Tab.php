@@ -13,23 +13,21 @@ use Cafe\Domain\Tab\Events\FoodOrdered;
 use Cafe\Domain\Tab\Exception\DrinksNotOutstanding;
 use Cafe\Domain\Tab\Exception\ItemsNotServed;
 use Cafe\Domain\Tab\Exception\NotPaidInFull;
+use EventSauce\EventSourcing\AggregateRoot;
+use EventSauce\EventSourcing\AggregateRootBehaviour;
 
-final class Tab extends BaseAggregate
+final class Tab implements AggregateRoot
 {
-    public string $tabId;
+    use AggregateRootBehaviour;
+
     private array $outstandingDrinks = [];
     private float $itemsServedValue = 0.0;
 
-    private function __construct()
+    public static function open(TabId $tabId, int $tableNumber, string $waiter) : self
     {
-    }
+        $tab = new static($tabId);
 
-    public static function open(string $tabId, int $tableNumber, string $waiter) : self
-    {
-        $tab = new self();
-        $tab->tabId = $tabId;
-
-        $tab->recordEvent(new TabOpened($tabId, $tableNumber, $waiter));
+        $tab->recordThat(new TabOpened($tabId, $tableNumber, $waiter));
 
         return $tab;
     }
@@ -115,12 +113,8 @@ final class Tab extends BaseAggregate
         $this->recordEvent(new TabClosed($this->tabId, $amountPaid, $this->itemsServedValue, $tip));
     }
 
-    protected function apply(DomainEvent $event) : void
+    protected function applyTabOpened(TabOpened $event) : void
     {
-        switch ($event) {
-            case $event instanceof TabOpened:
-                $this->tabId = $event->tabId;
-                break;
-        }
+
     }
 }

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Cafe\UserInterface\Web\Controller;
 
+use Cafe\Domain\Tab\Tab;
+use Cafe\Domain\Tab\TabId;
+use Cafe\Domain\Tab\TabRepository;
 use Cafe\UserInterface\Web\Form\CloseTabType;
 use Cafe\UserInterface\Web\Form\OpenTabType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,6 +16,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class TabController extends AbstractController
 {
+    private TabRepository $repository;
+
+    public function __construct(TabRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     /**
      * @Route(path="tab/open", name="tab_open")
      */
@@ -22,6 +32,15 @@ final class TabController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $tab = Tab::open(
+                TabId::fromString('tab-id'),
+                $form->get('tableNumber')->getData(),
+                $form->get('waiter')->getData(),
+            );
+
+            $this->repository->save($tab);
+
             return $this->redirectToRoute('home');
         }
 

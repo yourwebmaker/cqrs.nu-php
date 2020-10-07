@@ -87,6 +87,9 @@
     "egulias/email-validator": {
         "version": "2.1.22"
     },
+    "eventsauce/doctrine-message-repository": {
+        "version": "0.8.2"
+    },
     "eventsauce/eventsauce": {
         "version": "0.8.1"
     },

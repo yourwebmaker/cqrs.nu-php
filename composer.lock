@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "28e90fa4b055b3f3f8304fd7d04a03d3",
+    "content-hash": "a418903a75f4969f914c9a2efcf95e84",
     "packages": [
         {
             "name": "brick/math",
@@ -1561,6 +1561,49 @@
                 "validator"
             ],
             "time": "2020-09-26T15:48:38+00:00"
+        },
+        {
+            "name": "eventsauce/doctrine-message-repository",
+            "version": "0.8.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/EventSaucePHP/DoctrineMessageRepository.git",
+                "reference": "18cca775e75dc62c1db2ed42d4820c8a5e38f581"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/EventSaucePHP/DoctrineMessageRepository/zipball/18cca775e75dc62c1db2ed42d4820c8a5e38f581",
+                "reference": "18cca775e75dc62c1db2ed42d4820c8a5e38f581",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "^2.5",
+                "eventsauce/eventsauce": "^0.7.0 || ^0.8.0",
+                "ext-json": "*",
+                "php": "^7.2 || ^8.0",
+                "ramsey/uuid": "^3.6 || ^4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.5 || ^9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "EventSauce\\DoctrineMessageRepository\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Frank de Jonge",
+                    "email": "info@frenky.net"
+                }
+            ],
+            "description": "Doctrine Message Repository for EventSauce",
+            "time": "2020-10-02T19:43:59+00:00"
         },
         {
             "name": "eventsauce/eventsauce",

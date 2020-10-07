@@ -25,10 +25,10 @@ final class StaticData
     public static function getWaitStaff() : array
     {
         return [
-            1 => 'Jack',
-            2 => 'Lena',
-            3 => 'Pedro',
-            4 => 'Anastasia'
+            'Jack' => 'Jack',
+            'Lena' => 'Lena',
+            'Pedro' => 'Pedro',
+            'Anastasia' => 'Anastasia'
         ];
     }
 }

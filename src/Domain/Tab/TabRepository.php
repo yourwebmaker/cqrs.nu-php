@@ -7,5 +7,5 @@ namespace Cafe\Domain\Tab;
 interface TabRepository
 {
     public function save(Tab $tab) : void;
-    public function get(string $tabId) : Tab;
+    public function get(TabId $tabId): Tab;
 }
