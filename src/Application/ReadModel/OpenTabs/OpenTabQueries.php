@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\Collection;
 use DomainException;
 use RuntimeException;
 
-final class OpenTabs
+final class OpenTabQueries
 {
 
     /** @var array<string, TableTodo> */

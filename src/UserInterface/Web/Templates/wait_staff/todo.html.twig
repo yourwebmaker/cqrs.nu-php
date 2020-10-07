@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+{% block title %}Todo List For {{ waiter }}{% endblock %}
+{% block content %}
+    {#@model Dictionary<int, List<CafeReadModels.OpenTabs.TabItem>>#}
+    <h2>Todo List For @ViewBag.Waiter</h2>
+    {#@foreach (var table in Model)#}
+    {% for table in tables %}
+    <h3>Table @table.Key</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Menu #</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {#@foreach (var item in table.Value)#}
+            {% for item in table %}
+            <tr>
+                <td>{{ item.menuNumber }}</td>
+                <td>{{ item.description }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ path('tab_status', {tableId : '1'}) }}">Go To Tab</a>
+    {% endfor %}
+{% endblock %}

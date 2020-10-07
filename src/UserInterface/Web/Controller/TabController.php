@@ -31,6 +31,16 @@ final class TabController extends AbstractController
     }
 
     /**
+     * @Route(path="tab/order", name="tab_order")
+     */
+    public function order(Request $request) : Response
+    {
+        return $this->render('tab/order.html.twig', [
+            //'form' => $form->createView(),
+        ]);
+    }
+
+    /**
      * @Route(path="tab/close", name="tab_close")
      */
     public function close(Request $request): Response
