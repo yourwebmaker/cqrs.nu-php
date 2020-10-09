@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cafe\Application\ReadModel\OpenTabs;
+namespace Cafe\Application\Read\OpenTabs;
 
 final class TabStatus
 {

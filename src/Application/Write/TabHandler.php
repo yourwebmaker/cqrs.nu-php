@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Cafe\Application;
+namespace Cafe\Application\Write;
 
+use Cafe\Application\Write\OpenTabCommand;
 use Cafe\Domain\Tab\Tab;
 use Cafe\Domain\Tab\TabRepository;
 

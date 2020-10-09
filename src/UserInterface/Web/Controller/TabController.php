@@ -34,12 +34,14 @@ final class TabController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $tab = Tab::open(
-                TabId::fromString('tab-id'),
+                TabId::generate(),
                 $form->get('tableNumber')->getData(),
                 $form->get('waiter')->getData(),
             );
 
             $this->repository->save($tab);
+
+            $this->addFlash('success', 'Tab Opened');
 
             return $this->redirectToRoute('home');
         }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cafe\Application\ReadModel\ChefTodoList;
+namespace Cafe\Application\Read\ChefTodoList;
 
 use PHPUnit\Framework\TestCase;
 

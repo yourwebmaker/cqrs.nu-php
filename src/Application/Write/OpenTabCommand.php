@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cafe\Application;
+namespace Cafe\Application\Write;
 
 final class OpenTabCommand
 {

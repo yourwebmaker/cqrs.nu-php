@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cafe\Domain\Tab;
 
 use EventSauce\EventSourcing\AggregateRootId;
+use Ramsey\Uuid\Uuid;
 
 class TabId implements AggregateRootId
 {
@@ -13,6 +14,11 @@ class TabId implements AggregateRootId
     private function __construct(string $identifier)
     {
         $this->identifier = $identifier;
+    }
+
+    public static function generate(): TabId
+    {
+        return new self(Uuid::uuid4()->toString());
     }
 
     public function toString(): string

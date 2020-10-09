@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cafe\UserInterface\Web\Controller;
 
-use Cafe\Application\ReadModel\OpenTabs\OpenTabQueries;
+use Cafe\Application\Read\OpenTabs\OpenTabQueries;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 

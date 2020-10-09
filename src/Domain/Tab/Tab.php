@@ -113,8 +113,4 @@ final class Tab implements AggregateRoot
         $this->recordEvent(new TabClosed($this->tabId, $amountPaid, $this->itemsServedValue, $tip));
     }
 
-    protected function applyTabOpened(TabOpened $event) : void
-    {
-
-    }
 }

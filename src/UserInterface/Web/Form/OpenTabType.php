@@ -2,7 +2,7 @@
 
 namespace Cafe\UserInterface\Web\Form;
 
-use Cafe\Application\OpenTabCommand;
+use Cafe\Application\Write\OpenTabCommand;
 use Cafe\UserInterface\Web\StaticData\StaticData;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
