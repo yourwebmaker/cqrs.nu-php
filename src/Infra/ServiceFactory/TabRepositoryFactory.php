@@ -6,11 +6,13 @@ namespace Cafe\Infra\ServiceFactory;
 
 use Cafe\Domain\Tab\Tab;
 use Cafe\Domain\Tab\TabRepository;
+use Cafe\Infra\Read\OpenTabsSerialized;
 use Cafe\Infra\TabRepositoryEventSauce;
 use Doctrine\DBAL\DriverManager;
 use EventSauce\DoctrineMessageRepository\DoctrineMessageRepository;
 use EventSauce\EventSourcing\ConstructingAggregateRootRepository;
 use EventSauce\EventSourcing\Serialization\ConstructingMessageSerializer;
+use EventSauce\EventSourcing\SynchronousMessageDispatcher;
 
 class TabRepositoryFactory
 {
@@ -26,6 +28,9 @@ class TabRepositoryFactory
                     ]),
                     new ConstructingMessageSerializer(),
                     'tab_aggregate'
+                ),
+                 new SynchronousMessageDispatcher(
+                    new OpenTabsSerialized(),
                 )
             )
         );

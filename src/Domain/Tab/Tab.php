@@ -32,6 +32,11 @@ final class Tab implements AggregateRoot
         return $tab;
     }
 
+    public function applyTabOpened(object $event): void
+    {
+
+    }
+
     /**
      * @param DomainEvent[] $events
      * @return Tab

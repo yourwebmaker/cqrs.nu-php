@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace Cafe\UserInterface\Web\Controller;
 
-use Cafe\Application\Read\OpenTabs\OpenTabQueries;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class WaitStaffController extends AbstractController
 {
-    private OpenTabQueries $query;
-
-    public function todo(string $waiter) : Response
+    /**
+     * @Route(name="waitstaff_todo", path="waitstaff/{id}/todo")
+     */
+    public function todo(string $id) : Response
     {
         return $this->render('wait_staff/todo.html.twig', [
-            'waiter' => $waiter,
-            'model' => $this->query->todoListForWaiter($waiter)
+            'waiter' => $id,
+            //'model' => $this->query->todoListForWaiter($id)
         ]);
     }
 }

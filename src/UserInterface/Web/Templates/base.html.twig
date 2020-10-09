@@ -50,8 +50,37 @@
                 </form>#}
             </div>
         </nav>
-        <h2>{{ block('title') }}</h2>
-        {% block content %}{% endblock %}
+        <div class="container-fluid">
+            <div class="row">
+                <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                    <div class="sidebar-sticky">
+                        <ul class="list-unstyled">
+                            <li><h6>Wait Staff Todo Lists</h6>
+                                <ul>
+                                    {% for w in staticData.getWaitStaff() %}
+                                        <li><a href="{{ path('waitstaff_todo', {id : w}) }}">{{ w }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <li><h6>sdfsf</h6>
+                                <ul>
+                                    <li>ssss</li>
+                                    <li>ssss</li>
+                                    <li>ssss</li>
+                                    <li>ssss</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                    <h2>{{ block('title') }}</h2>
+                    {% block content %}{% endblock %}
+                </main>
+            </div>
+        </div>
+
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
