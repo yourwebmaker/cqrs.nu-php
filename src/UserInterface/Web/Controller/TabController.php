@@ -52,6 +52,16 @@ final class TabController extends AbstractController
     }
 
     /**
+     * @Route(path="tab/{tableNumber}/status", name="tab_status")
+     */
+    public function status(string $tableNumber) : Response
+    {
+        return $this->render('tab/order.html.twig', [
+            //'form' => $form->createView(),
+        ]);
+    }
+
+    /**
      * @Route(path="tab/order", name="tab_order")
      */
     public function order(Request $request) : Response

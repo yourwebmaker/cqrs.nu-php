@@ -29,7 +29,7 @@ services:
 
     Cafe\Domain\Tab\TabRepository:
         # the first argument is the class and the second argument is the static method
-        factory: [ 'Cafe\Infra\ServiceFactory\TabRepositoryFactory', 'create' ]
+        factory: [ '@Cafe\Infra\ServiceFactory\TabRepositoryFactory', 'create' ]
 
     #Cafe\Application\Read\OpenTabsQueries: ~
 

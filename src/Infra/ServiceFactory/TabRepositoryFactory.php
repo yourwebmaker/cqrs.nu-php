@@ -6,9 +6,10 @@ namespace Cafe\Infra\ServiceFactory;
 
 use Cafe\Domain\Tab\Tab;
 use Cafe\Domain\Tab\TabRepository;
-use Cafe\Infra\Read\OpenTabsSerialized;
+use Cafe\Infra\Read\TabProjector;
 use Cafe\Infra\TabRepositoryEventSauce;
-use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
 use EventSauce\DoctrineMessageRepository\DoctrineMessageRepository;
 use EventSauce\EventSourcing\ConstructingAggregateRootRepository;
 use EventSauce\EventSourcing\Serialization\ConstructingMessageSerializer;
@@ -16,21 +17,27 @@ use EventSauce\EventSourcing\SynchronousMessageDispatcher;
 
 class TabRepositoryFactory
 {
+    private Connection $connection;
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(Connection $connection, EntityManagerInterface $entityManager)
+    {
+        $this->connection = $connection;
+        $this->entityManager = $entityManager;
+    }
+
     public function create() : TabRepository
     {
         return new TabRepositoryEventSauce(
             new ConstructingAggregateRootRepository(
                 Tab::class,
                 new DoctrineMessageRepository(
-                    DriverManager::getConnection([
-                        'driver' => 'pdo_sqlite',
-                        'path' => __DIR__ . '/../../../var/data/db.sqlite'
-                    ]),
+                    $this->connection,
                     new ConstructingMessageSerializer(),
-                    'tab_aggregate'
+                    'aggregate_tab'
                 ),
                  new SynchronousMessageDispatcher(
-                    new OpenTabsSerialized(),
+                    new TabProjector($this->entityManager),
                 )
             )
         );

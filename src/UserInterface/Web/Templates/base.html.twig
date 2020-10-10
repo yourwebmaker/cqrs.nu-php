@@ -62,12 +62,11 @@
                                     {% endfor %}
                                 </ul>
                             </li>
-                            <li><h6>sdfsf</h6>
+                            <li><h6>Open Tabs</h6>
                                 <ul>
-                                    <li>ssss</li>
-                                    <li>ssss</li>
-                                    <li>ssss</li>
-                                    <li>ssss</li>
+                                    {% for tableNumber in activeTables.activeTableNumbers() %}
+                                        <li><a href="{{ path('tab_status', {tableNumber : tableNumber}) }}">{{ tableNumber }}</a></li>
+                                    {% endfor %}
                                 </ul>
                             </li>
                         </ul>

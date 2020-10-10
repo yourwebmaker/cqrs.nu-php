@@ -29,29 +29,20 @@ marked as served or cancelled first.
 - [ ] Make event store to use different types of persistence (redis, etc). Make it an interface
 - [ ] Unify config from 'migrations-db.php' and Connection
 - [ ] Describe the project like this one: https://github.com/CodelyTV/php-ddd-example
-- [ ] Form Validation
-- [ ] Use Symfony forms
 - [ ] Install container
 - [ ] PHPStan
-- [ ] Create domain events assertion for counts, data types, etc
-- [ ] Events must use constructors
 - [ ] Apply doctrine code standards
 - [ ] Mutation testing
 - [ ] Add to Scrutinizer
-- [ ] Type-hint all the constructors
-- [ ] Use collections Instead of arrays (check .net example) (Psalm?), ArrayCollection on $items
 - [ ] Replace strings by GUID
 ##### Infra
 - [ ] Persistence using Doctrine
-- [ ] Persistence using ES
+- [X] Persistence using ES
 - [ ] Installation and run guide using docker
+- [ ] Do not update write in case read fail.
 
 
 - Implement Open tab
-    - Command
-    - Event
-    - Aggregate
-    - Persistence
     - ReadModel
     - Controller Post
     - Controller Query
