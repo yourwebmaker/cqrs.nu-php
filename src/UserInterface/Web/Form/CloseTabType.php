@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cafe\UserInterface\Web\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CloseTabType extends AbstractType
 {
@@ -18,12 +19,5 @@ class CloseTabType extends AbstractType
                 'label' => 'Close Tab',
             ])
         ;
-    }
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            //'data_class' => OpenTabCommand::class, todo use CloseTabCommand
-        ]);
     }
 }
