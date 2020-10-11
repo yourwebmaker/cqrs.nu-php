@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Cafe\Domain\Tab\Events;
 
+use Cafe\Domain\Tab\TabId;
+
 final class DrinksServed
 {
-    public string $tabId;
+    public TabId $tabId;
     /** @var int[] */
     public array $menuNumbers;
 

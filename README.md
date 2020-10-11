@@ -29,6 +29,7 @@ marked as served or cancelled first.
 - [ ] Move code out of controllers to Handlers
 - [ ] Refactor \Cafe\UserInterface\Web\Controller\TabController::order
 ##### Misc
+- [ ] Replace every single array for a collection. 
 - [ ] Make event store to use different types of persistence (redis, etc). Make it an interface
 - [ ] Unify config from 'migrations-db.php' and Connection
 - [ ] Describe the project like this one: https://github.com/CodelyTV/php-ddd-example
@@ -37,6 +38,7 @@ marked as served or cancelled first.
 - [ ] Apply doctrine code standards
 - [ ] Mutation testing
 - [ ] Add to Scrutinizer
+- [ ] Use yield return new DrinksServed to record events?
 ##### Infra
 - [ ] Persistence using Doctrine
 - [X] Persistence using ES

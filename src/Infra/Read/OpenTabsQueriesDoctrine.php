@@ -6,6 +6,7 @@ namespace Cafe\Infra\Read;
 
 use Cafe\Application\Read\OpenTabs\Tab;
 use Cafe\Application\Read\OpenTabs\TabInvoice;
+use Cafe\Application\Read\OpenTabs\TabItem;
 use Cafe\Application\Read\OpenTabs\TabStatus;
 use Cafe\Application\Read\OpenTabsQueries;
 use Doctrine\ORM\EntityManagerInterface;
@@ -55,9 +56,35 @@ class OpenTabsQueriesDoctrine implements OpenTabsQueries
         return $tab->tabId;
     }
 
-    public function tabForTable(int $table): TabStatus
+    public function tabForTable(int $tableNumber): TabStatus
     {
-        return new TabStatus();
+        $tabId = $this->tabIdForTable($tableNumber);
+        $connection = $this->entityManager->getConnection();
+        $rows = $connection->fetchAllAssociative('select * from read_model_tab_item where tab_id = :tab_id', [
+            'tab_id' => $tabId,
+        ]);
+
+        $toServe = [];
+        $inPreparation = [];
+        $served = [];
+
+        foreach ($rows as $row) {
+            $item = new TabItem((int) $row['menu_number'], $row['description'], (float) $row['price']);
+
+            if ($row['status'] === 'to-serve') {
+                $toServe[] = $item;
+            }
+
+            if ($row['status'] === 'in-preparation') {
+                $inPreparation[] = $item;
+            }
+
+            if ($row['status'] === 'served') {
+                $served[] = $item;
+            }
+        }
+
+        return new TabStatus($tabId, $tableNumber, $toServe, $inPreparation, $served);
     }
 
     /**

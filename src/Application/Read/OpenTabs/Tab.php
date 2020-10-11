@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Cafe\Application\Read\OpenTabs;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,12 +33,6 @@ class Tab
     /** @var array<TabItem> */
     public array $served;
 
-    /**
-     * @ORM\OneToMany(cascade={"persist"}, targetEntity="TabItem", mappedBy="tab")
-     * @var Collection
-     */
-    public Collection $items;
-
     public function __construct(string $tabId, int $tableNumber, string $waiter, array $toServe, array $inPreparation, array $served)
     {
         $this->tabId = $tabId;
@@ -49,7 +41,6 @@ class Tab
         $this->toServe = $toServe;
         $this->inPreparation = $inPreparation;
         $this->served = $served;
-        $this->items = new ArrayCollection();
     }
 
     public function moveItems(array $menuNumbers, \Closure $from, \Closure $to) : void

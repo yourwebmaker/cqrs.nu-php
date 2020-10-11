@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cafe\Domain\Tab;
 
+use Cafe\Application\Write\MarkDrinksServed;
 use Cafe\Application\Write\OpenTabCommand;
 use Cafe\Application\Write\PlaceOrderCommand;
 use Cafe\Domain\Tab\Events\TabClosed;
@@ -51,6 +52,15 @@ final class Tab implements AggregateRoot
         }
     }
 
+    public function markDrinksServed(MarkDrinksServed $command) : void
+    {
+        if (!$this->areDrinksOutstanding($command->menuNumbers)) {
+            throw new DrinksNotOutstanding();
+        }
+
+        $this->recordThat(new DrinksServed($command->tabId, $command->menuNumbers));
+    }
+
     public function applyTabOpened(TabOpened $event): void
     {
         $this->open = true;
@@ -66,43 +76,37 @@ final class Tab implements AggregateRoot
         $this->outstandingFood[] = $event->items;
     }
 
+    public function applyDrinksServed(DrinksServed $event) : void
+    {
+        return;
+//        foreach ($event->menuNumbers as $menuNumber)
+//        {
+//            /** @var OrderedItem $item */
+//            $item = $this->outstandingDrinks.First(d => d.MenuNumber == num);
+//            $this->outstandingDrinksoutstandingDrinks.Remove(item);
+//            $this->servedItemsValue += $item->price;
+//        }
+    }
+
     public function applyTabClosed(TabClosed $event) : void
     {
         $this->open = false;
     }
 
-    /**
-     * @param string[] $menuNumbers
-     */
-    public function markDrinksServed(array $menuNumbers) : void
+    private function areDrinksOutstanding(array $menuNumbers) : bool
     {
-        foreach ($menuNumbers as $menuNumber) {
-            if (!isset($this->outstandingDrinks[$menuNumber])) {
-                throw new DrinksNotOutstanding("Trying to serve drink '$menuNumber' but it was not ordered yet");
-            }
-        }
-
-        foreach ($menuNumbers as $menuNumber) {
-            unset($this->outstandingDrinks[$menuNumber]);
-        }
-
-        $event = new DrinksServed($this->tabId, $menuNumbers);
-        $this->recordEvent($event);
+        return $this->areAllInList($menuNumbers, $this->outstandingDrinks);
     }
 
-    public function close(float $amountPaid) : void
+    private function areAllInList(array $menuNumbers, array $list) : bool
     {
-        $tip = $amountPaid - $this->itemsServedValue;
-
-        if ($amountPaid < $this->itemsServedValue) {
-            throw NotPaidInFull::withTotals($amountPaid, $this->itemsServedValue);
-        }
-
-        $notServed = count($this->outstandingDrinks);
-        if ($notServed > 0) {
-            throw ItemsNotServed::withTotals($notServed);
-        }
-
-        $this->recordEvent(new TabClosed($this->tabId, $amountPaid, $this->itemsServedValue, $tip));
+        return false;
+//        var curHave = new List<int>(have.Select(i => i.MenuNumber));
+//            foreach (var num in want)
+//                if (curHave.Contains(num))
+//                    curHave.Remove(num);
+//                else
+//                    return false;
+//            return true;
     }
 }

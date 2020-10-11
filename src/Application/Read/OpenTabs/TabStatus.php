@@ -17,42 +17,42 @@ final class TabStatus
     /** @var array<TabItem> */
     public array $served;
 
-//    public function __construct(string $tabId, int $tableNumber, array $toServe, array $inPreparation, array $served)
-//    {
-//        $this->tabId = $tabId;
-//        $this->tableNumber = $tableNumber;
-//        $this->toServe = $toServe;
-//        $this->inPreparation = $inPreparation;
-//        $this->served = $served;
-//    }
+    public function __construct(string $tabId, int $tableNumber, array $toServe, array $inPreparation, array $served)
+    {
+        $this->tabId = $tabId;
+        $this->tableNumber = $tableNumber;
+        $this->toServe = $toServe;
+        $this->inPreparation = $inPreparation;
+        $this->served = $served;
+    }
 
     public function getItemsToServe() : array
     {
-        return StaticData::getMenu();
+        return $this->toServe;
     }
 
     public function hasItemsToServe() : bool
     {
-        return true;
-    }
-
-    public function hasItemsInPreparation() : bool
-    {
-        return true;
+        return count($this->toServe) > 0;
     }
 
     public function getItemsInPreparation() : array
     {
-        return StaticData::getMenu();
+        return $this->inPreparation;
     }
 
-    public function hasItemsServed() : bool
+    public function hasItemsInPreparation() : bool
     {
-        return true;
+        return count($this->inPreparation) > 0;
     }
 
     public function getServedItems() : array
     {
-        return StaticData::getMenu();
+        return $this->served;
+    }
+
+    public function hasItemsServed() : bool
+    {
+        return count($this->served) > 0;
     }
 }

@@ -10,3 +10,13 @@ services:
     ports:
     - 8000:8000
     entrypoint: "php -S 0.0.0.0:8000 -t public"
+
+  db:
+    container_name: mysql-cqrs
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: daniel
+    ports:
+      - 3333:4444

@@ -16,7 +16,7 @@ interface OpenTabsQueries
     public function activeTableNumbers(): array;
     public function invoiceForTable(int $table): TabInvoice;
     public function tabIdForTable(int $tableNumber) : string;
-    public function tabForTable(int $table) : TabStatus;
+    public function tabForTable(int $tableNumber) : TabStatus;
 
     /**
      * @return array<int, array<TabItem>>
