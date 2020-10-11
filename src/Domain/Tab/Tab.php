@@ -63,7 +63,7 @@ final class Tab implements AggregateRoot
 
     public function applyFoodOrdered(FoodOrdered $event) : void
     {
-        $this->outstandingFood = $event->items;
+        $this->outstandingFood[] = $event->items;
     }
 
     public function applyTabClosed(TabClosed $event) : void

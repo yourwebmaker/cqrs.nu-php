@@ -24,6 +24,7 @@ marked as served or cancelled first.
 ##### Domain
 - [ ] Allow to serve food
 - [ ] Allow to Amend order
+- [ ] Do not allow to enter negative numbers on total to order;
 #### Application
 - [ ] Move code out of controllers to Handlers
 - [ ] Refactor \Cafe\UserInterface\Web\Controller\TabController::order
@@ -36,7 +37,6 @@ marked as served or cancelled first.
 - [ ] Apply doctrine code standards
 - [ ] Mutation testing
 - [ ] Add to Scrutinizer
-- [ ] Replace strings by GUID
 ##### Infra
 - [ ] Persistence using Doctrine
 - [X] Persistence using ES

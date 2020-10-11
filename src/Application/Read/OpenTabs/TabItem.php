@@ -14,8 +14,8 @@ class TabItem
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\Column(type="string")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(type="integer")
      */
     public string $id;
     /**
