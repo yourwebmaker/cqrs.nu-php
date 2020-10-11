@@ -14,10 +14,6 @@ class OpenTabsQueriesDoctrine implements OpenTabsQueries
 {
     private EntityManagerInterface $entityManager;
 
-
-    /** @var array<string, Tab>>  */
-    private array $todoByTab;
-
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
@@ -28,6 +24,7 @@ class OpenTabsQueriesDoctrine implements OpenTabsQueries
      */
     public function activeTableNumbers(): array
     {
+        //todo replace by simple sql
         $data = $this->entityManager->createQueryBuilder()
             ->from(Tab::class, 't')
             ->select('t')
@@ -43,14 +40,24 @@ class OpenTabsQueriesDoctrine implements OpenTabsQueries
         // TODO: Implement invoiceForTable() method.
     }
 
-    public function tabIdForTable(int $table): string
+    public function tabIdForTable(int $tableNumber): string
     {
-        // TODO: Implement tabIdForTable() method.
+        //todo replace by simple sql
+        /** @var Tab $tab */
+        $tab = $this->entityManager->createQueryBuilder()
+            ->from(Tab::class, 't')
+            ->select('t')
+            ->where('t.tableNumber = :tableNumber')
+            ->setParameter('tableNumber', $tableNumber)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $tab->tabId;
     }
 
     public function tabForTable(int $table): TabStatus
     {
-        // TODO: Implement tabForTable() method.
+        return new TabStatus();
     }
 
     /**

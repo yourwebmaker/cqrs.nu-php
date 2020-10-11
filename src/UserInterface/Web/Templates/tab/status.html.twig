@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+{% block title %}Tab Status{% endblock %}
+{% block content %}
+    <h3>Tab For Table {{tableNumber}}</h3>
+    <a href="{{ path('tab_close', {tableNumber: tableNumber}) }}" class="btn btn-success">Close Table</a>
+    <a href="{{ path('tab_order', {tableNumber: tableNumber}) }}" class="btn btn-success">Order Food/Drink</a>
+
+    {% if tab.hasItemsToServe %}
+        <h3>Items To Serve</h3>
+        <table class="table">
+            <thead>
+            <tr>
+                <td>Menu #</td>
+                <td>Description</td>
+                <td>Mark Served</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in tab.getItemsToServe() %}
+                <tr>
+                    <td>{{ item.menuNumber}}</td>
+                    <td>{{ item.description}}</td>
+                    <td><input type="checkbox"></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary">Mark Served</button>
+    {% endif %}
+
+    {% if tab.hasItemsInPreparation() %}
+        <h3>Food In Preparation</h3>
+        <table class="table">
+            <thead>
+            <tr>
+                <td>Menu #</td>
+                <td>Description</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in tab.getItemsInPreparation() %}
+                <tr>
+                    <td>{{ item.menuNumber}}</td>
+                    <td>{{ item.description}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    {% if tab.hasItemsServed() %}
+        <h3>Items Already Served</h3>
+        <table class="table">
+            <thead>
+            <tr>
+                <td>Menu #</td>
+                <td>Description</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in tab.getItemsInPreparation() %}
+                <tr>
+                    <td>{{ item.menuNumber}}</td>
+                    <td>{{ item.description}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+{% endblock %}
+
+
+

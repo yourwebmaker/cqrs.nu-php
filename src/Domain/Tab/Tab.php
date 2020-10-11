@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Cafe\Domain\Tab;
 
-use Cafe\Domain\Tab\Events\DomainEvent;
+use Cafe\Application\Write\OpenTabCommand;
+use Cafe\Application\Write\PlaceOrderCommand;
 use Cafe\Domain\Tab\Events\TabClosed;
 use Cafe\Domain\Tab\Events\TabOpened;
 use Cafe\Domain\Tab\Events\DrinksOrdered;
@@ -20,66 +21,54 @@ final class Tab implements AggregateRoot
 {
     use AggregateRootBehaviour;
 
-    private array $outstandingDrinks = [];
-    private float $itemsServedValue = 0.0;
+    private bool $open = false;
+    private array $outstandingDrinks;
+    private array $outstandingFood;
+    private array $preparedFood;
+    private float $servedItemsValue;
 
-    public static function open(TabId $tabId, int $tableNumber, string $waiter) : self
+    public static function open(OpenTabCommand $command) : self
     {
-        $tab = new static($tabId);
+        $tab = new static($command->tabId);
 
-        $tab->recordThat(new TabOpened($tabId, $tableNumber, $waiter));
+        $tab->recordThat(new TabOpened(
+            $command->tabId,
+            $command->tableNumber,
+            $command->waiter)
+        );
 
         return $tab;
     }
 
-    public function applyTabOpened(object $event): void
+    public function order(PlaceOrderCommand $command) : void
     {
+        if ($command->hasDrinks()) {
+            $this->recordThat(new DrinksOrdered($command->tabId, $command->getDrinks()));
+        }
 
+        if ($command->hasFood()) {
+            $this->recordThat(new FoodOrdered($command->tabId, $command->getFood()));
+        }
     }
 
-    /**
-     * @param DomainEvent[] $events
-     * @return Tab
-     */
-    public static function fromEvents(array $events): Tab
+    public function applyTabOpened(TabOpened $event): void
     {
-        $tab = new self();
-        foreach ($events as $event) {
-            $tab->apply($event);
-        }
-
-        return $tab;
+        $this->open = true;
     }
 
-    /**
-     * @param OrderedItem[] $items
-     */
-    public function order(array $items) : void
+    public function applyDrinksOrdered(DrinksOrdered $event): void
     {
-        $drinks = array_filter($items, static function (OrderedItem $item) {
-            return $item->isDrink;
-        });
+        $this->outstandingDrinks[] = $event->items;
+    }
 
-        if ($drinks) {
+    public function applyFoodOrdered(FoodOrdered $event) : void
+    {
+        $this->outstandingFood = $event->items;
+    }
 
-            $itemsDrinks = array_values($drinks);
-
-            /** @var OrderedItem $drink */
-            foreach ($itemsDrinks as $drink) {
-                $this->outstandingDrinks[$drink->menuNumber] = $drink;
-                $this->itemsServedValue += $drink->price;
-            }
-
-            $this->recordEvent(new DrinksOrdered($this->tabId, $itemsDrinks));
-        }
-
-        $food = array_filter($items, static function (OrderedItem $item) {
-            return !$item->isDrink;
-        });
-
-        if ($food) {
-            $this->recordEvent(new FoodOrdered($this->tabId, array_values($food)));
-        }
+    public function applyTabClosed(TabClosed $event) : void
+    {
+        $this->open = false;
     }
 
     /**
@@ -94,7 +83,6 @@ final class Tab implements AggregateRoot
         }
 
         foreach ($menuNumbers as $menuNumber) {
-            //todo, probably there is a bug here
             unset($this->outstandingDrinks[$menuNumber]);
         }
 
@@ -117,5 +105,4 @@ final class Tab implements AggregateRoot
 
         $this->recordEvent(new TabClosed($this->tabId, $amountPaid, $this->itemsServedValue, $tip));
     }
-
 }

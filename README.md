@@ -20,11 +20,13 @@ marked as served or cancelled first.
 - Open your browser on `http://localhost:8000/tab/open`
 
 
-
 ### Todo
 ##### Domain
 - [ ] Allow to serve food
 - [ ] Allow to Amend order
+#### Application
+- [ ] Move code out of controllers to Handlers
+- [ ] Refactor \Cafe\UserInterface\Web\Controller\TabController::order
 ##### Misc
 - [ ] Make event store to use different types of persistence (redis, etc). Make it an interface
 - [ ] Unify config from 'migrations-db.php' and Connection
@@ -40,9 +42,17 @@ marked as served or cancelled first.
 - [X] Persistence using ES
 - [ ] Installation and run guide using docker
 - [ ] Do not update write in case read fail.
-
+#UI
+- [ ] Add icons, better colors to buttons.
+- [ ] Add footer
+- [ ] Add github link
+- [ ] Style tables and table headers
+- [ ] Add flash messages
+- [ ] Style http://localhost:8000/tab/297/order
 
 - Implement Open tab
+    - Handling command
     - ReadModel
+    - Form
     - Controller Post
     - Controller Query

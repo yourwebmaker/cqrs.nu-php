@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cafe\UserInterface\Web\Form;
 
+use Cafe\UserInterface\Web\StaticData\StaticData;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;

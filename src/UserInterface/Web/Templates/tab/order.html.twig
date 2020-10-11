@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block title %}Place order{% endblock %}
 {% block content %}
+    {{ form_start(form) }}
     <fieldset>
         <table class="table">
             <thead>
@@ -11,21 +12,17 @@
             </tr>
             </thead>
             <tbody>
-            @for (int i = 0; i < Model.Items.Count; i++)
-            {
+            {% for item in form.items %}
             <tr>
-                <td>
-                    @Model.Items[i].MenuNumber
-                    @Html.HiddenFor(m => m.Items[i].MenuNumber)
-                </td>
-                <td>@Model.Items[i].Description</td>
-                <td>@Html.TextBoxFor(m => m.Items[i].NumberToOrder)</td>
+                <td>{{ form_row(item.menuNumber) }}</td>
+                <td>{{ form_row(item.description) }}</td>
+                <td>{{ form_row(item.numberToOrder) }}</td>
             </tr>
-            }
+            {% endfor %}
             </tbody>
         </table>
 
-        <button type="submit" class="btn">Place Order</button>
+        <button type="submit" class="btn btn-primary">Place Order</button>
     </fieldset>
-
+    {{ form_end(form) }}
 {% endblock %}

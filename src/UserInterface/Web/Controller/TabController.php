@@ -4,11 +4,21 @@ declare(strict_types=1);
 
 namespace Cafe\UserInterface\Web\Controller;
 
+use Cafe\Application\Read\OpenTabsQueries;
+use Cafe\Application\Write\OpenTabCommand;
+use Cafe\Application\Write\PlaceOrderCommand;
+use Cafe\Domain\Tab\OrderedItem;
 use Cafe\Domain\Tab\Tab;
 use Cafe\Domain\Tab\TabId;
 use Cafe\Domain\Tab\TabRepository;
 use Cafe\UserInterface\Web\Form\CloseTabType;
 use Cafe\UserInterface\Web\Form\OpenTabType;
+use Cafe\UserInterface\Web\Form\OrderType;
+use Cafe\UserInterface\Web\Model\OrderItem;
+use Cafe\UserInterface\Web\Model\OrderModel;
+use Cafe\UserInterface\Web\StaticData\MenuItem;
+use Cafe\UserInterface\Web\StaticData\StaticData;
+use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,10 +27,12 @@ use Symfony\Component\Routing\Annotation\Route;
 final class TabController extends AbstractController
 {
     private TabRepository $repository;
+    private OpenTabsQueries $queries;
 
-    public function __construct(TabRepository $repository)
+    public function __construct(TabRepository $repository, OpenTabsQueries $queries)
     {
         $this->repository = $repository;
+        $this->queries = $queries;
     }
 
     /**
@@ -33,17 +45,19 @@ final class TabController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $tableNumber = $form->get('tableNumber')->getData();
+
             $tab = Tab::open(
-                TabId::generate(),
-                $form->get('tableNumber')->getData(),
-                $form->get('waiter')->getData(),
+                new OpenTabCommand(
+                    Uuid::uuid4()->toString(),
+                    $tableNumber,
+                    $form->get('waiter')->getData(),
+                )
             );
 
             $this->repository->save($tab);
 
-            $this->addFlash('success', 'Tab Opened');
-
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('tab_order', ['tableNumber' => $tableNumber]);
         }
 
         return $this->render('tab/open.html.twig', [
@@ -52,29 +66,67 @@ final class TabController extends AbstractController
     }
 
     /**
+     * @Route(path="tab/{tableNumber}/order", name="tab_order")
+     */
+    public function order(int $tableNumber, Request $request) : Response
+    {
+        $menu = StaticData::getMenu();
+
+        $items = array_map(fn(MenuItem $menuItem) => new OrderItem(
+            $menuItem->menuNumber,
+            $menuItem->description,
+            0
+        ), $menu);
+
+        $orderModel = new OrderModel($items);
+        $form = $this->createForm(OrderType::class, $orderModel);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $orderedItems = [];
+            foreach ($orderModel->items as $item) {
+                for ($i = 0; $i < $item->numberToOrder; $i++) {
+                    $orderedItems[] = new OrderedItem(
+                        $item->menuNumber,
+                        $menu[$item->menuNumber]->description,
+                        $menu[$item->menuNumber]->isDrink,
+                        $menu[$item->menuNumber]->price,
+                    );
+                }
+            }
+
+            $tabId = $this->queries->tabIdForTable($tableNumber);
+            $command = new PlaceOrderCommand($tabId, $orderedItems);
+            $tab = $this->repository->get(TabId::fromString($tabId));
+
+            $tab->order($command);
+            $this->repository->save($tab);
+
+            return $this->redirectToRoute('tab_status', ['tableNumber' => $tableNumber]);
+        }
+
+        return $this->render('tab/order.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
      * @Route(path="tab/{tableNumber}/status", name="tab_status")
      */
-    public function status(string $tableNumber) : Response
+    public function status(int $tableNumber) : Response
     {
-        return $this->render('tab/order.html.twig', [
-            //'form' => $form->createView(),
+        return $this->render('tab/status.html.twig', [
+            'tableNumber' => $tableNumber,
+            'tab' => $this->queries->tabForTable($tableNumber)
         ]);
     }
 
-    /**
-     * @Route(path="tab/order", name="tab_order")
-     */
-    public function order(Request $request) : Response
-    {
-        return $this->render('tab/order.html.twig', [
-            //'form' => $form->createView(),
-        ]);
-    }
+
 
     /**
-     * @Route(path="tab/close", name="tab_close")
+     * @Route(path="tab/{tableNumber}/close", name="tab_close")
      */
-    public function close(Request $request): Response
+    public function close(string $tableNumber, Request $request): Response
     {
         $form = $this->createForm(CloseTabType::class);
         $form->handleRequest($request);

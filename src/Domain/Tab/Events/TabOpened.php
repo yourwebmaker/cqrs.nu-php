@@ -29,6 +29,7 @@ final class TabOpened implements SerializablePayload
     public function toPayload(): array
     {
         return [
+            'tabId' => $this->tabId,
             'tableNumber' => $this->tableNumber,
             'waiter' => $this->waiter,
         ];
