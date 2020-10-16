@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class OpenTabsQueriesDoctrine implements OpenTabsQueries
 {
+    //todo use just DBAL. We don't need ORM here.
     private EntityManagerInterface $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager)

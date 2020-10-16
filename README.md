@@ -51,6 +51,7 @@ marked as served or cancelled first.
 - [ ] Style tables and table headers
 - [ ] Add flash messages
 - [ ] Style http://localhost:8000/tab/297/order
+- [ ] Add validators on DTOs
 
 - Implement Open tab
     - Handling command

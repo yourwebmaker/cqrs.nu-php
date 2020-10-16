@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Cafe\Application\Read\OpenTabs;
 
-use Cafe\UserInterface\Web\StaticData\StaticData;
-
 final class TabStatus
 {
     public string $tabId;
@@ -26,6 +24,9 @@ final class TabStatus
         $this->served = $served;
     }
 
+    /**
+     * @return array<TabItem>
+     */
     public function getItemsToServe() : array
     {
         return $this->toServe;

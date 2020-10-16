@@ -6,6 +6,7 @@ namespace Cafe\Infra\Read;
 
 use Cafe\Application\Read\OpenTabs\Tab;
 use Cafe\Domain\Tab\Events\DrinksOrdered;
+use Cafe\Domain\Tab\Events\DrinksServed;
 use Cafe\Domain\Tab\Events\FoodOrdered;
 use Cafe\Domain\Tab\Events\TabOpened;
 use Cafe\Domain\Tab\OrderedItem;
@@ -42,6 +43,25 @@ class TabProjector implements Consumer
                     'description' => $item->description,
                     'price' => $item->price,
                     'status' => 'to-serve'
+                ]);
+            }
+        }
+
+        if ($event instanceof DrinksServed) {
+            foreach ($event->menuNumbers as $menuNumber) {
+                $sql = '
+                    update read_model_tab_item 
+                    set status = :new_status 
+                    where 
+                        menu_number = :menu_number and
+                        tab_id = :tab_id and
+                        status = :old_status
+                    limit 1';
+                $this->connection->executeQuery($sql, [
+                    'new_status' => 'served',
+                    'old_status' => 'to-serve',
+                    'menu_number' => $menuNumber,
+                    'tab_id' => $event->tabId->toString()
                 ]);
             }
         }

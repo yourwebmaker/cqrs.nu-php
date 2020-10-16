@@ -13,8 +13,6 @@ use Cafe\Domain\Tab\Events\DrinksOrdered;
 use Cafe\Domain\Tab\Events\DrinksServed;
 use Cafe\Domain\Tab\Events\FoodOrdered;
 use Cafe\Domain\Tab\Exception\DrinksNotOutstanding;
-use Cafe\Domain\Tab\Exception\ItemsNotServed;
-use Cafe\Domain\Tab\Exception\NotPaidInFull;
 use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\AggregateRootBehaviour;
 
@@ -23,10 +21,10 @@ final class Tab implements AggregateRoot
     use AggregateRootBehaviour;
 
     private bool $open = false;
-    private array $outstandingDrinks;
-    private array $outstandingFood;
-    private array $preparedFood;
-    private float $servedItemsValue;
+    private array $outstandingDrinks = [];
+    private array $outstandingFood = [];
+    private array $preparedFood = [];
+    private float $servedItemsValue = 0.0;
 
     public static function open(OpenTabCommand $command) : self
     {
@@ -68,7 +66,7 @@ final class Tab implements AggregateRoot
 
     public function applyDrinksOrdered(DrinksOrdered $event): void
     {
-        $this->outstandingDrinks[] = $event->items;
+        $this->outstandingDrinks += $event->items;
     }
 
     public function applyFoodOrdered(FoodOrdered $event) : void
@@ -78,14 +76,16 @@ final class Tab implements AggregateRoot
 
     public function applyDrinksServed(DrinksServed $event) : void
     {
-        return;
-//        foreach ($event->menuNumbers as $menuNumber)
-//        {
-//            /** @var OrderedItem $item */
-//            $item = $this->outstandingDrinks.First(d => d.MenuNumber == num);
-//            $this->outstandingDrinksoutstandingDrinks.Remove(item);
-//            $this->servedItemsValue += $item->price;
-//        }
+        foreach ($event->menuNumbers as $num) {
+            /** @var OrderedItem $item */
+            $item = array_values(array_filter($this->outstandingDrinks, fn(OrderedItem $drink) => $drink->menuNumber === $num))[0];
+
+            if (($position = array_search($item, $this->outstandingDrinks, true)) !== false) {
+                unset($this->outstandingDrinks[$position]);
+            }
+
+            $this->servedItemsValue += $item->price;
+        }
     }
 
     public function applyTabClosed(TabClosed $event) : void
@@ -93,20 +93,29 @@ final class Tab implements AggregateRoot
         $this->open = false;
     }
 
+    /**
+     * @param array<int> $menuNumbers
+     */
     private function areDrinksOutstanding(array $menuNumbers) : bool
     {
         return $this->areAllInList($menuNumbers, $this->outstandingDrinks);
     }
 
-    private function areAllInList(array $menuNumbers, array $list) : bool
+    /**
+     * @param array<int> $want
+     * @param array<OrderedItem> $have
+     */
+    private function areAllInList(array $want, array $have): bool
     {
-        return false;
-//        var curHave = new List<int>(have.Select(i => i.MenuNumber));
-//            foreach (var num in want)
-//                if (curHave.Contains(num))
-//                    curHave.Remove(num);
-//                else
-//                    return false;
-//            return true;
+        $curHave = array_map(fn(OrderedItem $orderedItem) => $orderedItem->menuNumber, $have);
+        foreach ($want as $num) {
+            if (($key = array_search($num, $curHave, true)) !== false) {
+                unset($curHave[$key]);
+            } else {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

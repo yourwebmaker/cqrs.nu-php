@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Cafe\UserInterface\Web\Controller;
 
 use Cafe\Application\Read\OpenTabsQueries;
+use Cafe\Application\Write\MarkDrinksServed;
+use Cafe\Application\Write\MarkItemsServedCommand;
 use Cafe\Application\Write\OpenTabCommand;
 use Cafe\Application\Write\PlaceOrderCommand;
+use Cafe\Application\Write\TabHandler;
 use Cafe\Domain\Tab\OrderedItem;
 use Cafe\Domain\Tab\Tab;
 use Cafe\Domain\Tab\TabId;
@@ -28,11 +31,13 @@ final class TabController extends AbstractController
 {
     private TabRepository $repository;
     private OpenTabsQueries $queries;
+    private TabHandler $handler;
 
-    public function __construct(TabRepository $repository, OpenTabsQueries $queries)
+    public function __construct(TabRepository $repository, OpenTabsQueries $queries, TabHandler $handler)
     {
         $this->repository = $repository;
         $this->queries = $queries;
+        $this->handler = $handler;
     }
 
     /**
@@ -121,7 +126,18 @@ final class TabController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route(path="tab/{tableNumber}/mark-served", name="tab_mark_served")
+     */
+    public function markServed(int $tableNumber, Request $request)
+    {
+        $menuNumbers = array_map(fn(array $item) => array_key_first($item), $request->request->get('items'));
+        $tabId = $this->queries->tabIdForTable($tableNumber);
+        $command = new MarkItemsServedCommand($tabId, $menuNumbers);
+        $this->handler->markServed($command);
 
+        return $this->redirectToRoute('tab_status', ['tableNumber' => $tableNumber]);
+    }
 
     /**
      * @Route(path="tab/{tableNumber}/close", name="tab_close")

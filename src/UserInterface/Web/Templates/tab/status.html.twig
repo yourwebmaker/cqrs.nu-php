@@ -6,6 +6,7 @@
     <a href="{{ path('tab_order', {tableNumber: tableNumber}) }}" class="btn btn-success">Order Food/Drink</a>
 
     {% if tab.hasItemsToServe %}
+        <form action="{{ path('tab_mark_served', {'tableNumber': tableNumber}) }}" method="post">
         <h3>Items To Serve</h3>
         <table class="table">
             <thead>
@@ -20,12 +21,13 @@
                 <tr>
                     <td>{{ item.menuNumber}}</td>
                     <td>{{ item.description}}</td>
-                    <td><input type="checkbox"></td>
+                    <td><input type="checkbox" value="{{ item.menuNumber}}" name="items[][{{ item.menuNumber }}]"/></td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
         <button type="submit" class="btn btn-primary">Mark Served</button>
+        </form>
     {% endif %}
 
     {% if tab.hasItemsInPreparation() %}
@@ -58,7 +60,7 @@
             </tr>
             </thead>
             <tbody>
-            {% for item in tab.getItemsInPreparation() %}
+            {% for item in tab.servedItems() %}
                 <tr>
                     <td>{{ item.menuNumber}}</td>
                     <td>{{ item.description}}</td>
