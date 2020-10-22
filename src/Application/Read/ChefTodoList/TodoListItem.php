@@ -6,8 +6,8 @@ namespace Cafe\Application\Read\ChefTodoList;
 
 final class TodoListItem
 {
-    public int $menuNumber; //1, 2, 3, 4
-    public string $description; //Sandwich, Carbonara pasta, Lasagna
+    public int $menuNumber;
+    public string $description;
 
     public function __construct(int $menuNumber, string $description)
     {

@@ -6,30 +6,14 @@ namespace Cafe\Application\Read\ChefTodoList;
 
 final class TodoListGroup
 {
+    public string $groupId;
     public string $tabId;
-    /** @var array<TodoListItem> */
     public array $items;
 
-    /**
-     * @param array<TodoListItem> $items
-     */
-    public function __construct(string $tabId, array $items)
+    public function __construct(string $groupId, string $tabId, array $items)
     {
+        $this->groupId = $groupId;
         $this->tabId = $tabId;
-        foreach ($items as $item) {
-            $this->items[$item->menuNumber] = $item;
-        }
-    }
-
-    public function removeItem(int $menuNumber) : void
-    {
-        unset($this->items[$menuNumber]);
-    }
-
-    public function removeItems(array $menuNumbers) : void
-    {
-        foreach ($menuNumbers as $menuNumber) {
-            $this->removeItem($menuNumber);
-        }
+        $this->items = $items;
     }
 }

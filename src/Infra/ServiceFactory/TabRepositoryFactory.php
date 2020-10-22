@@ -6,6 +6,7 @@ namespace Cafe\Infra\ServiceFactory;
 
 use Cafe\Domain\Tab\Tab;
 use Cafe\Domain\Tab\TabRepository;
+use Cafe\Infra\Read\ChefTodoProjector;
 use Cafe\Infra\Read\TabProjector;
 use Cafe\Infra\TabRepositoryEventSauce;
 use Doctrine\DBAL\Connection;
@@ -38,6 +39,7 @@ class TabRepositoryFactory
                 ),
                  new SynchronousMessageDispatcher(
                     new TabProjector($this->entityManager, $this->connection),
+                    new ChefTodoProjector($this->connection),
                 )
             )
         );

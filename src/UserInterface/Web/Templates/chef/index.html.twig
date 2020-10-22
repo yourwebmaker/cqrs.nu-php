@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+{% block title %}Chef Todo List{% endblock %}
+{% block content %}
+    {% for group in groups %}
+        <form action="{{ path('chef_markprepared') }}" method="post">
+            <input hidden value="{{ group.groupId }}" name="groupId"/>
+            <input hidden value="{{ group.tabId }}" name="tabId"/>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Menu #</th>
+                    <th>Description</th>
+                    <th>Prepared</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in group.items %}
+                <tr>
+                    <td>{{ item.menuNumber}}</td>
+                    <td>{{ item.description }}</td>
+                    <td><input type="checkbox" value="{{ item.menuNumber}}" name="items[][{{ item.menuNumber }}]"/></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <button type="submit" class="btn btn-primary">Mark Prepared</button>
+            <hr />
+        </form>
+    {% endfor %}
+{% endblock %}
