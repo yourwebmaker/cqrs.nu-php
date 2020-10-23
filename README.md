@@ -28,6 +28,8 @@ marked as served or cancelled first.
 #### Application
 - [ ] Move code out of controllers to Handlers
 - [ ] Refactor \Cafe\UserInterface\Web\Controller\TabController::order
+- [ ] Handle domain exceptions
+- [ ] Choose to use or not Commands on the Aggregates
 ##### Misc
 - [ ] Replace every single array for a collection. 
 - [ ] Make event store to use different types of persistence (redis, etc). Make it an interface

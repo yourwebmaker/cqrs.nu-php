@@ -6,9 +6,11 @@ namespace Cafe\Domain\Tab;
 
 use Cafe\Application\Write\MarkDrinksServed;
 use Cafe\Application\Write\MarkFoodPrepared;
+use Cafe\Application\Write\MarkFoodServed;
 use Cafe\Application\Write\OpenTabCommand;
 use Cafe\Application\Write\PlaceOrderCommand;
 use Cafe\Domain\Tab\Events\FoodPrepared;
+use Cafe\Domain\Tab\Events\FoodServed;
 use Cafe\Domain\Tab\Events\TabClosed;
 use Cafe\Domain\Tab\Events\TabOpened;
 use Cafe\Domain\Tab\Events\DrinksOrdered;
@@ -16,12 +18,13 @@ use Cafe\Domain\Tab\Events\DrinksServed;
 use Cafe\Domain\Tab\Events\FoodOrdered;
 use Cafe\Domain\Tab\Exception\DrinksNotOutstanding;
 use Cafe\Domain\Tab\Exception\FoodNotOutstanding;
+use Cafe\Domain\Tab\Exception\FoodNotPrepared;
 use EventSauce\EventSourcing\AggregateRoot;
-use EventSauce\EventSourcing\AggregateRootBehaviour;
+use EventSauce\EventSourcing\AggregateRootBehaviourWithRequiredHistory;
 
 final class Tab implements AggregateRoot
 {
-    use AggregateRootBehaviour;
+    use AggregateRootBehaviourWithRequiredHistory;
 
     private bool $open = false;
     private array $outstandingDrinks = [];
@@ -71,6 +74,15 @@ final class Tab implements AggregateRoot
         $this->recordThat(new FoodPrepared($command->tabId, $command->groupId, $command->menuNumbers));
     }
 
+    public function markFoodServed(MarkFoodServed $command): void
+    {
+        if (!$this->isFoodPrepared($command->menuNumbers)) {
+            throw new FoodNotPrepared();
+        }
+
+        $this->recordThat(new FoodServed($command->tabId, $command->menuNumbers));
+    }
+
     public function applyTabOpened(TabOpened $event): void
     {
         $this->open = true;
@@ -116,6 +128,21 @@ final class Tab implements AggregateRoot
         }
     }
 
+    public function applyFoodServed(FoodServed $event) : void
+    {
+        //Todo .... use collections for this mess.
+        foreach ($event->menuNumbers as $num) {
+            /** @var OrderedItem $item */
+            $item = array_values(array_filter($this->preparedFood, fn(OrderedItem $food) => $food->menuNumber === $num))[0];
+
+            if (($position = array_search($item, $this->preparedFood, true)) !== false) {
+                unset($this->preparedFood[$position]);
+            }
+
+            $this->servedItemsValue += $item->price;
+        }
+    }
+
     public function applyTabClosed(TabClosed $event) : void
     {
         $this->open = false;
@@ -135,6 +162,14 @@ final class Tab implements AggregateRoot
     private function isFoodOutstanding(array $menuNumbers) : bool
     {
         return $this->areAllInList($menuNumbers, $this->outstandingFood);
+    }
+
+    /**
+     * @param array<int> $menuNumbers
+     */
+    private function isFoodPrepared(array $menuNumbers) : bool
+    {
+        return $this->areAllInList($menuNumbers, $this->preparedFood);
     }
 
     /**

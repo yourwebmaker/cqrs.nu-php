@@ -9,6 +9,7 @@ use Cafe\Domain\Tab\Events\DrinksOrdered;
 use Cafe\Domain\Tab\Events\DrinksServed;
 use Cafe\Domain\Tab\Events\FoodOrdered;
 use Cafe\Domain\Tab\Events\FoodPrepared;
+use Cafe\Domain\Tab\Events\FoodServed;
 use Cafe\Domain\Tab\Events\TabOpened;
 use Cafe\Domain\Tab\OrderedItem;
 use Doctrine\DBAL\Connection;
@@ -94,6 +95,25 @@ class TabProjector implements Consumer
                 $this->connection->executeQuery($sql, [
                     'old_status' => 'in-preparation',
                     'new_status' => 'to-serve',
+                    'menu_number' => $menuNumber,
+                    'tab_id' => $event->tabId->toString()
+                ]);
+            }
+        }
+
+        if ($event instanceof FoodServed) {
+            foreach ($event->menuNumbers as $menuNumber) {
+                $sql = '
+                    update read_model_tab_item 
+                    set status = :new_status 
+                    where 
+                        menu_number = :menu_number and
+                        tab_id = :tab_id and
+                        status = :old_status
+                    limit 1';
+                $this->connection->executeQuery($sql, [
+                    'old_status' => 'to-serve',
+                    'new_status' => 'served', //use constants here.
                     'menu_number' => $menuNumber,
                     'tab_id' => $event->tabId->toString()
                 ]);
