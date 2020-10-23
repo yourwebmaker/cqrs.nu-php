@@ -41,7 +41,6 @@ marked as served or cancelled first.
 - [ ] Persistence using Doctrine
 - [ ] Installation and run guide using docker
 - [ ] Do not update write in case read fail.
-- [ ] Drop some SF and Composer packages (http client, mailer, notifier, translation, etc)
 #UI
 - [ ] Add icons, better colors to buttons.
 - [ ] Add footer
