@@ -8,6 +8,7 @@ use Cafe\Application\Read\OpenTabs\Tab;
 use Cafe\Domain\Tab\Events\DrinksOrdered;
 use Cafe\Domain\Tab\Events\DrinksServed;
 use Cafe\Domain\Tab\Events\FoodOrdered;
+use Cafe\Domain\Tab\Events\FoodPrepared;
 use Cafe\Domain\Tab\Events\TabOpened;
 use Cafe\Domain\Tab\OrderedItem;
 use Doctrine\DBAL\Connection;
@@ -67,6 +68,7 @@ class TabProjector implements Consumer
         }
 
         if ($event instanceof FoodOrdered) {
+            //Todo, create a method for these loops in order to DRY) {
             /** @var OrderedItem $item */
             foreach ($event->items as $item) {
                 $this->connection->insert('read_model_tab_item', [
@@ -75,6 +77,25 @@ class TabProjector implements Consumer
                     'description' => $item->description,
                     'price' => $item->price,
                     'status' => 'in-preparation'
+                ]);
+            }
+        }
+
+        if ($event instanceof FoodPrepared) {
+            foreach ($event->menuNumbers as $menuNumber) {
+                $sql = '
+                    update read_model_tab_item 
+                    set status = :new_status 
+                    where 
+                        menu_number = :menu_number and
+                        tab_id = :tab_id and
+                        status = :old_status
+                    limit 1';
+                $this->connection->executeQuery($sql, [
+                    'old_status' => 'in-preparation',
+                    'new_status' => 'to-serve',
+                    'menu_number' => $menuNumber,
+                    'tab_id' => $event->tabId->toString()
                 ]);
             }
         }

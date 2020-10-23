@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace Cafe\Domain\Tab;
 
 use Cafe\Application\Write\MarkDrinksServed;
+use Cafe\Application\Write\MarkFoodPrepared;
 use Cafe\Application\Write\OpenTabCommand;
 use Cafe\Application\Write\PlaceOrderCommand;
+use Cafe\Domain\Tab\Events\FoodPrepared;
 use Cafe\Domain\Tab\Events\TabClosed;
 use Cafe\Domain\Tab\Events\TabOpened;
 use Cafe\Domain\Tab\Events\DrinksOrdered;
 use Cafe\Domain\Tab\Events\DrinksServed;
 use Cafe\Domain\Tab\Events\FoodOrdered;
 use Cafe\Domain\Tab\Exception\DrinksNotOutstanding;
+use Cafe\Domain\Tab\Exception\FoodNotOutstanding;
 use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\AggregateRootBehaviour;
 
@@ -59,6 +62,15 @@ final class Tab implements AggregateRoot
         $this->recordThat(new DrinksServed($command->tabId, $command->menuNumbers));
     }
 
+    public function markFoodPrepared(MarkFoodPrepared $command) : void
+    {
+        if (!$this->isFoodOutstanding($command->menuNumbers)) {
+            throw new FoodNotOutstanding();
+        }
+
+        $this->recordThat(new FoodPrepared($command->tabId, $command->groupId, $command->menuNumbers));
+    }
+
     public function applyTabOpened(TabOpened $event): void
     {
         $this->open = true;
@@ -71,11 +83,12 @@ final class Tab implements AggregateRoot
 
     public function applyFoodOrdered(FoodOrdered $event) : void
     {
-        $this->outstandingFood[] = $event->items;
+        $this->outstandingFood += $event->items;
     }
 
     public function applyDrinksServed(DrinksServed $event) : void
     {
+        //Todo .... use collections for this mess.
         foreach ($event->menuNumbers as $num) {
             /** @var OrderedItem $item */
             $item = array_values(array_filter($this->outstandingDrinks, fn(OrderedItem $drink) => $drink->menuNumber === $num))[0];
@@ -85,6 +98,21 @@ final class Tab implements AggregateRoot
             }
 
             $this->servedItemsValue += $item->price;
+        }
+    }
+
+    public function applyFoodPrepared(FoodPrepared $event) : void
+    {
+        //Todo .... use collections for this mess.
+        foreach ($event->menuNumbers as $num) {
+            /** @var OrderedItem $item */
+            $item = array_values(array_filter($this->outstandingFood, fn(OrderedItem $food) => $food->menuNumber === $num))[0];
+
+            if (($position = array_search($item, $this->outstandingFood, true)) !== false) {
+                unset($this->outstandingFood[$position]);
+            }
+
+            $this->preparedFood[] = $item;
         }
     }
 
@@ -99,6 +127,14 @@ final class Tab implements AggregateRoot
     private function areDrinksOutstanding(array $menuNumbers) : bool
     {
         return $this->areAllInList($menuNumbers, $this->outstandingDrinks);
+    }
+
+    /**
+     * @param array<int> $menuNumbers
+     */
+    private function isFoodOutstanding(array $menuNumbers) : bool
+    {
+        return $this->areAllInList($menuNumbers, $this->outstandingFood);
     }
 
     /**

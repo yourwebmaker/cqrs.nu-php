@@ -42,10 +42,11 @@ final class ChefController extends AbstractController
     {
         //todo... jesus... fix this mess.
         $menuNumbers = array_map(fn(array $item) => array_key_first($item), $request->request->get('items'));
-        $tabIdString = $request->request->getAlnum('tabId');
+        $tabIdString = $request->request->get('tabId');
+        $groupId = $request->request->get('groupId');
         $tabIdVO = TabId::fromString($tabIdString);
         $tab = $this->repository->get($tabIdVO);
-        $command = new MarkFoodPrepared($tabIdString, $menuNumbers);
+        $command = new MarkFoodPrepared($tabIdString, $groupId, $menuNumbers);
         $tab->markFoodPrepared($command);
         $this->repository->save($tab);
 

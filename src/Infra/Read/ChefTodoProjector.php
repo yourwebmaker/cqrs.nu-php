@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cafe\Infra\Read;
 
 use Cafe\Domain\Tab\Events\FoodOrdered;
+use Cafe\Domain\Tab\Events\FoodPrepared;
 use Cafe\Domain\Tab\OrderedItem;
 use Doctrine\DBAL\Connection;
 use EventSauce\EventSourcing\Consumer;
@@ -40,6 +41,24 @@ class ChefTodoProjector implements Consumer
                     'group_id' => $groupId,
                     'description' => $item->description,
                     'menu_number' => $item->menuNumber,
+                ]);
+            }
+        }
+
+        if ($event instanceof FoodPrepared) {
+            /** @var int $menuNumber */
+            foreach ($event->menuNumbers as $menuNumber) {
+                $sql = 'delete 
+                        from read_model_chef_todo_item 
+                        where 
+                            menu_number = :menu_number and 
+                            group_id = :group_id
+                        limit 1
+                ';
+
+                $this->connection->executeQuery($sql, [
+                    'group_id' => $event->groupId,
+                    'menu_number' => $menuNumber,
                 ]);
             }
         }
