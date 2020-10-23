@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cafe\UserInterface\Web\Controller;
 
 use Cafe\Application\Read\OpenTabsQueries;
+use Cafe\Application\Write\CloseTabCommand;
 use Cafe\Application\Write\MarkDrinksServed;
 use Cafe\Application\Write\MarkItemsServedCommand;
 use Cafe\Application\Write\OpenTabCommand;
@@ -142,12 +143,23 @@ final class TabController extends AbstractController
     /**
      * @Route(path="tab/{tableNumber}/close", name="tab_close")
      */
-    public function close(string $tableNumber, Request $request): Response
+    public function close(int $tableNumber, Request $request): Response
     {
         $form = $this->createForm(CloseTabType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $tabId = TabId::fromString($this->queries->tabIdForTable($tableNumber));
+            $command = new CloseTabCommand(
+                $tabId,
+                $form->get('amountPaid')->getData()
+            );
+
+            $tab = $this->repository->get($tabId);
+            $tab->close($command);
+            $this->repository->save($tab);
+
             return $this->redirectToRoute('home');
         }
 

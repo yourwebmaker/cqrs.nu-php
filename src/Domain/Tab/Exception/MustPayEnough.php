@@ -6,6 +6,6 @@ namespace Cafe\Domain\Tab\Exception;
 
 use DomainException;
 
-final class FoodNotPrepared extends DomainException
+final class MustPayEnough extends DomainException
 {
 }

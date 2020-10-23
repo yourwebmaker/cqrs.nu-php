@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cafe\Domain\Tab;
 
+use Cafe\Application\Write\CloseTabCommand;
 use Cafe\Application\Write\MarkDrinksServed;
 use Cafe\Application\Write\MarkFoodPrepared;
 use Cafe\Application\Write\MarkFoodServed;
@@ -19,6 +20,9 @@ use Cafe\Domain\Tab\Events\FoodOrdered;
 use Cafe\Domain\Tab\Exception\DrinksNotOutstanding;
 use Cafe\Domain\Tab\Exception\FoodNotOutstanding;
 use Cafe\Domain\Tab\Exception\FoodNotPrepared;
+use Cafe\Domain\Tab\Exception\MustPayEnough;
+use Cafe\Domain\Tab\Exception\TabHasUnservedItems;
+use Cafe\Domain\Tab\Exception\TabNotOpen;
 use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\AggregateRootBehaviourWithRequiredHistory;
 
@@ -81,6 +85,28 @@ final class Tab implements AggregateRoot
         }
 
         $this->recordThat(new FoodServed($command->tabId, $command->menuNumbers));
+    }
+
+    public function close(CloseTabCommand $command): void
+    {
+        if (!$this->open) {
+            throw new TabNotOpen();
+        }
+
+        if ($this->hasUnservedItems()) {
+            throw new TabHasUnservedItems();
+        }
+
+        if ($command->amountPaid < $this->servedItemsValue) {
+            throw new MustPayEnough();
+        }
+
+        $this->recordThat(new TabClosed(
+            $command->tabId,
+            $command->amountPaid,
+            $this->servedItemsValue,
+            $command->amountPaid - $this->servedItemsValue
+        ));
     }
 
     public function applyTabOpened(TabOpened $event): void
@@ -188,5 +214,10 @@ final class Tab implements AggregateRoot
         }
 
         return true;
+    }
+
+    private function hasUnservedItems() : bool
+    {
+        return count($this->outstandingDrinks) || count($this->outstandingFood) || count($this->preparedFood);
     }
 }

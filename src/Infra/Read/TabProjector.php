@@ -10,6 +10,7 @@ use Cafe\Domain\Tab\Events\DrinksServed;
 use Cafe\Domain\Tab\Events\FoodOrdered;
 use Cafe\Domain\Tab\Events\FoodPrepared;
 use Cafe\Domain\Tab\Events\FoodServed;
+use Cafe\Domain\Tab\Events\TabClosed;
 use Cafe\Domain\Tab\Events\TabOpened;
 use Cafe\Domain\Tab\OrderedItem;
 use Doctrine\DBAL\Connection;
@@ -117,6 +118,14 @@ class TabProjector implements Consumer
                     'menu_number' => $menuNumber,
                     'tab_id' => $event->tabId->toString()
                 ]);
+            }
+        }
+
+        if ($event instanceof TabClosed) {
+            $tables = ['read_model_chef_todo_group', 'read_model_chef_todo_item', 'read_model_tab', 'read_model_tab_item'];
+            foreach ($tables as $table) {
+                $sql = 'delete from ' . $table . ' where tab_id = :tab_id';
+                $this->connection->executeQuery($sql,  ['tab_id' => $event->tabId->toString()]);
             }
         }
 
