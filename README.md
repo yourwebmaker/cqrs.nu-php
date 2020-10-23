@@ -22,8 +22,6 @@ marked as served or cancelled first.
 
 ### Todo
 ##### Domain
-- [ ] Allow to serve food
-- [ ] Allow to Amend order
 - [ ] Do not allow to enter negative numbers on total to order;
 #### Application
 - [ ] Move code out of controllers to Handlers
@@ -33,9 +31,7 @@ marked as served or cancelled first.
 ##### Misc
 - [ ] Replace every single array for a collection. 
 - [ ] Make event store to use different types of persistence (redis, etc). Make it an interface
-- [ ] Unify config from 'migrations-db.php' and Connection
 - [ ] Describe the project like this one: https://github.com/CodelyTV/php-ddd-example
-- [ ] Install container
 - [ ] PHPStan
 - [ ] Apply doctrine code standards
 - [ ] Mutation testing
@@ -43,7 +39,6 @@ marked as served or cancelled first.
 - [ ] Use yield return new DrinksServed to record events?
 ##### Infra
 - [ ] Persistence using Doctrine
-- [X] Persistence using ES
 - [ ] Installation and run guide using docker
 - [ ] Do not update write in case read fail.
 - [ ] Drop some SF and Composer packages (http client, mailer, notifier, translation, etc)
@@ -56,10 +51,3 @@ marked as served or cancelled first.
 - [ ] Style http://localhost:8000/tab/297/order
 - [ ] Add validators on DTOs
 - [ ] Display total of the tab then closing it.
-
-- Implement Open tab
-    - Handling command
-    - ReadModel
-    - Form
-    - Controller Post
-    - Controller Query

@@ -9,7 +9,7 @@ use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
 final class TabClosed implements SerializablePayload
 {
-    public TabId $tabId;
+    public TabId $tabId; //todo use simple strings for this shit.
     public float $amountPaid;
     public float $orderValue;
     public float $tipValue;
