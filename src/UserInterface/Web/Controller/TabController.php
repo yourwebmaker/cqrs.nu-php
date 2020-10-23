@@ -6,7 +6,6 @@ namespace Cafe\UserInterface\Web\Controller;
 
 use Cafe\Application\Read\OpenTabsQueries;
 use Cafe\Application\Write\CloseTabCommand;
-use Cafe\Application\Write\MarkDrinksServed;
 use Cafe\Application\Write\MarkItemsServedCommand;
 use Cafe\Application\Write\OpenTabCommand;
 use Cafe\Application\Write\PlaceOrderCommand;

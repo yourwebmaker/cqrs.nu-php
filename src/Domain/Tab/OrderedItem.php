@@ -21,7 +21,7 @@ final class OrderedItem implements JsonSerializable
         $this->price = $price;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         return [
             'menuNumber' => $this->menuNumber,

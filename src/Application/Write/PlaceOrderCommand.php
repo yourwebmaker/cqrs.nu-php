@@ -34,11 +34,11 @@ class PlaceOrderCommand
      */
     public function getDrinks() : array
     {
-        return array_filter($this->items, fn (OrderedItem $item) => $item->isDrink);
+        return array_values(array_filter($this->items, fn (OrderedItem $item) => $item->isDrink));
     }
 
     public function getFood() : array
     {
-        return array_filter($this->items, fn (OrderedItem $item) => !$item->isDrink);
+        return array_values(array_filter($this->items, fn (OrderedItem $item) => !$item->isDrink));
     }
 }
