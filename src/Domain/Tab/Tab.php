@@ -23,18 +23,29 @@ use Cafe\Domain\Tab\Exception\FoodNotPrepared;
 use Cafe\Domain\Tab\Exception\MustPayEnough;
 use Cafe\Domain\Tab\Exception\TabHasUnservedItems;
 use Cafe\Domain\Tab\Exception\TabNotOpen;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\AggregateRootBehaviourWithRequiredHistory;
+use EventSauce\EventSourcing\AggregateRootId;
 
 final class Tab implements AggregateRoot
 {
     use AggregateRootBehaviourWithRequiredHistory;
 
     private bool $open = false;
-    private array $outstandingDrinks = [];
-    private array $outstandingFood = [];
-    private array $preparedFood = [];
+    private Collection $outstandingDrinks;
+    private Collection $outstandingFood;
+    private Collection $preparedFood;
     private float $servedItemsValue = 0.0;
+
+    private function __construct(AggregateRootId $aggregateRootId)
+    {
+        $this->aggregateRootId = $aggregateRootId;
+        $this->outstandingDrinks = new ArrayCollection();
+        $this->outstandingFood = new ArrayCollection();
+        $this->preparedFood = new ArrayCollection();
+    }
 
     public static function open(OpenTabCommand $command) : self
     {
@@ -109,67 +120,58 @@ final class Tab implements AggregateRoot
         ));
     }
 
-    public function applyTabOpened(TabOpened $event): void
+    private function applyTabOpened(TabOpened $event): void
     {
         $this->open = true;
     }
 
-    public function applyDrinksOrdered(DrinksOrdered $event): void
+    private function applyDrinksOrdered(DrinksOrdered $event): void
     {
-        $this->outstandingDrinks += $event->items;
+        $this->outstandingDrinks = new ArrayCollection();
+        foreach ($event->items as $item) {
+            $this->outstandingDrinks->add($item);
+        }
     }
 
-    public function applyFoodOrdered(FoodOrdered $event) : void
+    private function applyFoodOrdered(FoodOrdered $event) : void
     {
-        $this->outstandingFood += $event->items;
+        $this->outstandingFood = new ArrayCollection();
+        foreach ($event->items as $item) {
+            $this->outstandingFood->add($item);
+        }
     }
 
-    public function applyDrinksServed(DrinksServed $event) : void
+    private function applyDrinksServed(DrinksServed $event) : void
     {
-        //Todo .... use collections for this mess.
         foreach ($event->menuNumbers as $num) {
             /** @var OrderedItem $item */
-            $item = array_values(array_filter($this->outstandingDrinks, fn(OrderedItem $drink) => $drink->menuNumber === $num))[0];
-
-            if (($position = array_search($item, $this->outstandingDrinks, true)) !== false) {
-                unset($this->outstandingDrinks[$position]);
-            }
-
+            $item = $this->outstandingDrinks->filter(fn(OrderedItem $drink) => $drink->menuNumber === $num)->first();
+            $this->outstandingDrinks->removeElement($item);
             $this->servedItemsValue += $item->price;
         }
     }
 
-    public function applyFoodPrepared(FoodPrepared $event) : void
+    private function applyFoodPrepared(FoodPrepared $event) : void
     {
-        //Todo .... use collections for this mess.
         foreach ($event->menuNumbers as $num) {
             /** @var OrderedItem $item */
-            $item = array_values(array_filter($this->outstandingFood, fn(OrderedItem $food) => $food->menuNumber === $num))[0];
-
-            if (($position = array_search($item, $this->outstandingFood, true)) !== false) {
-                unset($this->outstandingFood[$position]);
-            }
-
-            $this->preparedFood[] = $item;
+            $item = $this->outstandingFood->filter(fn(OrderedItem $food) => $food->menuNumber === $num)->first();
+            $this->outstandingFood->removeElement($item);
+            $this->preparedFood->add($item);
         }
     }
 
-    public function applyFoodServed(FoodServed $event) : void
+    private function applyFoodServed(FoodServed $event) : void
     {
-        //Todo .... use collections for this mess.
         foreach ($event->menuNumbers as $num) {
             /** @var OrderedItem $item */
-            $item = array_values(array_filter($this->preparedFood, fn(OrderedItem $food) => $food->menuNumber === $num))[0];
-
-            if (($position = array_search($item, $this->preparedFood, true)) !== false) {
-                unset($this->preparedFood[$position]);
-            }
-
+            $item = $this->preparedFood->filter(fn(OrderedItem $food) => $food->menuNumber === $num)->first();
+            $this->preparedFood->removeElement($item);
             $this->servedItemsValue += $item->price;
         }
     }
 
-    public function applyTabClosed(TabClosed $event) : void
+    private function applyTabClosed(TabClosed $event) : void
     {
         $this->open = false;
     }
@@ -179,7 +181,7 @@ final class Tab implements AggregateRoot
      */
     private function areDrinksOutstanding(array $menuNumbers) : bool
     {
-        return $this->areAllInList($menuNumbers, $this->outstandingDrinks);
+        return $this->areAllInList($menuNumbers, $this->outstandingDrinks->toArray());
     }
 
     /**
@@ -187,7 +189,7 @@ final class Tab implements AggregateRoot
      */
     private function isFoodOutstanding(array $menuNumbers) : bool
     {
-        return $this->areAllInList($menuNumbers, $this->outstandingFood);
+        return $this->areAllInList($menuNumbers, $this->outstandingFood->toArray());
     }
 
     /**
@@ -195,7 +197,7 @@ final class Tab implements AggregateRoot
      */
     private function isFoodPrepared(array $menuNumbers) : bool
     {
-        return $this->areAllInList($menuNumbers, $this->preparedFood);
+        return $this->areAllInList($menuNumbers, $this->preparedFood->toArray());
     }
 
     /**
@@ -218,6 +220,6 @@ final class Tab implements AggregateRoot
 
     private function hasUnservedItems() : bool
     {
-        return count($this->outstandingDrinks) || count($this->outstandingFood) || count($this->preparedFood);
+        return $this->outstandingDrinks->count() || $this->outstandingFood->count() || $this->preparedFood->count();
     }
 }
