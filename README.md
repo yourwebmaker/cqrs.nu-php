@@ -22,7 +22,7 @@ marked as served or cancelled first.
 
 ### Todo
 ##### Domain
-- [ ] Do not allow to enter negative numbers on total to order;
+- [ ] Do not allow entering negative numbers on total to order;
 #### Application
 - [ ] Move code out of controllers to Handlers
 - [ ] Refactor \Cafe\UserInterface\Web\Controller\TabController::order
@@ -30,7 +30,6 @@ marked as served or cancelled first.
 - [ ] Choose to use or not Commands on the Aggregates
 ##### Misc
 - [ ] Replace every single array for a collection. 
-- [ ] Make event store to use different types of persistence (redis, etc). Make it an interface
 - [ ] Describe the project like this one: https://github.com/CodelyTV/php-ddd-example
 - [ ] PHPStan
 - [ ] Apply doctrine code standards
@@ -39,7 +38,6 @@ marked as served or cancelled first.
 - [ ] Use yield return new DrinksServed to record events?
 ##### Infra
 - [ ] Persistence using Doctrine
-- [ ] Installation and run guide using docker
 - [ ] Do not update write in case read fail.
 #UI
 - [ ] Add icons, better colors to buttons.
