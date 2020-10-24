@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cafe\Application\Read\OpenTabs;
 
+use Closure;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -43,7 +44,7 @@ class Tab
         $this->served = $served;
     }
 
-    public function moveItems(array $menuNumbers, \Closure $from, \Closure $to) : void
+    public function moveItems(array $menuNumbers, Closure $from, Closure $to) : void
     {
         $fromList = $from($this);
     }

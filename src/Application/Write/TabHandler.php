@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cafe\Application\Write;
 
 use Cafe\Application\Read\OpenTabsQueries;
+use Cafe\Domain\Tab\Tab;
 use Cafe\Domain\Tab\TabId;
 use Cafe\Domain\Tab\TabRepository;
 use Cafe\UserInterface\Web\StaticData\MenuItem;
@@ -13,15 +14,26 @@ use Cafe\UserInterface\Web\StaticData\StaticData;
 class TabHandler
 {
     private TabRepository $repository;
-    private OpenTabsQueries $queries;
 
-    public function __construct(TabRepository $repository, OpenTabsQueries $queries)
+    public function __construct(TabRepository $repository)
     {
         $this->repository = $repository;
-        $this->queries = $queries;
     }
 
-    public function markServed(MarkItemsServedCommand $command) : void
+    public function handleOpenTabCommand(OpenTabCommand $command) : void
+    {
+        $tab = Tab::open($command);
+        $this->repository->save($tab);
+    }
+
+    public function handlePlaceOrderCommand(PlaceOrderCommand $command) : void
+    {
+        $tab = $this->repository->get($command->tabId);
+        $tab->order($command);
+        $this->repository->save($tab);
+    }
+
+    public function handleMarkItemsServedCommand(MarkItemsServedCommand $command) : void
     {
         $tabId = TabId::fromString($command->tabId);
         $tab = $this->repository->get($tabId);
@@ -43,13 +55,27 @@ class TabHandler
         }
 
         if (count($drinksNumbers) > 0) {
-            $tab->markDrinksServed(new MarkDrinksServed($command->tabId, $drinksNumbers));
+            $tab->markDrinksServed(new MarkDrinksServedComman($command->tabId, $drinksNumbers));
         }
 
         if (count($foodNumbers) > 0) {
-            $tab->markFoodServed(new MarkFoodServed($command->tabId, $foodNumbers));
+            $tab->markFoodServed(new MarkFoodServedCommand($command->tabId, $foodNumbers));
         }
 
+        $this->repository->save($tab);
+    }
+
+    public function handleMarkFoodPreparedCommand(MarkFoodPreparedCommand $command) : void
+    {
+        $tab = $this->repository->get($command->tabId);
+        $tab->markFoodPrepared($command);
+        $this->repository->save($tab);
+    }
+
+    public function handleCloseTabCommand(CloseTabCommand $command) : void
+    {
+        $tab = $this->repository->get($command->tabId);
+        $tab->close($command);
         $this->repository->save($tab);
     }
 }

@@ -6,9 +6,10 @@ namespace Cafe\Application\Write;
 
 use Cafe\Domain\Tab\TabId;
 
-class MarkFoodServed
+class MarkDrinksServedComman
 {
     public TabId $tabId;
+    /** @var array<int>  */
     public array $menuNumbers;
 
     public function __construct(string $tabId, array $menuNumbers)

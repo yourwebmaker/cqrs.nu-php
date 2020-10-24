@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Cafe\UserInterface\Web\Controller;
 
 use Cafe\Application\Read\ChefTodoListQueries;
-use Cafe\Application\Write\MarkFoodPrepared;
-use Cafe\Domain\Tab\TabId;
-use Cafe\Domain\Tab\TabRepository;
+use Cafe\Application\Write\MarkFoodPreparedCommand;
+use League\Tactician\CommandBus;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,12 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
 final class ChefController extends AbstractController
 {
     private ChefTodoListQueries $query;
-    private TabRepository $repository;
+    private CommandBus $commandBus;
 
-    public function __construct(ChefTodoListQueries $query, TabRepository $repository)
+    public function __construct(ChefTodoListQueries $query, CommandBus $commandBus)
     {
         $this->query = $query;
-        $this->repository = $repository;
+        $this->commandBus = $commandBus;
     }
 
     /**
@@ -44,11 +43,8 @@ final class ChefController extends AbstractController
         $menuNumbers = array_map(fn(array $item) => array_key_first($item), $request->request->get('items'));
         $tabIdString = $request->request->get('tabId');
         $groupId = $request->request->get('groupId');
-        $tabIdVO = TabId::fromString($tabIdString);
-        $tab = $this->repository->get($tabIdVO);
-        $command = new MarkFoodPrepared($tabIdString, $groupId, $menuNumbers);
-        $tab->markFoodPrepared($command);
-        $this->repository->save($tab);
+
+        $this->commandBus->handle(new MarkFoodPreparedCommand($tabIdString, $groupId, $menuNumbers));
 
         return $this->redirectToRoute('chef_index');
     }

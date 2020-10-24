@@ -9,11 +9,8 @@ use Cafe\Application\Write\CloseTabCommand;
 use Cafe\Application\Write\MarkItemsServedCommand;
 use Cafe\Application\Write\OpenTabCommand;
 use Cafe\Application\Write\PlaceOrderCommand;
-use Cafe\Application\Write\TabHandler;
 use Cafe\Domain\Tab\OrderedItem;
-use Cafe\Domain\Tab\Tab;
 use Cafe\Domain\Tab\TabId;
-use Cafe\Domain\Tab\TabRepository;
 use Cafe\UserInterface\Web\Form\CloseTabType;
 use Cafe\UserInterface\Web\Form\OpenTabType;
 use Cafe\UserInterface\Web\Form\OrderType;
@@ -21,6 +18,7 @@ use Cafe\UserInterface\Web\Model\OrderItem;
 use Cafe\UserInterface\Web\Model\OrderModel;
 use Cafe\UserInterface\Web\StaticData\MenuItem;
 use Cafe\UserInterface\Web\StaticData\StaticData;
+use League\Tactician\CommandBus;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,15 +27,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class TabController extends AbstractController
 {
-    private TabRepository $repository;
     private OpenTabsQueries $queries;
-    private TabHandler $handler;
+    private CommandBus $commandBus;
 
-    public function __construct(TabRepository $repository, OpenTabsQueries $queries, TabHandler $handler)
+    public function __construct(OpenTabsQueries $queries, CommandBus $commandBus)
     {
-        $this->repository = $repository;
         $this->queries = $queries;
-        $this->handler = $handler;
+        $this->commandBus = $commandBus;
     }
 
     /**
@@ -52,15 +48,11 @@ final class TabController extends AbstractController
 
             $tableNumber = $form->get('tableNumber')->getData();
 
-            $tab = Tab::open(
-                new OpenTabCommand(
-                    Uuid::uuid4()->toString(),
-                    $tableNumber,
-                    $form->get('waiter')->getData(),
-                )
-            );
-
-            $this->repository->save($tab);
+            $this->commandBus->handle(new OpenTabCommand(
+                Uuid::uuid4()->toString(),
+                $tableNumber,
+                $form->get('waiter')->getData(),
+            ));
 
             return $this->redirectToRoute('tab_order', ['tableNumber' => $tableNumber]);
         }
@@ -88,6 +80,7 @@ final class TabController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            //todo move this inside the handler
             $orderedItems = [];
             foreach ($orderModel->items as $item) {
                 for ($i = 0; $i < $item->numberToOrder; $i++) {
@@ -101,11 +94,8 @@ final class TabController extends AbstractController
             }
 
             $tabId = $this->queries->tabIdForTable($tableNumber);
-            $command = new PlaceOrderCommand($tabId, $orderedItems);
-            $tab = $this->repository->get(TabId::fromString($tabId));
 
-            $tab->order($command);
-            $this->repository->save($tab);
+            $this->commandBus->handle(new PlaceOrderCommand($tabId, $orderedItems));
 
             return $this->redirectToRoute('tab_status', ['tableNumber' => $tableNumber]);
         }
@@ -132,9 +122,9 @@ final class TabController extends AbstractController
     public function markServed(int $tableNumber, Request $request)
     {
         $menuNumbers = array_map(fn(array $item) => array_key_first($item), $request->request->get('items'));
+
         $tabId = $this->queries->tabIdForTable($tableNumber);
-        $command = new MarkItemsServedCommand($tabId, $menuNumbers);
-        $this->handler->markServed($command);
+        $this->commandBus->handle(new MarkItemsServedCommand($tabId, $menuNumbers));
 
         return $this->redirectToRoute('tab_status', ['tableNumber' => $tableNumber]);
     }
@@ -150,14 +140,11 @@ final class TabController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $tabId = TabId::fromString($this->queries->tabIdForTable($tableNumber));
-            $command = new CloseTabCommand(
+
+            $this->commandBus->handle(new CloseTabCommand(
                 $tabId,
                 $form->get('amountPaid')->getData()
-            );
-
-            $tab = $this->repository->get($tabId);
-            $tab->close($command);
-            $this->repository->save($tab);
+            ));
 
             return $this->redirectToRoute('home');
         }
