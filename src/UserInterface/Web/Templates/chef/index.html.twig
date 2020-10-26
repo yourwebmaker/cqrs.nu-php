@@ -14,17 +14,17 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for item in group.items %}
+                {% for i, item in group.items %}
                 <tr>
                     <td>{{ item.menuNumber}}</td>
                     <td>{{ item.description }}</td>
-                    <td><input type="checkbox" value="{{ item.menuNumber}}" name="items[][{{ item.menuNumber }}]"/></td>
+                    <td><input type="checkbox" value="{{ item.menuNumber}}" name="items[]"/></td>
                 </tr>
                 {% endfor %}
                 </tbody>
             </table>
 
-            <button type="submit" class="btn btn-primary">Mark Prepared</button>
+            <button type="submit" class="btn btn-primary" name="mark-prepared">Mark Prepared</button>
             <hr />
         </form>
     {% endfor %}

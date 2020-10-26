@@ -39,8 +39,7 @@ final class ChefController extends AbstractController
      */
     public function markPrepared(Request $request) : RedirectResponse
     {
-        //todo... jesus... fix this mess.
-        $menuNumbers = array_map(fn(array $item) => array_key_first($item), $request->request->get('items'));
+        $menuNumbers = array_map(fn(string $itemString) => (int) $itemString, $request->request->get('items'));
         $tabIdString = $request->request->get('tabId');
         $groupId = $request->request->get('groupId');
 

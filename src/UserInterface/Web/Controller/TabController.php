@@ -121,8 +121,7 @@ final class TabController extends AbstractController
      */
     public function markServed(int $tableNumber, Request $request)
     {
-        $menuNumbers = array_map(fn(array $item) => array_key_first($item), $request->request->get('items'));
-
+        $menuNumbers = array_map(fn(string $itemString) => (int) $itemString, $request->request->get('items'));
         $tabId = $this->queries->tabIdForTable($tableNumber);
         $this->commandBus->handle(new MarkItemsServedCommand($tabId, $menuNumbers));
 

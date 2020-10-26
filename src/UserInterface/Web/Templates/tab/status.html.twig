@@ -21,12 +21,12 @@
                 <tr>
                     <td>{{ item.menuNumber}}</td>
                     <td>{{ item.description}}</td>
-                    <td><input type="checkbox" value="{{ item.menuNumber}}" name="items[][{{ item.menuNumber }}]"/></td>
+                    <td><input type="checkbox" value="{{ item.menuNumber}}" name="items[]"/></td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
-        <button type="submit" class="btn btn-primary">Mark Served</button>
+        <button type="submit" class="btn btn-primary" name="mark-served">Mark Served</button>
         </form>
     {% endif %}
 

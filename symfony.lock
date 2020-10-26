@@ -108,20 +108,11 @@
     "monolog/monolog": {
         "version": "2.1.1"
     },
-    "myclabs/deep-copy": {
-        "version": "1.10.1"
-    },
     "nikic/php-parser": {
         "version": "v4.10.2"
     },
     "ocramius/proxy-manager": {
         "version": "2.8.0"
-    },
-    "phar-io/manifest": {
-        "version": "2.0.1"
-    },
-    "phar-io/version": {
-        "version": "3.0.2"
     },
     "php": {
         "version": "7.4"
@@ -134,38 +125,6 @@
     },
     "phpdocumentor/type-resolver": {
         "version": "1.4.0"
-    },
-    "phpspec/prophecy": {
-        "version": "1.12.1"
-    },
-    "phpunit/php-code-coverage": {
-        "version": "9.2.0"
-    },
-    "phpunit/php-file-iterator": {
-        "version": "3.0.5"
-    },
-    "phpunit/php-invoker": {
-        "version": "3.1.1"
-    },
-    "phpunit/php-text-template": {
-        "version": "2.0.3"
-    },
-    "phpunit/php-timer": {
-        "version": "5.0.2"
-    },
-    "phpunit/phpunit": {
-        "version": "4.7",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "4.7",
-            "ref": "477e1387616f39505ba79715f43f124836020d71"
-        },
-        "files": [
-            ".env.test",
-            "phpunit.xml.dist",
-            "tests/bootstrap.php"
-        ]
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -187,54 +146,6 @@
     },
     "ramsey/uuid": {
         "version": "4.1.1"
-    },
-    "sebastian/cli-parser": {
-        "version": "1.0.1"
-    },
-    "sebastian/code-unit": {
-        "version": "1.0.7"
-    },
-    "sebastian/code-unit-reverse-lookup": {
-        "version": "2.0.3"
-    },
-    "sebastian/comparator": {
-        "version": "4.0.5"
-    },
-    "sebastian/complexity": {
-        "version": "2.0.1"
-    },
-    "sebastian/diff": {
-        "version": "4.0.3"
-    },
-    "sebastian/environment": {
-        "version": "5.1.3"
-    },
-    "sebastian/exporter": {
-        "version": "4.0.3"
-    },
-    "sebastian/global-state": {
-        "version": "5.0.1"
-    },
-    "sebastian/lines-of-code": {
-        "version": "1.0.1"
-    },
-    "sebastian/object-enumerator": {
-        "version": "4.0.3"
-    },
-    "sebastian/object-reflector": {
-        "version": "2.0.3"
-    },
-    "sebastian/recursion-context": {
-        "version": "4.0.3"
-    },
-    "sebastian/resource-operations": {
-        "version": "3.0.3"
-    },
-    "sebastian/type": {
-        "version": "2.3.0"
-    },
-    "sebastian/version": {
-        "version": "3.0.2"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
@@ -614,9 +525,6 @@
     },
     "symfony/yaml": {
         "version": "v5.1.7"
-    },
-    "theseer/tokenizer": {
-        "version": "1.2.0"
     },
     "twig/extra-bundle": {
         "version": "v3.0.5"
