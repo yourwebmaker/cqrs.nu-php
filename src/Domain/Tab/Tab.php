@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Cafe\Domain\Tab;
 
 use Cafe\Application\Write\CloseTabCommand;
-use Cafe\Application\Write\MarkDrinksServedComman;
+use Cafe\Application\Write\MarkDrinksServedCommand;
 use Cafe\Application\Write\MarkFoodPreparedCommand;
 use Cafe\Application\Write\MarkFoodServedCommand;
 use Cafe\Application\Write\OpenTabCommand;
@@ -73,13 +73,13 @@ final class Tab implements AggregateRoot
         }
     }
 
-    public function markDrinksServed(MarkDrinksServedComman $command) : void
+    public function markDrinksServed(MarkDrinksServedCommand $command) : void
     {
         if (!$this->areDrinksOutstanding($command->menuNumbers)) {
             throw new DrinksNotOutstanding();
         }
 
-        $this->recordThat(new DrinksServed($command->tabId, $command->menuNumbers));
+        $this->recordThat(new DrinksServed($command->tabId->toString(), $command->menuNumbers));
     }
 
     public function markFoodPrepared(MarkFoodPreparedCommand $command) : void

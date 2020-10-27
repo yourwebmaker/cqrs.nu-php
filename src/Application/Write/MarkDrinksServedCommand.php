@@ -6,7 +6,7 @@ namespace Cafe\Application\Write;
 
 use Cafe\Domain\Tab\TabId;
 
-class MarkDrinksServedComman
+class MarkDrinksServedCommand
 {
     public TabId $tabId;
     /** @var array<int>  */
