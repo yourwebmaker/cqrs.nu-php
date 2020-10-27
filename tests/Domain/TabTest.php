@@ -222,7 +222,7 @@ class TabTest extends TestCase
         $tab->close(new CloseTabCommand(TabId::fromString($this->tabId), $amountPaid));
 
         self::assertContainsEquals(new TabClosed(
-            TabId::fromString($this->tabId),
+            $this->tabId,
             $amountPaid,
             $amountPaid,
             $tip = 0
@@ -238,7 +238,7 @@ class TabTest extends TestCase
         $tab->close(new CloseTabCommand(TabId::fromString($this->tabId), $amountPaid));
 
         self::assertContainsEquals(new TabClosed(
-            TabId::fromString($this->tabId),
+            $this->tabId,
             $amountPaid,
             $this->drink2->price,
             $tip = 0.50

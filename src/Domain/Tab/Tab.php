@@ -115,7 +115,7 @@ final class Tab implements AggregateRoot
         }
 
         $this->recordThat(new TabClosed(
-            $command->tabId,
+            $command->tabId->toString(),
             $command->amountPaid,
             $this->servedItemsValue,
             $command->amountPaid - $this->servedItemsValue

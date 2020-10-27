@@ -126,7 +126,7 @@ class TabProjector implements Consumer
             $tables = ['read_model_chef_todo_group', 'read_model_chef_todo_item', 'read_model_tab', 'read_model_tab_item'];
             foreach ($tables as $table) {
                 $sql = 'delete from ' . $table . ' where tab_id = :tab_id';
-                $this->connection->executeQuery($sql,  ['tab_id' => $event->tabId->toString()]);
+                $this->connection->executeQuery($sql,  ['tab_id' => $event->tabId]);
             }
         }
 
