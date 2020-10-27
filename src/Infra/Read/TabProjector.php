@@ -117,7 +117,7 @@ class TabProjector implements Consumer
                     'old_status' => 'to-serve',
                     'new_status' => 'served', //use constants here.
                     'menu_number' => $menuNumber,
-                    'tab_id' => $event->tabId->toString()
+                    'tab_id' => $event->tabId
                 ]);
             }
         }

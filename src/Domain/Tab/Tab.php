@@ -97,7 +97,7 @@ final class Tab implements AggregateRoot
             throw new FoodNotPrepared();
         }
 
-        $this->recordThat(new FoodServed($command->tabId, $command->menuNumbers));
+        $this->recordThat(new FoodServed($command->tabId->toString(), $command->menuNumbers));
     }
 
     public function close(CloseTabCommand $command): void
