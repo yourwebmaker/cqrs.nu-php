@@ -69,7 +69,7 @@ final class Tab implements AggregateRoot
         }
 
         if ($command->hasFood()) {
-            $this->recordThat(new FoodOrdered($command->tabId, $command->getFood()));
+            $this->recordThat(new FoodOrdered($command->tabId->toString(), $command->getFood()));
         }
     }
 
@@ -208,6 +208,7 @@ final class Tab implements AggregateRoot
      */
     private function areAllInList(array $want, array $have): bool
     {
+        //todo... jesus... move this to collection.
         $curHave = array_map(fn(OrderedItem $orderedItem) => $orderedItem->menuNumber, $have);
         foreach ($want as $num) {
             if (($key = array_search($num, $curHave, true)) !== false) {

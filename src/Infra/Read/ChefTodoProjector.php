@@ -30,14 +30,14 @@ class ChefTodoProjector implements Consumer
 
             //todo ... wrap within transaction
             $this->connection->insert('read_model_chef_todo_group', [
-                'tab_id' => $event->tabId->toString(),
+                'tab_id' => $event->tabId,
                 'group_id' => $groupId
             ]);
 
             /** @var OrderedItem $item */
             foreach ($event->items as $item) {
                 $this->connection->insert('read_model_chef_todo_item', [
-                    'tab_id' => $event->tabId->toString(),
+                    'tab_id' => $event->tabId,
                     'group_id' => $groupId,
                     'description' => $item->description,
                     'menu_number' => $item->menuNumber,

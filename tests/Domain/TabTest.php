@@ -79,7 +79,7 @@ class TabTest extends TestCase
 
         self::assertEquals([
             new TabOpened($this->tabId, $this->tableNumber, $this->waiter),
-            new FoodOrdered(TabId::fromString($this->tabId), [$this->food1, $this->food2])
+            new FoodOrdered($this->tabId, [$this->food1, $this->food2])
         ],
             $tab->releaseEvents()
         );
@@ -93,7 +93,7 @@ class TabTest extends TestCase
         self::assertEquals([
             new TabOpened($this->tabId, $this->tableNumber, $this->waiter),
             new DrinksOrdered($this->tabId, [$this->drink2]),
-            new FoodOrdered(TabId::fromString($this->tabId), [$this->food1]),
+            new FoodOrdered($this->tabId, [$this->food1]),
         ],
             $tab->releaseEvents()
         );
@@ -107,7 +107,7 @@ class TabTest extends TestCase
         self::assertEquals([
             new TabOpened($this->tabId, $this->tableNumber, $this->waiter),
             new DrinksOrdered($this->tabId, [$this->drink2]),
-            new FoodOrdered(TabId::fromString($this->tabId), [$this->food1]),
+            new FoodOrdered($this->tabId, [$this->food1]),
         ],
             $tab->releaseEvents()
         );
@@ -140,7 +140,7 @@ class TabTest extends TestCase
 
         self::assertEquals([
             new TabOpened($this->tabId, $this->tableNumber, $this->waiter),
-            new FoodOrdered(TabId::fromString($this->tabId), [$this->food1, $this->food1]),
+            new FoodOrdered($this->tabId, [$this->food1, $this->food1]),
             new FoodPrepared(TabId::fromString($this->tabId), 'groupId', [$this->food1->menuNumber, $this->food1->menuNumber]),
         ],
             $tab->releaseEvents()
@@ -174,7 +174,7 @@ class TabTest extends TestCase
 
         self::assertEquals([
             new TabOpened($this->tabId, $this->tableNumber, $this->waiter),
-            new FoodOrdered(TabId::fromString($this->tabId), [$this->food1, $this->food1]),
+            new FoodOrdered($this->tabId, [$this->food1, $this->food1]),
             new FoodPrepared(TabId::fromString($this->tabId), 'groupId', [$this->food1->menuNumber, $this->food1->menuNumber]),
             new FoodServed(TabId::fromString($this->tabId), [$this->food1->menuNumber, $this->food1->menuNumber]),
         ],
