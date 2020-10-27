@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Cafe\Domain\Tab;
 
 use Cafe\Application\Write\CloseTabCommand;
-use Cafe\Application\Write\MarkDrinksServedComman;
+use Cafe\Application\Write\MarkDrinksServedCommand;
 use Cafe\Application\Write\MarkFoodPreparedCommand;
 use Cafe\Application\Write\MarkFoodServedCommand;
 use Cafe\Application\Write\OpenTabCommand;
@@ -28,6 +28,7 @@ use Doctrine\Common\Collections\Collection;
 use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\AggregateRootBehaviourWithRequiredHistory;
 use EventSauce\EventSourcing\AggregateRootId;
+use EventSauce\EventSourcing\UuidAggregateRootId;
 
 final class Tab implements AggregateRoot
 {
@@ -49,7 +50,8 @@ final class Tab implements AggregateRoot
 
     public static function open(OpenTabCommand $command) : self
     {
-        $tab = new static($command->tabId);
+
+        $tab = new static(UuidAggregateRootId::fromString($command->tabId));
 
         $tab->recordThat(new TabOpened(
             $command->tabId,
@@ -71,7 +73,7 @@ final class Tab implements AggregateRoot
         }
     }
 
-    public function markDrinksServed(MarkDrinksServedComman $command) : void
+    public function markDrinksServed(MarkDrinksServedCommand $command) : void
     {
         if (!$this->areDrinksOutstanding($command->menuNumbers)) {
             throw new DrinksNotOutstanding();
@@ -206,6 +208,7 @@ final class Tab implements AggregateRoot
      */
     private function areAllInList(array $want, array $have): bool
     {
+        //todo... jesus... move this to collection.
         $curHave = array_map(fn(OrderedItem $orderedItem) => $orderedItem->menuNumber, $have);
         foreach ($want as $num) {
             if (($key = array_search($num, $curHave, true)) !== false) {

@@ -5,17 +5,16 @@ declare(strict_types=1);
 namespace Cafe\Application\Write;
 
 use Cafe\Domain\Tab\OrderedItem;
-use Cafe\Domain\Tab\TabId;
 
 class PlaceOrderCommand
 {
-    public TabId $tabId;
+    public string $tabId;
     /** @var array<OrderedItem> */
     public array $items;
 
     public function __construct(string $tabId, array $items)
     {
-        $this->tabId = TabId::fromString($tabId);
+        $this->tabId = $tabId;
         $this->items = $items;
     }
 

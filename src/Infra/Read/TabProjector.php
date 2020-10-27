@@ -34,14 +34,15 @@ class TabProjector implements Consumer
         $event = $message->event();
 
         if ($event instanceof TabOpened) {
-            $this->entityManager->persist(new Tab($event->tabId->toString(), $event->tableNumber, $event->waiter, [], [], []));
+            //todo remove dependency from entity manager and use simple SQL here.
+            $this->entityManager->persist(new Tab($event->tabId, $event->tableNumber, $event->waiter, [], [], []));
         }
 
         if ($event instanceof DrinksOrdered) {
             /** @var OrderedItem $item */
             foreach ($event->items as $item) {
                 $this->connection->insert('read_model_tab_item', [
-                    'tab_id' => $event->tabId->toString(),
+                    'tab_id' => $event->tabId,
                     'menu_number' => $item->menuNumber,
                     'description' => $item->description,
                     'price' => $item->price,
@@ -64,7 +65,7 @@ class TabProjector implements Consumer
                     'new_status' => 'served',
                     'old_status' => 'to-serve',
                     'menu_number' => $menuNumber,
-                    'tab_id' => $event->tabId->toString()
+                    'tab_id' => $event->tabId
                 ]);
             }
         }
@@ -74,7 +75,7 @@ class TabProjector implements Consumer
             /** @var OrderedItem $item */
             foreach ($event->items as $item) {
                 $this->connection->insert('read_model_tab_item', [
-                    'tab_id' => $event->tabId->toString(),
+                    'tab_id' => $event->tabId,
                     'menu_number' => $item->menuNumber,
                     'description' => $item->description,
                     'price' => $item->price,
@@ -97,7 +98,7 @@ class TabProjector implements Consumer
                     'old_status' => 'in-preparation',
                     'new_status' => 'to-serve',
                     'menu_number' => $menuNumber,
-                    'tab_id' => $event->tabId->toString()
+                    'tab_id' => $event->tabId
                 ]);
             }
         }
@@ -116,7 +117,7 @@ class TabProjector implements Consumer
                     'old_status' => 'to-serve',
                     'new_status' => 'served', //use constants here.
                     'menu_number' => $menuNumber,
-                    'tab_id' => $event->tabId->toString()
+                    'tab_id' => $event->tabId
                 ]);
             }
         }
@@ -125,7 +126,7 @@ class TabProjector implements Consumer
             $tables = ['read_model_chef_todo_group', 'read_model_chef_todo_item', 'read_model_tab', 'read_model_tab_item'];
             foreach ($tables as $table) {
                 $sql = 'delete from ' . $table . ' where tab_id = :tab_id';
-                $this->connection->executeQuery($sql,  ['tab_id' => $event->tabId->toString()]);
+                $this->connection->executeQuery($sql,  ['tab_id' => $event->tabId]);
             }
         }
 

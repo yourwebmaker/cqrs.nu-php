@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Cafe\Application\Write;
 
-use Cafe\Application\Read\OpenTabsQueries;
 use Cafe\Domain\Tab\Tab;
-use Cafe\Domain\Tab\TabId;
 use Cafe\Domain\Tab\TabRepository;
 use Cafe\UserInterface\Web\StaticData\MenuItem;
 use Cafe\UserInterface\Web\StaticData\StaticData;
@@ -35,8 +33,7 @@ class TabHandler
 
     public function handleMarkItemsServedCommand(MarkItemsServedCommand $command) : void
     {
-        $tabId = TabId::fromString($command->tabId);
-        $tab = $this->repository->get($tabId);
+        $tab = $this->repository->get($command->tabId);
         $menu = StaticData::getMenu();
 
         $drinksNumbers = [];
@@ -55,7 +52,7 @@ class TabHandler
         }
 
         if (count($drinksNumbers) > 0) {
-            $tab->markDrinksServed(new MarkDrinksServedComman($command->tabId, $drinksNumbers));
+            $tab->markDrinksServed(new MarkDrinksServedCommand($command->tabId, $drinksNumbers));
         }
 
         if (count($foodNumbers) > 0) {

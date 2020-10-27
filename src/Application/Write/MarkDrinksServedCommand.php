@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace Cafe\Application\Write;
 
-use Cafe\Domain\Tab\TabId;
-
-class MarkDrinksServedComman
+class MarkDrinksServedCommand
 {
-    public TabId $tabId;
+    public string $tabId;
     /** @var array<int>  */
     public array $menuNumbers;
 
     public function __construct(string $tabId, array $menuNumbers)
     {
-        $this->tabId = TabId::fromString($tabId);
+        $this->tabId = $tabId;
         $this->menuNumbers = $menuNumbers;
     }
 }

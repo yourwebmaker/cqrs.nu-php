@@ -10,7 +10,6 @@ use Cafe\Application\Write\MarkItemsServedCommand;
 use Cafe\Application\Write\OpenTabCommand;
 use Cafe\Application\Write\PlaceOrderCommand;
 use Cafe\Domain\Tab\OrderedItem;
-use Cafe\Domain\Tab\TabId;
 use Cafe\UserInterface\Web\Form\CloseTabType;
 use Cafe\UserInterface\Web\Form\OpenTabType;
 use Cafe\UserInterface\Web\Form\OrderType;
@@ -138,10 +137,8 @@ final class TabController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $tabId = TabId::fromString($this->queries->tabIdForTable($tableNumber));
-
             $this->commandBus->handle(new CloseTabCommand(
-                $tabId,
+                $this->queries->tabIdForTable($tableNumber),
                 $form->get('amountPaid')->getData()
             ));
 
