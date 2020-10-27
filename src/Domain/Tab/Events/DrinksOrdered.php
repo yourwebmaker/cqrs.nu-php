@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Cafe\Domain\Tab\Events;
 
 use Cafe\Domain\Tab\OrderedItem;
-use Cafe\Domain\Tab\TabId;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
 final class DrinksOrdered implements SerializablePayload

@@ -141,7 +141,7 @@ class TabTest extends TestCase
         self::assertEquals([
             new TabOpened($this->tabId, $this->tableNumber, $this->waiter),
             new FoodOrdered($this->tabId, [$this->food1, $this->food1]),
-            new FoodPrepared(TabId::fromString($this->tabId), 'groupId', [$this->food1->menuNumber, $this->food1->menuNumber]),
+            new FoodPrepared($this->tabId, 'groupId', [$this->food1->menuNumber, $this->food1->menuNumber]),
         ],
             $tab->releaseEvents()
         );
@@ -175,7 +175,7 @@ class TabTest extends TestCase
         self::assertEquals([
             new TabOpened($this->tabId, $this->tableNumber, $this->waiter),
             new FoodOrdered($this->tabId, [$this->food1, $this->food1]),
-            new FoodPrepared(TabId::fromString($this->tabId), 'groupId', [$this->food1->menuNumber, $this->food1->menuNumber]),
+            new FoodPrepared($this->tabId, 'groupId', [$this->food1->menuNumber, $this->food1->menuNumber]),
             new FoodServed(TabId::fromString($this->tabId), [$this->food1->menuNumber, $this->food1->menuNumber]),
         ],
             $tab->releaseEvents()
