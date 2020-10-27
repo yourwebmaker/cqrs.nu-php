@@ -79,7 +79,7 @@ final class Tab implements AggregateRoot
             throw new DrinksNotOutstanding();
         }
 
-        $this->recordThat(new DrinksServed($command->tabId->toString(), $command->menuNumbers));
+        $this->recordThat(new DrinksServed($command->tabId, $command->menuNumbers));
     }
 
     public function markFoodPrepared(MarkFoodPreparedCommand $command) : void
