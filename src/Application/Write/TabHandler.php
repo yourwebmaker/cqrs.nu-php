@@ -68,7 +68,7 @@ class TabHandler
 
     public function handleMarkFoodPreparedCommand(MarkFoodPreparedCommand $command) : void
     {
-        $tab = $this->repository->get($command->tabId);
+        $tab = $this->repository->get(TabId::fromString($command->tabId));
         $tab->markFoodPrepared($command);
         $this->repository->save($tab);
     }
