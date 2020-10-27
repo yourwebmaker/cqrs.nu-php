@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Cafe\Infra\Read;
 
-use Cafe\Application\Read\OpenTabs\Tab;
 use Cafe\Domain\Tab\Events\DrinksOrdered;
 use Cafe\Domain\Tab\Events\DrinksServed;
 use Cafe\Domain\Tab\Events\FoodOrdered;
@@ -14,18 +13,15 @@ use Cafe\Domain\Tab\Events\TabClosed;
 use Cafe\Domain\Tab\Events\TabOpened;
 use Cafe\Domain\Tab\OrderedItem;
 use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManagerInterface;
 use EventSauce\EventSourcing\Consumer;
 use EventSauce\EventSourcing\Message;
 
 class TabProjector implements Consumer
 {
-    private EntityManagerInterface $entityManager;
     private Connection $connection;
 
-    public function __construct(EntityManagerInterface $entityManager, Connection $connection)
+    public function __construct(Connection $connection)
     {
-        $this->entityManager = $entityManager;
         $this->connection = $connection;
     }
 
@@ -34,8 +30,11 @@ class TabProjector implements Consumer
         $event = $message->event();
 
         if ($event instanceof TabOpened) {
-            //todo remove dependency from entity manager and use simple SQL here.
-            $this->entityManager->persist(new Tab($event->tabId, $event->tableNumber, $event->waiter, [], [], []));
+            $this->connection->insert('read_model_tab', [
+                'tab_id' => $event->tabId,
+                'table_number' => $event->tableNumber,
+                'waiter' => $event->waiter,
+            ]);
         }
 
         if ($event instanceof DrinksOrdered) {
@@ -129,7 +128,5 @@ class TabProjector implements Consumer
                 $this->connection->executeQuery($sql,  ['tab_id' => $event->tabId]);
             }
         }
-
-        $this->entityManager->flush();
     }
 }

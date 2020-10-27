@@ -4,28 +4,10 @@ declare(strict_types=1);
 
 namespace Cafe\Application\Read\OpenTabs;
 
-use Closure;
-use Doctrine\ORM\Mapping as ORM;
-
-/**
- * @ORM\Entity()
- * @ORM\Table(name="read_model_tab")
- */
 class Tab
 {
-    /**
-     * @ORM\Id()
-     * @ORM\Column(type="string")
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
     public string $tabId;
-    /**
-     * @ORM\Column(type="integer")
-     */
     public int $tableNumber;
-    /**
-     * @ORM\Column(type="string")
-     */
     public string $waiter;
     /** @var array<TabItem> */
     public array $toServe;
@@ -42,10 +24,5 @@ class Tab
         $this->toServe = $toServe;
         $this->inPreparation = $inPreparation;
         $this->served = $served;
-    }
-
-    public function moveItems(array $menuNumbers, Closure $from, Closure $to) : void
-    {
-        $fromList = $from($this);
     }
 }
