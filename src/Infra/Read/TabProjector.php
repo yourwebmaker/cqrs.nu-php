@@ -34,7 +34,8 @@ class TabProjector implements Consumer
         $event = $message->event();
 
         if ($event instanceof TabOpened) {
-            $this->entityManager->persist(new Tab($event->tabId->toString(), $event->tableNumber, $event->waiter, [], [], []));
+            //todo remove dependency from entity manager and use simple SQL here.
+            $this->entityManager->persist(new Tab($event->tabId, $event->tableNumber, $event->waiter, [], [], []));
         }
 
         if ($event instanceof DrinksOrdered) {

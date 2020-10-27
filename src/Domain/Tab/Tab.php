@@ -28,6 +28,7 @@ use Doctrine\Common\Collections\Collection;
 use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\AggregateRootBehaviourWithRequiredHistory;
 use EventSauce\EventSourcing\AggregateRootId;
+use EventSauce\EventSourcing\UuidAggregateRootId;
 
 final class Tab implements AggregateRoot
 {
@@ -49,7 +50,8 @@ final class Tab implements AggregateRoot
 
     public static function open(OpenTabCommand $command) : self
     {
-        $tab = new static($command->tabId);
+
+        $tab = new static(UuidAggregateRootId::fromString($command->tabId));
 
         $tab->recordThat(new TabOpened(
             $command->tabId,
