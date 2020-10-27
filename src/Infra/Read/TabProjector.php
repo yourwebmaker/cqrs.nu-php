@@ -42,7 +42,7 @@ class TabProjector implements Consumer
             /** @var OrderedItem $item */
             foreach ($event->items as $item) {
                 $this->connection->insert('read_model_tab_item', [
-                    'tab_id' => $event->tabId->toString(),
+                    'tab_id' => $event->tabId,
                     'menu_number' => $item->menuNumber,
                     'description' => $item->description,
                     'price' => $item->price,

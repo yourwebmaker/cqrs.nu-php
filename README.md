@@ -47,4 +47,3 @@ marked as served or cancelled first.
 - [ ] Add flash messages
 - [ ] Style http://localhost:8000/tab/297/order
 - [ ] Add validators on DTOs
-- [ ] Display total of the tab then closing it.

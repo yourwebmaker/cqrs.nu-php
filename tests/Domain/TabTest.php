@@ -66,7 +66,7 @@ class TabTest extends TestCase
 
         self::assertEquals([
                 new TabOpened($this->tabId, $this->tableNumber, $this->waiter),
-                new DrinksOrdered(TabId::fromString($this->tabId), [$this->drink1, $this->drink2])
+                new DrinksOrdered($this->tabId, [$this->drink1, $this->drink2])
             ],
             $tab->releaseEvents()
         );
@@ -92,7 +92,7 @@ class TabTest extends TestCase
 
         self::assertEquals([
             new TabOpened($this->tabId, $this->tableNumber, $this->waiter),
-            new DrinksOrdered(TabId::fromString($this->tabId), [$this->drink2]),
+            new DrinksOrdered($this->tabId, [$this->drink2]),
             new FoodOrdered(TabId::fromString($this->tabId), [$this->food1]),
         ],
             $tab->releaseEvents()
@@ -106,7 +106,7 @@ class TabTest extends TestCase
 
         self::assertEquals([
             new TabOpened($this->tabId, $this->tableNumber, $this->waiter),
-            new DrinksOrdered(TabId::fromString($this->tabId), [$this->drink2]),
+            new DrinksOrdered($this->tabId, [$this->drink2]),
             new FoodOrdered(TabId::fromString($this->tabId), [$this->food1]),
         ],
             $tab->releaseEvents()

@@ -10,11 +10,11 @@ use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
 final class DrinksOrdered implements SerializablePayload
 {
-    public TabId $tabId;
+    public string $tabId;
     /** @var array<OrderedItem> */
     public array $items;
 
-    public function __construct(TabId  $tabId, array $items)
+    public function __construct(string $tabId, array $items)
     {
         $this->tabId = $tabId;
         $this->items = $items;
@@ -23,7 +23,7 @@ final class DrinksOrdered implements SerializablePayload
     public function toPayload(): array
     {
         return [
-            'tabId' => $this->tabId->toString(),
+            'tabId' => $this->tabId,
             'items' => array_map(fn(OrderedItem $item) => $item->jsonSerialize(), $this->items)
         ];
     }
@@ -31,7 +31,7 @@ final class DrinksOrdered implements SerializablePayload
     public static function fromPayload(array $payload): SerializablePayload
     {
         return new self(
-            TabId::fromString($payload['tabId']),
+            $payload['tabId'],
             array_map(fn(array $item) => new OrderedItem(
                 $item['menuNumber'],
                 $item['description'],
