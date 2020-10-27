@@ -4,21 +4,19 @@ declare(strict_types=1);
 
 namespace Cafe\Infra\Read;
 
-use Cafe\Application\Read\OpenTabs\Tab;
 use Cafe\Application\Read\OpenTabs\TabInvoice;
 use Cafe\Application\Read\OpenTabs\TabItem;
 use Cafe\Application\Read\OpenTabs\TabStatus;
 use Cafe\Application\Read\OpenTabsQueries;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\DBAL\Connection;
 
-class OpenTabsQueriesDoctrine implements OpenTabsQueries
+class OpenTabsQueriesDBAL implements OpenTabsQueries
 {
-    //todo use just DBAL. We don't need ORM here.
-    private EntityManagerInterface $entityManager;
+    private Connection $connection;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(Connection $connection)
     {
-        $this->entityManager = $entityManager;
+        $this->connection = $connection;
     }
 
     /**
@@ -26,15 +24,14 @@ class OpenTabsQueriesDoctrine implements OpenTabsQueries
      */
     public function activeTableNumbers(): array
     {
-        //todo replace by simple sql
-        $data = $this->entityManager->createQueryBuilder()
-            ->from(Tab::class, 't')
-            ->select('t')
-            ->getQuery()
-            ->getResult()
-        ;
+        $sql = 'select table_number from read_model_tab';
+        $tableNumbers = $this->connection->fetchNumeric($sql);
 
-        return array_map(fn(Tab $tab) => $tab->tableNumber, $data);
+        if (! $tableNumbers) {
+            return [];
+        }
+
+        return $tableNumbers;
     }
 
     public function invoiceForTable(int $table): TabInvoice
@@ -44,24 +41,14 @@ class OpenTabsQueriesDoctrine implements OpenTabsQueries
 
     public function tabIdForTable(int $tableNumber): string
     {
-        //todo replace by simple sql
-        /** @var Tab $tab */
-        $tab = $this->entityManager->createQueryBuilder()
-            ->from(Tab::class, 't')
-            ->select('t')
-            ->where('t.tableNumber = :tableNumber')
-            ->setParameter('tableNumber', $tableNumber)
-            ->getQuery()
-            ->getOneOrNullResult();
-
-        return $tab->tabId;
+        $sql = 'select tab_id from read_model_tab where table_number = :table_number';
+        return $this->connection->fetchOne($sql, ['table_number' => $tableNumber]);
     }
 
     public function tabForTable(int $tableNumber): TabStatus
     {
         $tabId = $this->tabIdForTable($tableNumber);
-        $connection = $this->entityManager->getConnection();
-        $rows = $connection->fetchAllAssociative('select * from read_model_tab_item where tab_id = :tab_id', [
+        $rows = $this->connection->fetchAllAssociative('select * from read_model_tab_item where tab_id = :tab_id', [
             'tab_id' => $tabId,
         ]);
 

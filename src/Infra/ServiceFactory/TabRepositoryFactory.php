@@ -38,7 +38,7 @@ class TabRepositoryFactory
                     'aggregate_tab'
                 ),
                  new SynchronousMessageDispatcher(
-                    new TabProjector($this->entityManager, $this->connection),
+                    new TabProjector($this->connection),
                     new ChefTodoProjector($this->connection),
                 )
             )
