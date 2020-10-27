@@ -8,6 +8,7 @@ use Cafe\Domain\Tab\Tab;
 use Cafe\Domain\Tab\TabId;
 use Cafe\Domain\Tab\TabRepository;
 use EventSauce\EventSourcing\AggregateRootRepository;
+use EventSauce\EventSourcing\UuidAggregateRootId;
 
 class TabRepositoryEventSauce implements TabRepository
 {

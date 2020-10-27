@@ -138,10 +138,8 @@ final class TabController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $tabId = TabId::fromString($this->queries->tabIdForTable($tableNumber));
-
             $this->commandBus->handle(new CloseTabCommand(
-                $tabId,
+                $this->queries->tabIdForTable($tableNumber),
                 $form->get('amountPaid')->getData()
             ));
 
