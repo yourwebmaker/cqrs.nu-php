@@ -26,7 +26,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Todo Remove duplication in these (e.g [$this->food1, $this->food1]).
- * Todo Do not use commands
  * Todo Assert only 1 event. Create custom assertion
  */
 class TabTest extends TestCase
@@ -48,7 +47,10 @@ class TabTest extends TestCase
         $this->food2 = new OrderedItem(25, 'Vegetable Curry', false, 10.00);
     }
 
-    public function testOpenTab() : void
+    /**
+     * @test
+     */
+    public function open_tab() : void
     {
         $tab = Tab::open(new OpenTabCommand($this->tabId, $this->tableNumber, $this->waiter));
 
@@ -59,7 +61,10 @@ class TabTest extends TestCase
         );
     }
 
-    public function testCanPlaceDrinksOrder() : void
+    /**
+     * @test
+     */
+    public function can_place_drinks_order() : void
     {
         $tab = Tab::open(new OpenTabCommand($this->tabId, $this->tableNumber, $this->waiter));
         $tab->order(new PlaceOrderCommand($this->tabId, [$this->drink1, $this->drink2]));
@@ -72,7 +77,11 @@ class TabTest extends TestCase
         );
     }
 
-    public function testCanPlaceFoodOrder() : void
+    /**
+    /**
+     * @test
+     */
+    public function can_place_food_order() : void
     {
         $tab = Tab::open(new OpenTabCommand($this->tabId, $this->tableNumber, $this->waiter));
         $tab->order(new PlaceOrderCommand($this->tabId, [$this->food1, $this->food2]));
@@ -85,7 +94,10 @@ class TabTest extends TestCase
         );
     }
 
-    public function testCanPlaceFoodAndDrinkOrder() : void
+    /**
+     * @test
+     */
+    public function can_place_food_and_drink_order() : void
     {
         $tab = Tab::open(new OpenTabCommand($this->tabId, $this->tableNumber, $this->waiter));
         $tab->order(new PlaceOrderCommand($this->tabId, [$this->food1, $this->drink2]));
@@ -99,7 +111,10 @@ class TabTest extends TestCase
         );
     }
 
-    public function testOrderedDrinksCanBeServed() : void
+    /**
+     * @test
+     */
+    public function ordered_drinks_can_be_served() : void
     {
         $tab = Tab::open(new OpenTabCommand($this->tabId, $this->tableNumber, $this->waiter));
         $tab->order(new PlaceOrderCommand($this->tabId, [$this->food1, $this->drink2]));
@@ -113,7 +128,10 @@ class TabTest extends TestCase
         );
     }
 
-    public function testCanNotServeAnUnorderedDrink() : void
+    /**
+     * @test
+     */
+    public function cannot_serve_unordered_drink() : void
     {
         $this->expectException(DrinksNotOutstanding::class);
 
@@ -122,7 +140,10 @@ class TabTest extends TestCase
         $tab->markDrinksServed(new MarkDrinksServedCommand($this->tabId, [$this->drink2->menuNumber]));
     }
 
-    public function testCanNotServeAnOrderedDrinkTwice() : void
+    /**
+     * @test
+     */
+    public function cannot_server_an_ordered_drink_twice() : void
     {
         $this->expectException(DrinksNotOutstanding::class);
 
@@ -132,7 +153,10 @@ class TabTest extends TestCase
         $tab->markDrinksServed(new MarkDrinksServedCommand($this->tabId, [$this->drink1->menuNumber]));
     }
 
-    public function testOrderedFoodCanBeMarkedPrepared() : void
+    /**
+     * @test
+     */
+    public function order_food_can_be_marked_prepared() : void
     {
         $tab = Tab::open(new OpenTabCommand($this->tabId, $this->tableNumber, $this->waiter));
         $tab->order(new PlaceOrderCommand($this->tabId, [$this->food1, $this->food1]));
@@ -147,7 +171,10 @@ class TabTest extends TestCase
         );
     }
 
-    public function testFoodNotOrderedCanNotBeMarkedPrepared() : void
+    /**
+     * @test
+     */
+    public function food_not_ordered_cannot_be_marked_prepared() : void
     {
         $this->expectException(FoodNotOutstanding::class);
 
@@ -155,7 +182,10 @@ class TabTest extends TestCase
         $tab->markFoodPrepared(new MarkFoodPreparedCommand($this->tabId, 'groupId', [$this->food1->menuNumber, $this->food1->menuNumber]));
     }
 
-    public function testCanNotMarkFoodAsPreparedTwice() : void
+    /**
+     * @test
+     */
+    public function cannot_marked_food_as_prepared_twice() : void
     {
         $this->expectException(FoodNotOutstanding::class);
 
@@ -165,7 +195,10 @@ class TabTest extends TestCase
         $tab->markFoodPrepared(new MarkFoodPreparedCommand($this->tabId, 'groupId', [$this->food1->menuNumber]));
     }
 
-    public function testCanServePreparedFood() : void
+    /**
+     * @test
+     */
+    public function can_serve_prepared_food() : void
     {
         $tab = Tab::open(new OpenTabCommand($this->tabId, $this->tableNumber, $this->waiter));
         $tab->order(new PlaceOrderCommand($this->tabId, [$this->food1, $this->food1]));
@@ -182,7 +215,10 @@ class TabTest extends TestCase
         );
     }
 
-    public function testCanNotServePreparedFoodTwice() : void
+    /**
+     * @test
+     */
+    public function cannot_serve_prepared_food_twice() : void
     {
         $this->expectException(FoodNotPrepared::class);
 
@@ -193,7 +229,10 @@ class TabTest extends TestCase
         $tab->markFoodServed(new MarkFoodServedCommand($this->tabId, [$this->food1->menuNumber, $this->food1->menuNumber]));
     }
 
-    public function testCanNotServeUnorderedFood() : void
+    /**
+     * @test
+     */
+    public function cannot_serve_unordered_food() : void
     {
         $this->expectException(FoodNotPrepared::class);
 
@@ -203,7 +242,10 @@ class TabTest extends TestCase
         $tab->markFoodServed(new MarkFoodServedCommand($this->tabId, [$this->food2->menuNumber]));
     }
 
-    public function testCanNotServeOrderedButUnpreparedFood() : void
+    /**
+     * @test
+     */
+    public function cannot_serve_ordered_but_unprepared_food() : void
     {
         $this->expectException(FoodNotPrepared::class);
 
@@ -212,7 +254,10 @@ class TabTest extends TestCase
         $tab->markFoodServed(new MarkFoodServedCommand($this->tabId, [$this->food2->menuNumber]));
     }
 
-    public function testCanCloseTabByPayingExactAmount() : void
+    /**
+     * @test
+     */
+    public function can_close_tab_by_paying_exact_amount() : void
     {
         $tab = Tab::open(new OpenTabCommand($this->tabId, $this->tableNumber, $this->waiter));
         $tab->order(new PlaceOrderCommand($this->tabId, [$this->food1, $this->food2]));
@@ -229,7 +274,10 @@ class TabTest extends TestCase
         ), $tab->releaseEvents()); //todo gambi do carai;
     }
 
-    public function testCanCloseTabWithTip() : void
+    /**
+     * @test
+     */
+    public function can_close_tab_with_tip() : void
     {
         $tab = Tab::open(new OpenTabCommand($this->tabId, $this->tableNumber, $this->waiter));
         $tab->order(new PlaceOrderCommand($this->tabId, [$this->drink2]));
@@ -245,7 +293,10 @@ class TabTest extends TestCase
         ), $tab->releaseEvents()); //todo gambi do carai;
     }
 
-    public function testMustPayEnoughToCloseTab() : void
+    /**
+     * @test
+     */
+    public function must_pay_enough_to_close_tab() : void
     {
         $this->expectException(MustPayEnough::class);
 
@@ -256,7 +307,10 @@ class TabTest extends TestCase
         $tab->close(new CloseTabCommand($this->tabId, $amountPaid));
     }
 
-    public function testCanNotCloseTabTwice() : void
+    /**
+     * @test
+     */
+    public function cannot_close_tab_twice() : void
     {
         $this->expectException(TabNotOpen::class);
 
@@ -268,7 +322,10 @@ class TabTest extends TestCase
         $tab->close(new CloseTabCommand($this->tabId, $amountPaid));
     }
 
-    public function testCanNotCloseTabWithUnservedDrinksItems() : void
+    /**
+     * @test
+     */
+    public function cannot_close_tab_with_unserved_drink_items() : void
     {
         $this->expectException(TabHasUnservedItems::class);
 
@@ -277,7 +334,10 @@ class TabTest extends TestCase
         $tab->close(new CloseTabCommand($this->tabId, $this->drink2->price));
     }
 
-    public function testCanNotCloseTabWithUnpreparedFoodItems() : void
+    /**
+     * @test
+     */
+    public function cannot_close_tab_with_unprepared_food_items() : void
     {
         $this->expectException(TabHasUnservedItems::class);
 
@@ -286,7 +346,10 @@ class TabTest extends TestCase
         $tab->close(new CloseTabCommand($this->tabId, $this->food1->price));
     }
 
-    public function testCanNotCloseTabWithUnservedFoodItems() : void
+    /**
+     * @test
+     */
+    public function cannot_close_tab_with_unserved_food_items() : void
     {
         $this->expectException(TabHasUnservedItems::class);
 
