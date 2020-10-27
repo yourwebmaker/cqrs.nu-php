@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Cafe\Application\Write;
 
 use Cafe\Domain\Tab\Tab;
-use Cafe\Domain\Tab\TabId;
 use Cafe\Domain\Tab\TabRepository;
 use Cafe\UserInterface\Web\StaticData\MenuItem;
 use Cafe\UserInterface\Web\StaticData\StaticData;
@@ -27,15 +26,14 @@ class TabHandler
 
     public function handlePlaceOrderCommand(PlaceOrderCommand $command) : void
     {
-        $tab = $this->repository->get(TabId::fromString($command->tabId));
+        $tab = $this->repository->get($command->tabId);
         $tab->order($command);
         $this->repository->save($tab);
     }
 
     public function handleMarkItemsServedCommand(MarkItemsServedCommand $command) : void
     {
-        $tabId = TabId::fromString($command->tabId);
-        $tab = $this->repository->get($tabId);
+        $tab = $this->repository->get($command->tabId);
         $menu = StaticData::getMenu();
 
         $drinksNumbers = [];
@@ -66,14 +64,14 @@ class TabHandler
 
     public function handleMarkFoodPreparedCommand(MarkFoodPreparedCommand $command) : void
     {
-        $tab = $this->repository->get(TabId::fromString($command->tabId));
+        $tab = $this->repository->get($command->tabId);
         $tab->markFoodPrepared($command);
         $this->repository->save($tab);
     }
 
     public function handleCloseTabCommand(CloseTabCommand $command) : void
     {
-        $tab = $this->repository->get(TabId::fromString($command->tabId));
+        $tab = $this->repository->get($command->tabId);
         $tab->close($command);
         $this->repository->save($tab);
     }
