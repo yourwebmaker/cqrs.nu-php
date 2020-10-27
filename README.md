@@ -13,37 +13,13 @@ Upon closing a tab, it must be paid for in full. A tab with unserved items canno
 marked as served or cancelled first.
 
 ### Requirements
-- Docker
+- PHP 7.4 (SF5 requirements) 
+- MySql
+
 
 ### Running
-- Run `docker-compose up -d` on your terminal
-- Open your browser on `http://localhost:8000/tab/open`
+- `php bin/console doctrine:migrations:migrate` to create the tables for the aggregate root and read models
+- Open your browser on `http://localhost:8000/` (ohhhh dockkkerrrr)
 
-
-### Todo
-##### Domain
-- [ ] Do not allow entering negative numbers on total to order;
-#### Application
-- [ ] Move code out of controllers to Handlers
-- [ ] Refactor \Cafe\UserInterface\Web\Controller\TabController::order
-- [ ] Handle domain exceptions
-- [ ] Choose to use or not Commands on the Aggregates
-##### Misc
-- [ ] Replace every single array for a collection. 
-- [ ] Describe the project like this one: https://github.com/CodelyTV/php-ddd-example
-- [ ] PHPStan
-- [ ] Apply doctrine code standards
-- [ ] Mutation testing
-- [ ] Add to Scrutinizer
-- [ ] Use yield return new DrinksServed to record events?
-##### Infra
-- [ ] Persistence using Doctrine
-- [ ] Do not update write in case read fail.
-#UI
-- [ ] Add icons, better colors to buttons.
-- [ ] Add footer
-- [ ] Add github link
-- [ ] Style tables and table headers
-- [ ] Add flash messages
-- [ ] Style http://localhost:8000/tab/297/order
-- [ ] Add validators on DTOs
+### Testing
+- `php bin/phpunit` (yeah... I know SF testing sucks)
