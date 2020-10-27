@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Cafe\Application\Write;
 
-use Cafe\Application\Read\OpenTabsQueries;
 use Cafe\Domain\Tab\Tab;
 use Cafe\Domain\Tab\TabId;
 use Cafe\Domain\Tab\TabRepository;
 use Cafe\UserInterface\Web\StaticData\MenuItem;
 use Cafe\UserInterface\Web\StaticData\StaticData;
-use EventSauce\EventSourcing\UuidAggregateRootId;
 
 class TabHandler
 {
@@ -29,7 +27,7 @@ class TabHandler
 
     public function handlePlaceOrderCommand(PlaceOrderCommand $command) : void
     {
-        $tab = $this->repository->get($command->tabId);
+        $tab = $this->repository->get(TabId::fromString($command->tabId));
         $tab->order($command);
         $this->repository->save($tab);
     }

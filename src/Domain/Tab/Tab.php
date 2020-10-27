@@ -65,11 +65,11 @@ final class Tab implements AggregateRoot
     public function order(PlaceOrderCommand $command) : void
     {
         if ($command->hasDrinks()) {
-            $this->recordThat(new DrinksOrdered($command->tabId->toString(), $command->getDrinks()));
+            $this->recordThat(new DrinksOrdered($command->tabId, $command->getDrinks()));
         }
 
         if ($command->hasFood()) {
-            $this->recordThat(new FoodOrdered($command->tabId->toString(), $command->getFood()));
+            $this->recordThat(new FoodOrdered($command->tabId, $command->getFood()));
         }
     }
 

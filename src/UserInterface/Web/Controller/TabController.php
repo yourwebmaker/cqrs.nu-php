@@ -10,7 +10,6 @@ use Cafe\Application\Write\MarkItemsServedCommand;
 use Cafe\Application\Write\OpenTabCommand;
 use Cafe\Application\Write\PlaceOrderCommand;
 use Cafe\Domain\Tab\OrderedItem;
-use Cafe\Domain\Tab\TabId;
 use Cafe\UserInterface\Web\Form\CloseTabType;
 use Cafe\UserInterface\Web\Form\OpenTabType;
 use Cafe\UserInterface\Web\Form\OrderType;
