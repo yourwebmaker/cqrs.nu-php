@@ -13,13 +13,15 @@ Upon closing a tab, it must be paid for in full. A tab with unserved items canno
 marked as served or cancelled first.
 
 ### Requirements
-- PHP 7.4 (SF5 requirements) 
-- MySql
+- Docker 
 
-
-### Running
-- `php bin/console doctrine:migrations:migrate` to create the tables for the aggregate root and read models
-- Open your browser on `http://localhost:8000/` (ohhhh dockkkerrrr)
+### Installation
+- Clone this repository: `git clone git@github.com:yourwebmaker/cqrs.nu-php.git`
+- Install the containers: `docker-compose up -d`
+- Access the container: `docker exec -it cafe-fpm bash`
+- Install dependencies: `composer install`
+- Setup database: `php bin/console doctrine:migrations:migrate -n`
+- Open your browser on `http://0.0.0.0:8001/tab/open`
 
 ### Testing
-- `php bin/phpunit` (yeah... I know SF testing sucks)
+- Inside the container: `php bin/phpunit` (yeah... I know SF testing sucks, but that's what we have for now)
