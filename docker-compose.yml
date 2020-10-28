@@ -2,21 +2,26 @@
 version: "3.1"
 services:
   php-fpm:
-    image: devilbox/php-fpm-7.4
-    container_name: cqrs.nu-fpm
+    image: devilbox/php-fpm:7.4-work
+    container_name: cafe-fpm
     working_dir: /application
     volumes:
-      - .:/application
+      - .:/application:cached
     ports:
-    - 8000:8000
+    - 8001:8000
     entrypoint: "php -S 0.0.0.0:8000 -t public"
+    depends_on:
+      - mysql
 
-  db:
-    container_name: mysql-cqrs
-    image: mysql
+  mysql:
+    image: mysql:5.7
+    container_name: cafe-mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: daniel
+      MYSQL_ROOT_PASSWORD: root-cafe
+      MYSQL_DATABASE: cafe-db
+      MYSQL_USER: cafe-user
+      MYSQL_PASSWORD: cafe-pass
     ports:
-      - 3333:4444
+      - 3307:3306
