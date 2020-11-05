@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Cafe\Domain\Tab;
 
 use Cafe\Application\Write\CloseTabCommand;
-use Cafe\Application\Write\MarkDrinksServedCommand;
 use Cafe\Application\Write\MarkFoodPreparedCommand;
 use Cafe\Application\Write\MarkFoodServedCommand;
-use Cafe\Application\Write\OpenTabCommand;
 use Cafe\Application\Write\PlaceOrderCommand;
 use Cafe\Domain\Tab\Events\FoodPrepared;
 use Cafe\Domain\Tab\Events\FoodServed;
@@ -34,6 +32,7 @@ final class Tab implements AggregateRoot
 {
     use AggregateRootBehaviourWithRequiredHistory;
 
+    private string $tabId;
     private bool $open = false;
     private Collection $outstandingDrinks;
     private Collection $outstandingFood;
@@ -68,13 +67,13 @@ final class Tab implements AggregateRoot
         }
     }
 
-    public function markDrinksServed(MarkDrinksServedCommand $command) : void
+    public function markDrinksServed(array $menuNumbers) : void
     {
-        if (!$this->areDrinksOutstanding($command->menuNumbers)) {
+        if (!$this->areDrinksOutstanding($menuNumbers)) {
             throw new DrinksNotOutstanding();
         }
 
-        $this->recordThat(new DrinksServed($command->tabId, $command->menuNumbers));
+        $this->recordThat(new DrinksServed($this->tabId, $menuNumbers));
     }
 
     public function markFoodPrepared(MarkFoodPreparedCommand $command) : void
@@ -120,6 +119,7 @@ final class Tab implements AggregateRoot
     private function applyTabOpened(TabOpened $event): void
     {
         $this->open = true;
+        $this->tabId = $event->tabId;
     }
 
     private function applyDrinksOrdered(DrinksOrdered $event): void

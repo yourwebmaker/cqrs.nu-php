@@ -52,7 +52,7 @@ class TabHandler
         }
 
         if (count($drinksNumbers) > 0) {
-            $tab->markDrinksServed(new MarkDrinksServedCommand($command->tabId, $drinksNumbers));
+            $tab->markDrinksServed($drinksNumbers);
         }
 
         if (count($foodNumbers) > 0) {

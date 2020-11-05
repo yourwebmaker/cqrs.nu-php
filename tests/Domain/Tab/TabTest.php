@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Cafe\Domain\Tab;
 
 use Cafe\Application\Write\CloseTabCommand;
-use Cafe\Application\Write\MarkDrinksServedCommand;
 use Cafe\Application\Write\MarkFoodPreparedCommand;
 use Cafe\Application\Write\MarkFoodServedCommand;
 use Cafe\Application\Write\PlaceOrderCommand;
@@ -136,7 +135,7 @@ class TabTest extends TestCase
 
         $tab = Tab::open($this->tabId, $this->tableNumber, $this->waiter);
         $tab->order(new PlaceOrderCommand($this->tabId, [$this->drink1]));
-        $tab->markDrinksServed(new MarkDrinksServedCommand($this->tabId, [$this->drink2->menuNumber]));
+        $tab->markDrinksServed([$this->drink2->menuNumber]);
     }
 
     /**
@@ -148,8 +147,8 @@ class TabTest extends TestCase
 
         $tab = Tab::open($this->tabId, $this->tableNumber, $this->waiter);
         $tab->order(new PlaceOrderCommand($this->tabId, [$this->drink1]));
-        $tab->markDrinksServed(new MarkDrinksServedCommand($this->tabId, [$this->drink1->menuNumber]));
-        $tab->markDrinksServed(new MarkDrinksServedCommand($this->tabId, [$this->drink1->menuNumber]));
+        $tab->markDrinksServed([$this->drink1->menuNumber]);
+        $tab->markDrinksServed([$this->drink1->menuNumber]);
     }
 
     /**
@@ -280,7 +279,7 @@ class TabTest extends TestCase
     {
         $tab = Tab::open($this->tabId, $this->tableNumber, $this->waiter);
         $tab->order(new PlaceOrderCommand($this->tabId, [$this->drink2]));
-        $tab->markDrinksServed(new MarkDrinksServedCommand($this->tabId, [$this->drink2->menuNumber]));
+        $tab->markDrinksServed([$this->drink2->menuNumber]);
         $amountPaid = $this->drink2->price + 0.50;
         $tab->close(new CloseTabCommand($this->tabId, $amountPaid));
 
@@ -301,7 +300,7 @@ class TabTest extends TestCase
 
         $tab = Tab::open($this->tabId, $this->tableNumber, $this->waiter);
         $tab->order(new PlaceOrderCommand($this->tabId, [$this->drink2]));
-        $tab->markDrinksServed(new MarkDrinksServedCommand($this->tabId, [$this->drink2->menuNumber]));
+        $tab->markDrinksServed([$this->drink2->menuNumber]);
         $amountPaid = $this->drink2->price - 0.50;
         $tab->close(new CloseTabCommand($this->tabId, $amountPaid));
     }
@@ -315,7 +314,7 @@ class TabTest extends TestCase
 
         $tab = Tab::open($this->tabId, $this->tableNumber, $this->waiter);
         $tab->order(new PlaceOrderCommand($this->tabId, [$this->drink2]));
-        $tab->markDrinksServed(new MarkDrinksServedCommand($this->tabId, [$this->drink2->menuNumber]));
+        $tab->markDrinksServed([$this->drink2->menuNumber]);
         $amountPaid = $this->drink2->price;
         $tab->close(new CloseTabCommand($this->tabId, $amountPaid));
         $tab->close(new CloseTabCommand($this->tabId, $amountPaid));
