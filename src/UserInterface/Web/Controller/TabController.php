@@ -147,6 +147,7 @@ final class TabController extends AbstractController
 
         return $this->render('tab/close.html.twig', [
             'form' => $form->createView(),
+            'invoice' => $this->queries->invoiceForTable($tableNumber),
         ]);
     }
 }
