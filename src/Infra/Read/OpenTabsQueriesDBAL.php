@@ -34,9 +34,11 @@ class OpenTabsQueriesDBAL implements OpenTabsQueries
         return $tableNumbers;
     }
 
-    public function invoiceForTable(int $table): TabInvoice
+    public function invoiceForTable(int $tableNumber): TabInvoice
     {
-        // TODO: Implement invoiceForTable() method.
+        $tabId = $this->tabIdForTable($tableNumber);
+
+        return new TabInvoice($tabId, $tableNumber, $this->hydrateItems($tabId));
     }
 
     public function tabIdForTable(int $tableNumber): string
@@ -48,26 +50,22 @@ class OpenTabsQueriesDBAL implements OpenTabsQueries
     public function tabForTable(int $tableNumber): TabStatus
     {
         $tabId = $this->tabIdForTable($tableNumber);
-        $rows = $this->connection->fetchAllAssociative('select * from read_model_tab_item where tab_id = :tab_id', [
-            'tab_id' => $tabId,
-        ]);
+        $items = $this->hydrateItems($tabId);
 
         $toServe = [];
         $inPreparation = [];
         $served = [];
 
-        foreach ($rows as $row) {
-            $item = new TabItem((int) $row['menu_number'], $row['description'], (float) $row['price']);
-
-            if ($row['status'] === 'to-serve') {
+        foreach ($items as $item) {
+            if ($item->status === TabItem::STATUS_TO_SERVE) {
                 $toServe[] = $item;
             }
 
-            if ($row['status'] === 'in-preparation') {
+            if ($item->status === TabItem::STATUS_IN_PREPARATION) {
                 $inPreparation[] = $item;
             }
 
-            if ($row['status'] === 'served') {
+            if ($item->status === TabItem::STATUS_SERVED) {
                 $served[] = $item;
             }
         }
@@ -81,5 +79,18 @@ class OpenTabsQueriesDBAL implements OpenTabsQueries
     public function todoListForWaiter(string $waiter): array
     {
         // TODO: Implement todoListForWaiter() method.
+    }
+
+    /**
+     * @return array<TabItem>
+     */
+    private function hydrateItems(string $tabId): array
+    {
+        $rowsItems = $this->connection->fetchAllAssociative('select * from read_model_tab_item where tab_id = :tab_id', [
+            'tab_id' => $tabId,
+        ]);
+
+        $items = array_map(fn(array $row) => new TabItem((int)$row['menu_number'], $row['description'], (float)$row['price'], $row['status']), $rowsItems);
+        return $items;
     }
 }

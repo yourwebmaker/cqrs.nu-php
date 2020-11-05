@@ -1,5 +1,43 @@
 {% extends 'base.html.twig' %}
 {% block title %}Close tab{% endblock %}
 {% block content %}
+
+    <table class="table">
+
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Price each</th>
+                <th>Sub total</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for line in invoice.lines %}
+            <tr>
+                <td>{{ line.description }}</td>
+                <td>{{ line.quantity }}</td>
+                <td>{{ line.priceEach }}</td>
+                <td>{{ line.subTotal }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <td colspan="4">Total: {{ invoice.total }}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <hr>
+
+    {% if invoice.hasUnservedItems() %}
+        <div class="alert alert-danger" role="alert">
+            There're unserved items for this table. You won't be able to close it.
+        </div>
+    {% endif %}
+
     {{ form(form) }}
 {% endblock %}
