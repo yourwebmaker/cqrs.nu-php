@@ -56,7 +56,7 @@ class TabHandler
         }
 
         if (count($foodNumbers) > 0) {
-            $tab->markFoodServed(new MarkFoodServedCommand($command->tabId, $foodNumbers));
+            $tab->markFoodServed($foodNumbers);
         }
 
         $this->repository->save($tab);

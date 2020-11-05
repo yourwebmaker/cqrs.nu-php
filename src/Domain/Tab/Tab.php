@@ -85,13 +85,13 @@ final class Tab implements AggregateRoot
         $this->recordThat(new FoodPrepared($command->tabId, $command->groupId, $command->menuNumbers));
     }
 
-    public function markFoodServed(MarkFoodServedCommand $command): void
+    public function markFoodServed(array $menuNumbers): void
     {
-        if (!$this->isFoodPrepared($command->menuNumbers)) {
+        if (!$this->isFoodPrepared($menuNumbers)) {
             throw new FoodNotPrepared();
         }
 
-        $this->recordThat(new FoodServed($command->tabId, $command->menuNumbers));
+        $this->recordThat(new FoodServed($this->tabId, $menuNumbers));
     }
 
     public function close(CloseTabCommand $command): void
