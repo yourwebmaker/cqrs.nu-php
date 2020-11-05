@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Cafe\Domain\Tab;
 
 use Cafe\Application\Write\CloseTabCommand;
-use Cafe\Application\Write\MarkFoodPreparedCommand;
 use Cafe\Application\Write\PlaceOrderCommand;
 use Cafe\Domain\Tab\Events\FoodPrepared;
 use Cafe\Domain\Tab\Events\FoodServed;
@@ -157,7 +156,7 @@ class TabTest extends TestCase
     {
         $tab = Tab::open($this->tabId, $this->tableNumber, $this->waiter);
         $tab->order(new PlaceOrderCommand($this->tabId, [$this->food1, $this->food1]));
-        $tab->markFoodPrepared(new MarkFoodPreparedCommand($this->tabId, 'groupId', [$this->food1->menuNumber, $this->food1->menuNumber]));
+        $tab->markFoodPrepared([$this->food1->menuNumber, $this->food1->menuNumber], 'groupId');
 
         self::assertEquals([
             new TabOpened($this->tabId, $this->tableNumber, $this->waiter),
@@ -176,7 +175,7 @@ class TabTest extends TestCase
         $this->expectException(FoodNotOutstanding::class);
 
         $tab = Tab::open($this->tabId, $this->tableNumber, $this->waiter);
-        $tab->markFoodPrepared(new MarkFoodPreparedCommand($this->tabId, 'groupId', [$this->food1->menuNumber, $this->food1->menuNumber]));
+        $tab->markFoodPrepared([$this->food1->menuNumber, $this->food1->menuNumber], 'groupId');
     }
 
     /**
@@ -188,8 +187,8 @@ class TabTest extends TestCase
 
         $tab = Tab::open($this->tabId, $this->tableNumber, $this->waiter);
         $tab->order(new PlaceOrderCommand($this->tabId, [$this->food1, $this->food1]));
-        $tab->markFoodPrepared(new MarkFoodPreparedCommand($this->tabId, 'groupId', [$this->food1->menuNumber, $this->food1->menuNumber]));
-        $tab->markFoodPrepared(new MarkFoodPreparedCommand($this->tabId, 'groupId', [$this->food1->menuNumber]));
+        $tab->markFoodPrepared([$this->food1->menuNumber, $this->food1->menuNumber], 'groupId');
+        $tab->markFoodPrepared([$this->food1->menuNumber], 'groupId');
     }
 
     /**
@@ -199,7 +198,7 @@ class TabTest extends TestCase
     {
         $tab = Tab::open($this->tabId, $this->tableNumber, $this->waiter);
         $tab->order(new PlaceOrderCommand($this->tabId, [$this->food1, $this->food1]));
-        $tab->markFoodPrepared(new MarkFoodPreparedCommand($this->tabId, 'groupId', [$this->food1->menuNumber, $this->food1->menuNumber]));
+        $tab->markFoodPrepared([$this->food1->menuNumber, $this->food1->menuNumber], 'groupId');
         $tab->markFoodServed([$this->food1->menuNumber, $this->food1->menuNumber]);
 
         self::assertEquals([
@@ -221,7 +220,7 @@ class TabTest extends TestCase
 
         $tab = Tab::open($this->tabId, $this->tableNumber, $this->waiter);
         $tab->order(new PlaceOrderCommand($this->tabId, [$this->food1, $this->food1]));
-        $tab->markFoodPrepared(new MarkFoodPreparedCommand($this->tabId, 'groupId', [$this->food1->menuNumber, $this->food1->menuNumber]));
+        $tab->markFoodPrepared([$this->food1->menuNumber, $this->food1->menuNumber], 'groupId');
         $tab->markFoodServed([$this->food1->menuNumber, $this->food1->menuNumber]);
         $tab->markFoodServed([$this->food1->menuNumber, $this->food1->menuNumber]);
     }
@@ -235,7 +234,7 @@ class TabTest extends TestCase
 
         $tab = Tab::open($this->tabId, $this->tableNumber, $this->waiter);
         $tab->order(new PlaceOrderCommand($this->tabId, [$this->food1, $this->food1]));
-        $tab->markFoodPrepared(new MarkFoodPreparedCommand($this->tabId, 'groupId', [$this->food1->menuNumber]));
+        $tab->markFoodPrepared([$this->food1->menuNumber], 'groupId');
         $tab->markFoodServed([$this->food2->menuNumber]);
     }
 
@@ -258,7 +257,7 @@ class TabTest extends TestCase
     {
         $tab = Tab::open($this->tabId, $this->tableNumber, $this->waiter);
         $tab->order(new PlaceOrderCommand($this->tabId, [$this->food1, $this->food2]));
-        $tab->markFoodPrepared(new MarkFoodPreparedCommand($this->tabId, 'groupId', [$this->food1->menuNumber, $this->food2->menuNumber]));
+        $tab->markFoodPrepared([$this->food1->menuNumber, $this->food2->menuNumber], 'groupId');
         $tab->markFoodServed([$this->food1->menuNumber, $this->food2->menuNumber]);
         $amountPaid = $this->food1->price + $this->food2->price;
         $tab->close(new CloseTabCommand($this->tabId, $amountPaid));
@@ -352,7 +351,7 @@ class TabTest extends TestCase
 
         $tab = Tab::open($this->tabId, $this->tableNumber, $this->waiter);
         $tab->order(new PlaceOrderCommand($this->tabId, [$this->food1]));
-        $tab->markFoodPrepared(new MarkFoodPreparedCommand($this->tabId, 'groupId', [$this->food1->menuNumber]));
+        $tab->markFoodPrepared([$this->food1->menuNumber], 'groupId');
         $tab->close(new CloseTabCommand($this->tabId, $this->food1->price));
     }
 }
