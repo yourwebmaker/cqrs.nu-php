@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Cafe\Domain\Tab;
 
-use Cafe\Application\Write\CloseTabCommand;
 use Cafe\Application\Write\PlaceOrderCommand;
 use Cafe\Domain\Tab\Events\FoodPrepared;
 use Cafe\Domain\Tab\Events\FoodServed;
@@ -92,7 +91,7 @@ final class Tab implements AggregateRoot
         $this->recordThat(new FoodServed($this->tabId, $menuNumbers));
     }
 
-    public function close(CloseTabCommand $command): void
+    public function close(float $amountPaid): void
     {
         if (!$this->open) {
             throw new TabNotOpen();
@@ -102,16 +101,13 @@ final class Tab implements AggregateRoot
             throw new TabHasUnservedItems();
         }
 
-        if ($command->amountPaid < $this->servedItemsValue) {
+        if ($amountPaid < $this->servedItemsValue) {
             throw new MustPayEnough();
         }
 
-        $this->recordThat(new TabClosed(
-            $this->tabId,
-            $command->amountPaid,
-            $this->servedItemsValue,
-            $command->amountPaid - $this->servedItemsValue
-        ));
+        $tipValue = $amountPaid - $this->servedItemsValue;
+
+        $this->recordThat(new TabClosed($this->tabId, $amountPaid, $this->servedItemsValue, $tipValue));
     }
 
     private function applyTabOpened(TabOpened $event): void

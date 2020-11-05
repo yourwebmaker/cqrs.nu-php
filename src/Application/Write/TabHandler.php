@@ -72,7 +72,7 @@ class TabHandler
     public function handleCloseTabCommand(CloseTabCommand $command) : void
     {
         $tab = $this->repository->get($command->tabId);
-        $tab->close($command);
+        $tab->close($command->amountPaid);
         $this->repository->save($tab);
     }
 }
