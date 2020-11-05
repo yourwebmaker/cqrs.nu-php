@@ -20,7 +20,7 @@ class TabHandler
 
     public function handleOpenTabCommand(OpenTabCommand $command) : void
     {
-        $tab = Tab::open($command);
+        $tab = Tab::open($command->tabId, $command->tableNumber, $command->waiter);
         $this->repository->save($tab);
     }
 

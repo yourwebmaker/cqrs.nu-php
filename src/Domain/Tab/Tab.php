@@ -48,16 +48,11 @@ final class Tab implements AggregateRoot
         $this->preparedFood = new ArrayCollection();
     }
 
-    public static function open(OpenTabCommand $command) : self
+    public static function open(string $tabId, int $tableNumber, string $waiter) : self
     {
+        $tab = new static(UuidAggregateRootId::fromString($tabId));
 
-        $tab = new static(UuidAggregateRootId::fromString($command->tabId));
-
-        $tab->recordThat(new TabOpened(
-            $command->tabId,
-            $command->tableNumber,
-            $command->waiter)
-        );
+        $tab->recordThat(new TabOpened($tabId, $tableNumber, $waiter));
 
         return $tab;
     }
