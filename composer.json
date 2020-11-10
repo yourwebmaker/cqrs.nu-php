@@ -8,6 +8,7 @@
         "doctrine/annotations": "^1.11",
         "doctrine/collections": "^1.6",
         "doctrine/dbal": "^2.12",
+        "doctrine/migrations": "^3.0",
         "eventsauce/doctrine-message-repository": "^0.8.2",
         "league/tactician": "^1.0",
         "symfony/console": "5.1.*",
