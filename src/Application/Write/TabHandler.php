@@ -27,7 +27,7 @@ class TabHandler
     public function handlePlaceOrderCommand(PlaceOrderCommand $command) : void
     {
         $tab = $this->repository->get($command->tabId);
-        $tab->order($command);
+        $tab->order($command->items);
         $this->repository->save($tab);
     }
 

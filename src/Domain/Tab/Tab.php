@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Cafe\Domain\Tab;
 
-use Cafe\Application\Write\PlaceOrderCommand;
 use Cafe\Domain\Tab\Events\FoodPrepared;
 use Cafe\Domain\Tab\Events\FoodServed;
 use Cafe\Domain\Tab\Events\TabClosed;
@@ -53,14 +52,17 @@ final class Tab implements AggregateRoot
         return $tab;
     }
 
-    public function order(PlaceOrderCommand $command) : void
+    public function order(array $items) : void
     {
-        if ($command->hasDrinks()) {
-            $this->recordThat(new DrinksOrdered($command->tabId, $command->getDrinks()));
+        $itemsCollection = new ArrayCollection($items);
+        $drinks = $itemsCollection->filter(fn(OrderedItem $item) => $item->isDrink);
+        if ($drinks->count() > 0) {
+            $this->recordThat(new DrinksOrdered($this->tabId, array_values($drinks->toArray())));
         }
 
-        if ($command->hasFood()) {
-            $this->recordThat(new FoodOrdered($command->tabId, $command->getFood()));
+        $food = $itemsCollection->filter(fn(OrderedItem $item) => !$item->isDrink);
+        if ($food->count() > 0) {
+            $this->recordThat(new FoodOrdered($this->tabId, array_values($food->toArray())));
         }
     }
 
