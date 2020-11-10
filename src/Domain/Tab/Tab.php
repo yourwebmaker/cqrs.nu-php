@@ -4,12 +4,6 @@ declare(strict_types=1);
 
 namespace Cafe\Domain\Tab;
 
-use Cafe\Application\Write\CloseTabCommand;
-use Cafe\Application\Write\MarkDrinksServedCommand;
-use Cafe\Application\Write\MarkFoodPreparedCommand;
-use Cafe\Application\Write\MarkFoodServedCommand;
-use Cafe\Application\Write\OpenTabCommand;
-use Cafe\Application\Write\PlaceOrderCommand;
 use Cafe\Domain\Tab\Events\FoodPrepared;
 use Cafe\Domain\Tab\Events\FoodServed;
 use Cafe\Domain\Tab\Events\TabClosed;
@@ -34,6 +28,7 @@ final class Tab implements AggregateRoot
 {
     use AggregateRootBehaviourWithRequiredHistory;
 
+    private string $tabId;
     private bool $open = false;
     private Collection $outstandingDrinks;
     private Collection $outstandingFood;
@@ -48,59 +43,57 @@ final class Tab implements AggregateRoot
         $this->preparedFood = new ArrayCollection();
     }
 
-    public static function open(OpenTabCommand $command) : self
+    public static function open(string $tabId, int $tableNumber, string $waiter) : self
     {
+        $tab = new static(UuidAggregateRootId::fromString($tabId));
 
-        $tab = new static(UuidAggregateRootId::fromString($command->tabId));
-
-        $tab->recordThat(new TabOpened(
-            $command->tabId,
-            $command->tableNumber,
-            $command->waiter)
-        );
+        $tab->recordThat(new TabOpened($tabId, $tableNumber, $waiter));
 
         return $tab;
     }
 
-    public function order(PlaceOrderCommand $command) : void
+    public function order(array $items) : void
     {
-        if ($command->hasDrinks()) {
-            $this->recordThat(new DrinksOrdered($command->tabId, $command->getDrinks()));
+        $itemsCollection = new ArrayCollection($items);
+        $drinks = $itemsCollection->filter(fn(OrderedItem $item) => $item->isDrink);
+        if ($drinks->count() > 0) {
+            $this->recordThat(new DrinksOrdered($this->tabId, array_values($drinks->toArray())));
         }
 
-        if ($command->hasFood()) {
-            $this->recordThat(new FoodOrdered($command->tabId, $command->getFood()));
+        $food = $itemsCollection->filter(fn(OrderedItem $item) => !$item->isDrink);
+        if ($food->count() > 0) {
+            $this->recordThat(new FoodOrdered($this->tabId, array_values($food->toArray())));
         }
     }
 
-    public function markDrinksServed(MarkDrinksServedCommand $command) : void
+    public function markDrinksServed(array $menuNumbers) : void
     {
-        if (!$this->areDrinksOutstanding($command->menuNumbers)) {
+        if (!$this->areDrinksOutstanding($menuNumbers)) {
             throw new DrinksNotOutstanding();
         }
 
-        $this->recordThat(new DrinksServed($command->tabId, $command->menuNumbers));
+        $this->recordThat(new DrinksServed($this->tabId, $menuNumbers));
     }
 
-    public function markFoodPrepared(MarkFoodPreparedCommand $command) : void
+    public function markFoodPrepared(array $menuNumbers, string $groupId) : void
     {
-        if (!$this->isFoodOutstanding($command->menuNumbers)) {
+        if (!$this->isFoodOutstanding($menuNumbers)) {
             throw new FoodNotOutstanding();
         }
 
-        $this->recordThat(new FoodPrepared($command->tabId, $command->groupId, $command->menuNumbers));
+        $this->recordThat(new FoodPrepared($this->tabId, $groupId, $menuNumbers));
     }
 
-    public function markFoodServed(MarkFoodServedCommand $command): void
+    public function markFoodServed(array $menuNumbers): void
     {
-        if (!$this->isFoodPrepared($command->menuNumbers)) {
+        if (!$this->isFoodPrepared($menuNumbers)) {
             throw new FoodNotPrepared();
         }
 
-        $this->recordThat(new FoodServed($command->tabId, $command->menuNumbers));
+        $this->recordThat(new FoodServed($this->tabId, $menuNumbers));
     }
 
-    public function close(CloseTabCommand $command): void
+    public function close(float $amountPaid): void
     {
         if (!$this->open) {
             throw new TabNotOpen();
@@ -110,21 +103,19 @@ final class Tab implements AggregateRoot
             throw new TabHasUnservedItems();
         }
 
-        if ($command->amountPaid < $this->servedItemsValue) {
+        if ($amountPaid < $this->servedItemsValue) {
             throw new MustPayEnough();
         }
 
-        $this->recordThat(new TabClosed(
-            $command->tabId,
-            $command->amountPaid,
-            $this->servedItemsValue,
-            $command->amountPaid - $this->servedItemsValue
-        ));
+        $tipValue = $amountPaid - $this->servedItemsValue;
+
+        $this->recordThat(new TabClosed($this->tabId, $amountPaid, $this->servedItemsValue, $tipValue));
     }
 
     private function applyTabOpened(TabOpened $event): void
     {
         $this->open = true;
+        $this->tabId = $event->tabId;
     }
 
     private function applyDrinksOrdered(DrinksOrdered $event): void

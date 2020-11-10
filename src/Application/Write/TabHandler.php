@@ -20,14 +20,14 @@ class TabHandler
 
     public function handleOpenTabCommand(OpenTabCommand $command) : void
     {
-        $tab = Tab::open($command);
+        $tab = Tab::open($command->tabId, $command->tableNumber, $command->waiter);
         $this->repository->save($tab);
     }
 
     public function handlePlaceOrderCommand(PlaceOrderCommand $command) : void
     {
         $tab = $this->repository->get($command->tabId);
-        $tab->order($command);
+        $tab->order($command->items);
         $this->repository->save($tab);
     }
 
@@ -52,11 +52,11 @@ class TabHandler
         }
 
         if (count($drinksNumbers) > 0) {
-            $tab->markDrinksServed(new MarkDrinksServedCommand($command->tabId, $drinksNumbers));
+            $tab->markDrinksServed($drinksNumbers);
         }
 
         if (count($foodNumbers) > 0) {
-            $tab->markFoodServed(new MarkFoodServedCommand($command->tabId, $foodNumbers));
+            $tab->markFoodServed($foodNumbers);
         }
 
         $this->repository->save($tab);
@@ -65,14 +65,14 @@ class TabHandler
     public function handleMarkFoodPreparedCommand(MarkFoodPreparedCommand $command) : void
     {
         $tab = $this->repository->get($command->tabId);
-        $tab->markFoodPrepared($command);
+        $tab->markFoodPrepared($command->menuNumbers, $command->groupId);
         $this->repository->save($tab);
     }
 
     public function handleCloseTabCommand(CloseTabCommand $command) : void
     {
         $tab = $this->repository->get($command->tabId);
-        $tab->close($command);
+        $tab->close($command->amountPaid);
         $this->repository->save($tab);
     }
 }
