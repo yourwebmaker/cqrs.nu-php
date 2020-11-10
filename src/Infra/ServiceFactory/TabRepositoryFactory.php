@@ -10,7 +10,6 @@ use Cafe\Infra\Read\ChefTodoProjector;
 use Cafe\Infra\Read\TabProjector;
 use Cafe\Infra\TabRepositoryEventSauce;
 use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManagerInterface;
 use EventSauce\DoctrineMessageRepository\DoctrineMessageRepository;
 use EventSauce\EventSourcing\ConstructingAggregateRootRepository;
 use EventSauce\EventSourcing\Serialization\ConstructingMessageSerializer;
@@ -19,12 +18,10 @@ use EventSauce\EventSourcing\SynchronousMessageDispatcher;
 class TabRepositoryFactory
 {
     private Connection $connection;
-    private EntityManagerInterface $entityManager;
 
-    public function __construct(Connection $connection, EntityManagerInterface $entityManager)
+    public function __construct(Connection $connection)
     {
         $this->connection = $connection;
-        $this->entityManager = $entityManager;
     }
 
     public function create() : TabRepository

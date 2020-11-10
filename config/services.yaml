@@ -31,6 +31,10 @@ services:
         # the first argument is the class and the second argument is the static method
         factory: [ '@Cafe\Infra\ServiceFactory\TabRepositoryFactory', 'create' ]
 
+    Doctrine\DBAL\Connection:
+        # the first argument is the class and the second argument is the static method
+        factory: [ '@Cafe\Infra\ServiceFactory\DoctrineFactory', 'create' ]
+
     League\Tactician\CommandBus:
         # the first argument is the class and the second argument is the static method
         factory: [ '@Cafe\Infra\ServiceFactory\TacticianFactory', 'create' ]

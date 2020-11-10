@@ -20,7 +20,7 @@ marked as served or cancelled first.
 - Install the containers: `docker-compose up -d`
 - Access the container: `docker exec -it cafe-fpm bash`
 - Install dependencies: `composer install`
-- Setup database: `php bin/console doctrine:migrations:migrate -n`
+- Setup database: `vendor/bin/doctrine-migrations migrations:migrate --configuration migrations/migrations-config.php --db-configuration migrations/db-config.php `
 - Open your browser on `http://0.0.0.0:8001/tab/open`
 
 ### Testing
