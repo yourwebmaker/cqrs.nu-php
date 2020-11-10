@@ -2,13 +2,12 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": ">=7.4.0",
+        "php": "^7.4|^8.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/annotations": "^1.11",
         "doctrine/collections": "^1.6",
         "doctrine/dbal": "^2.12",
-        "doctrine/migrations": "^3.0",
         "eventsauce/doctrine-message-repository": "^0.8.2",
         "league/tactician": "^1.0",
         "symfony/console": "5.1.*",
@@ -20,6 +19,9 @@
         "symfony/yaml": "5.1.*"
     },
     "require-dev": {
+        "phpunit/phpunit": "^9.3",
+        "symfony/browser-kit": "5.1.*",
+        "symfony/css-selector": "5.1.*"
     },
     "config": {
         "optimize-autoloader": true,

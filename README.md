@@ -20,8 +20,8 @@ marked as served or cancelled first.
 - Install the containers: `docker-compose up -d`
 - Access the container: `docker exec -it cafe-fpm bash`
 - Install dependencies: `composer install`
-- Setup database: `vendor/bin/doctrine-migrations migrations:migrate --configuration migrations/migrations-config.php --db-configuration migrations/db-config.php `
+- Setup database: `php migrations/doctrine-migrations.phar migrations:migrate --configuration migrations/migrations-config.php --db-configuration migrations/db-config.php --no-interaction`
 - Open your browser on `http://0.0.0.0:8001/tab/open`
 
 ### Testing
-- Inside the container: `php bin/phpunit` (yeah... I know SF testing sucks, but that's what we have for now)
+- Inside the container: `php vendor/bin/phpunit tests/`

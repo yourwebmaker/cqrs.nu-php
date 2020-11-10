@@ -11,11 +11,9 @@ class DoctrineFactory
 {
     public function create(): Connection
     {
-
-        $connectionParams = array(
+        return  DriverManager::getConnection([
+            //todo use dotenv
             'url' => 'mysql://cafe-user:cafe-pass@cafe-mysql/cafe-db?charset=UTF8',
-        );
-        return  DriverManager::getConnection($connectionParams);
-
+        ]);
     }
 }
