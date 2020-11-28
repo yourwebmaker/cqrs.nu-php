@@ -4,7 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    cafe.database.dns: '%env(resolve:CAFE_DATABASE_URL)%'
+    cafe.database.url: '%env(resolve:CAFE_DATABASE_URL)%'
 
 services:
     # default configuration for services in *this* file
@@ -35,7 +35,7 @@ services:
     Doctrine\DBAL\Connection:
         # the first argument is the class and the second argument is the static method
         factory: [ '@Cafe\Infra\ServiceFactory\DoctrineFactory', 'create' ]
-        arguments: ['%cafe.database.dns%']
+        arguments: ['%cafe.database.url%']
 
     League\Tactician\CommandBus:
         # the first argument is the class and the second argument is the static method
