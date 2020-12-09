@@ -5,6 +5,8 @@ services:
     image: devilbox/php-fpm:7.4-work
     container_name: cafe-fpm
     working_dir: /application
+    environment:
+      CAFE_DATABASE_URL: 'mysql://cafe-user:cafe-pass@mysql:3306/cafe-db?serverVersion=5.7&charset=UTF8'
     volumes:
       - .:/application:cached
     ports:
