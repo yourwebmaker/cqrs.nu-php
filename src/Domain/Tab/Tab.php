@@ -93,9 +93,14 @@ final class Tab implements AggregateRoot
         $this->recordThat(new FoodServed($this->tabId, $menuNumbers));
     }
 
+    private function isClosed(): bool
+    {
+        return !$this->open;
+    }
+
     public function close(float $amountPaid): void
     {
-        if (!$this->open) {
+        if ($this->isClosed()) {
             throw new TabNotOpen();
         }
 
