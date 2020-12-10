@@ -54,6 +54,10 @@ final class Tab implements AggregateRoot
 
     public function order(array $items) : void
     {
+        if ($this->isClosed()) {
+            throw new TabNotOpen();
+        }
+
         $itemsCollection = new ArrayCollection($items);
         $drinks = $itemsCollection->filter(fn(OrderedItem $item) => $item->isDrink);
         if ($drinks->count() > 0) {
@@ -68,6 +72,10 @@ final class Tab implements AggregateRoot
 
     public function markDrinksServed(array $menuNumbers) : void
     {
+        if ($this->isClosed()) {
+            throw new TabNotOpen();
+        }
+
         if (!$this->areDrinksOutstanding($menuNumbers)) {
             throw new DrinksNotOutstanding();
         }
@@ -86,6 +94,10 @@ final class Tab implements AggregateRoot
 
     public function markFoodServed(array $menuNumbers): void
     {
+        if ($this->isClosed()) {
+            throw new TabNotOpen();
+        }
+
         if (!$this->isFoodPrepared($menuNumbers)) {
             throw new FoodNotPrepared();
         }
