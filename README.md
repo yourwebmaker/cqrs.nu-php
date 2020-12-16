@@ -24,4 +24,4 @@ marked as served or cancelled first.
 - Open your browser on `http://0.0.0.0:8001/tab/open`
 
 ### Testing
-- Inside the container: `php vendor/bin/phpunit tests/`
+- Inside the container: `vendor/bin/phpunit tests`

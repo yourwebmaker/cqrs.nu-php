@@ -9,11 +9,10 @@ use Doctrine\DBAL\DriverManager;
 
 class DoctrineFactory
 {
-    public function create(): Connection
+    public function create(string $databaseDns = ''): Connection
     {
         return  DriverManager::getConnection([
-            //todo use dotenv
-            'url' => 'mysql://cafe-user:cafe-pass@cafe-mysql/cafe-db?charset=UTF8',
+            'url' => $databaseDns,
         ]);
     }
 }

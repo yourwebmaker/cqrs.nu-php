@@ -107,6 +107,18 @@ class TabTest extends TestCase
     /**
      * @test
      */
+    public function cannot_place_an_order_if_the_table_is_closed(): void
+    {
+        $this->expectException(TabNotOpen::class);
+
+        $tab = Tab::open($this->tabId, $this->tableNumber, $this->waiter);
+        $tab->close(0);
+        $tab->order([$this->food1, $this->drink2]);
+    }
+
+    /**
+     * @test
+     */
     public function ordered_drinks_can_be_served() : void
     {
         $tab = Tab::open($this->tabId, $this->tableNumber, $this->waiter);
@@ -143,6 +155,18 @@ class TabTest extends TestCase
         $tab = Tab::open($this->tabId, $this->tableNumber, $this->waiter);
         $tab->order([$this->drink1]);
         $tab->markDrinksServed([$this->drink1->menuNumber]);
+        $tab->markDrinksServed([$this->drink1->menuNumber]);
+    }
+
+    /**
+     * @test
+     */
+    public function cannot_server_a_drink_if_the_table_is_colsed() : void
+    {
+        $this->expectException(TabNotOpen::class);
+
+        $tab = Tab::open($this->tabId, $this->tableNumber, $this->waiter);
+        $tab->close(0);
         $tab->markDrinksServed([$this->drink1->menuNumber]);
     }
 
@@ -220,6 +244,18 @@ class TabTest extends TestCase
         $tab->markFoodPrepared([$this->food1->menuNumber, $this->food1->menuNumber], 'groupId');
         $tab->markFoodServed([$this->food1->menuNumber, $this->food1->menuNumber]);
         $tab->markFoodServed([$this->food1->menuNumber, $this->food1->menuNumber]);
+    }
+
+    /**
+     * @test
+     */
+    public function cannot_server_a_food_if_the_table_is_colsed() : void
+    {
+        $this->expectException(TabNotOpen::class);
+
+        $tab = Tab::open($this->tabId, $this->tableNumber, $this->waiter);
+        $tab->close(0);
+        $tab->markFoodServed([$this->food1->menuNumber]);
     }
 
     /**
