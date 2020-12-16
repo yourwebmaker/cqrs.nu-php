@@ -25,7 +25,7 @@ class OpenTabsQueriesDBAL implements OpenTabsQueries
     public function activeTableNumbers(): array
     {
         $sql = 'select table_number from read_model_tab';
-        $tableNumbers = $this->connection->fetchNumeric($sql);
+        $tableNumbers = $this->connection->fetchFirstColumn($sql);
 
         if (! $tableNumbers) {
             return [];
