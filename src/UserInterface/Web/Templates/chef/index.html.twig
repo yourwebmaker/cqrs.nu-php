@@ -27,5 +27,7 @@
             <button type="submit" class="btn btn-primary" name="mark-prepared">Mark Prepared</button>
             <hr />
         </form>
+    {% else %}
+        <p>No items to prepare</p>
     {% endfor %}
 {% endblock %}
