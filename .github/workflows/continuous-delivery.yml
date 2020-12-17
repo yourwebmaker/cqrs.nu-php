@@ -48,10 +48,7 @@ jobs:
 #        if: ${{ matrix.php == '7.4' }}
 #        run: echo "COVERAGE=1" >> $GITHUB_ENV
       - name: Run Migration
-        run: |
-          vendor/bin/doctrine-migrations migrations:migrate \
-          --configuration migrations/migrations-config.php \
-          --db-configuration migrations/db-config.php --no-interaction || echo "No migrations found or migration failed"
+        run: vendor/bin/doctrine-migrations migrations:migrate --configuration migrations/migrations-config.php --db-configuration migrations/db-config.php --no-interaction --ansi || echo "No migrations found or migration failed"
         env:
           CAFE_DATABASE_URL: mysql://root:password@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/cafe-db?serverVersion=5.7&charset=UTF8
       - name: Run PHPUnit tests
