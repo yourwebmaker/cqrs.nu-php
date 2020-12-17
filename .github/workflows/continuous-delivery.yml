@@ -1,0 +1,64 @@
+name: CD
+
+on:
+  push:
+    branches: [ master, feature/**, bugfix/** ]
+  pull_request:
+    branches: [ master ]
+env:
+  COVERAGE: '0'
+
+jobs:
+  phpunit:
+    name: PHPUnit (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: false
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: cafe-db
+        ports:
+          - 3306/tcp
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    strategy:
+      matrix:
+        php:
+          - '7.4'
+          #- '8.0'
+        include:
+          - php: '7.4'
+            coverage: xdebug
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup-php
+        id: setup-php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: intl, bcmath, curl, openssl, mbstring
+          ini-values: memory_limit=-1
+          tools: composer
+          coverage: ${{ matrix.coverage }}
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress --ansi
+#      - name: Enable code coverage for PHP-7.4
+#        if: ${{ matrix.php == '7.4' }}
+#        run: echo "COVERAGE=1" >> $GITHUB_ENV
+      - name: Run Migration
+        run: |
+          vendor/bin/doctrine-migrations migrations:migrate \
+          --configuration migrations/migrations-config.php \
+          --db-configuration migrations/db-config.php --no-interaction || echo "No migrations found or migration failed"
+        env:
+          CAFE_DATABASE_URL: mysql://root:password@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/cafe-db?serverVersion=5.7&charset=UTF8
+      - name: Run PHPUnit tests
+        run: |
+          mkdir -p reports/phpunit
+          if [ "$COVERAGE" = '1' ]; then
+            vendor/bin/phpunit --coverage-clover reports/phpunit/clover.xml --log-junit reports/phpunit/junit.xml --colors=always
+          else
+            vendor/bin/phpunit --colors=always
+          fi
