@@ -12,16 +12,13 @@
     </head>
     <body>
         <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">Cafe</a>
+            <a class="navbar-brand" href="{{ path('home') }}">Cafe</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{{ path('home') }}">Home</a>
-                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('tab_open') }}">Open Tab</a>
                     </li>
@@ -40,13 +37,6 @@
                                 <ul>
                                     {% for w in staticData.getWaitStaff() %}
                                         <li><a href="{{ path('waitstaff_todo', {id : w}) }}">{{ w }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                            <li><h6>Open Tabs</h6>
-                                <ul>
-                                    {% for tableNumber in activeTables.activeTableNumbers() %}
-                                        <li><a href="{{ path('tab_status', {tableNumber : tableNumber}) }}">{{ tableNumber }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </li>
