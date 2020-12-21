@@ -1,3 +1,11 @@
 .container-fluid {
     margin-top: 15px;
 }
+
+.open-table {
+    border: 1px solid black;
+    text-align: center;
+    font-size: xxx-large;
+    margin-bottom: 30px;
+    border-radius: 10px;
+}
