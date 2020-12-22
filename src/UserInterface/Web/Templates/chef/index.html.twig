@@ -5,12 +5,12 @@
         <form action="{{ path('chef_markprepared') }}" method="post">
             <input hidden value="{{ group.groupId }}" name="groupId"/>
             <input hidden value="{{ group.tabId }}" name="tabId"/>
-            <table class="table">
-                <thead>
+            <table class="table table-bordered">
+                <thead class="thead-light">
                 <tr>
-                    <th>Menu #</th>
-                    <th>Description</th>
-                    <th>Prepared</th>
+                    <th scope="col">Menu #</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Prepared</th>
                 </tr>
                 </thead>
                 <tbody>
