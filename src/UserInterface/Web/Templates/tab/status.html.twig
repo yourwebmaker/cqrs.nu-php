@@ -8,12 +8,12 @@
     {% if tab.hasItemsToServe %}
         <form action="{{ path('tab_mark_served', {'tableNumber': tableNumber}) }}" method="post">
         <h3>Items To Serve</h3>
-        <table class="table">
-            <thead>
+        <table class="table table-bordered">
+            <thead class="thead-light">
             <tr>
-                <td>Menu #</td>
-                <td>Description</td>
-                <td>Mark Served</td>
+                <th scope="col">Menu #</th>
+                <th scope="col">Description</th>
+                <th scope="col">Mark Served</th>
             </tr>
             </thead>
             <tbody>
@@ -32,12 +32,12 @@
 
     {% if tab.hasItemsInPreparation() %}
         <h3>Food In Preparation</h3>
-        <table class="table">
-            <thead>
-            <tr>
-                <td>Menu #</td>
-                <td>Description</td>
-            </tr>
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Menu #</th>
+                    <th scope="col">Description</th>
+                </tr>
             </thead>
             <tbody>
             {% for item in tab.getItemsInPreparation() %}
@@ -52,12 +52,12 @@
 
     {% if tab.hasItemsServed() %}
         <h3>Items Already Served</h3>
-        <table class="table">
-            <thead>
-            <tr>
-                <td>Menu #</td>
-                <td>Description</td>
-            </tr>
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Menu #</th>
+                    <th scope="col">Description</th>
+                </tr>
             </thead>
             <tbody>
             {% for item in tab.servedItems() %}
