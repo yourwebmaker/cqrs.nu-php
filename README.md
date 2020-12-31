@@ -29,11 +29,14 @@ marked as served or cancelled first.
 
 ### Installation
 - Clone this repository: `git clone git@github.com:yourwebmaker/cqrs.nu-php.git`
-- Install the containers: `docker-compose up -d`
-- Access the container: `docker exec -it cafe-fpm bash`
-- Install dependencies: `composer install`
-- Setup database: `vendor/bin/doctrine-migrations migrations:migrate --configuration migrations/migrations-config.php --db-configuration migrations/db-config.php --no-interaction`
+- Start the containers: `make up`
+- Install dependencies: `make install-dependencies`
+- Setup database: `make migrations-run`
 - Open your browser on `http://0.0.0.0:8001/tab/open`
 
+### Usage
+- See full commands list `make help`
+- Access the container: `docker exec -it cafe-fpm bash`
+
 ### Testing
-- Inside the container: `vendor/bin/phpunit tests`
+- Run command: `make test`
