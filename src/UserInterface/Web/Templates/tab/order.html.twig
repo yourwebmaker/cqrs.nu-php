@@ -1,28 +1,33 @@
 {% extends 'base.html.twig' %}
 {% block title %}Place order{% endblock %}
 {% block content %}
-    {{ form_start(form) }}
-    <fieldset>
-        <table class="table table-bordered">
-            <thead class="thead-light">
+    <form>
+        <fieldset>
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Menu #</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Number To Order</th>
+                        <th scope="col">Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for item in menu %}
                 <tr>
-                    <th scope="col">Menu #</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Number To Order</th>
+                    <td>{{ item.menuNumber }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>
+                        <input type="number" min="1" name="quantity[{{ item.menuNumber }}]">
+                    </td>
+                    <td>
+                        <input type="number" min="1" name="quantity[{{ item.menuNumber }}]">
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-            {% for item in form.items %}
-            <tr>
-                <td>{{ form_row(item.menuNumber) }}</td>
-                <td>{{ form_row(item.description) }}</td>
-                <td>{{ form_row(item.numberToOrder) }}</td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-
-        <button type="submit" class="btn btn-primary">Place Order</button>
-    </fieldset>
-    {{ form_end(form) }}
+                {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary">Place Order</button>
+        </fieldset>
+    </form>
 {% endblock %}

@@ -101,6 +101,7 @@ final class TabController extends AbstractController
 
         return $this->render('tab/order.html.twig', [
             'form' => $form->createView(),
+            'menu' => $menu,
         ]);
     }
 
