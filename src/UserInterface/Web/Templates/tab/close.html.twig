@@ -2,14 +2,13 @@
 {% block title %}Close tab{% endblock %}
 {% block content %}
 
-    <table class="table">
-
-        <thead>
+    <table class="table table-bordered">
+        <thead class="thead-light">
             <tr>
-                <th>Description</th>
-                <th>Quantity</th>
-                <th>Price each</th>
-                <th>Sub total</th>
+                <th scope="col">Description</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price each</th>
+                <th scope="col">Sub total</th>
             </tr>
         </thead>
 
@@ -18,15 +17,15 @@
             <tr>
                 <td>{{ line.description }}</td>
                 <td>{{ line.quantity }}</td>
-                <td>{{ line.priceEach }}</td>
-                <td>{{ line.subTotal }}</td>
+                <td>{{ line.priceEach|format_currency('EUR') }}</td>
+                <td>{{ line.subTotal|format_currency('EUR') }}</td>
             </tr>
         {% endfor %}
         </tbody>
 
         <tfoot>
             <tr>
-                <td colspan="4">Total: {{ invoice.total }}</td>
+                <td colspan="4"><strong>Total: {{ invoice.total|format_currency('EUR') }}</strong></td>
             </tr>
         </tfoot>
     </table>

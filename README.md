@@ -12,16 +12,31 @@ Finally, the visitors close the tab by paying what is owed, possibly with a tip 
 Upon closing a tab, it must be paid for in full. A tab with unserved items cannot be closed unless the items are either 
 marked as served or cancelled first.
 
+### Screenshots
+![Screenshot](screenshots/1-home.png)
+![Screenshot](screenshots/2-opening-tab.png)
+![Screenshot](screenshots/3-ordering.png)
+![Screenshot](screenshots/4-tab-status.png)
+![Screenshot](screenshots/5-chef-todo.png)
+![Screenshot](screenshots/5-chef-todo.png)
+![Screenshot](screenshots/7-home-some-opened.png)
+![Screenshot](screenshots/8-status-2.png)
+![Screenshot](screenshots/9-cant-close-tab.png)
+![Screenshot](screenshots/10-closing-tab.png)
+
 ### Requirements
 - Docker 
 
 ### Installation
 - Clone this repository: `git clone git@github.com:yourwebmaker/cqrs.nu-php.git`
-- Install the containers: `docker-compose up -d`
-- Access the container: `docker exec -it cafe-fpm bash`
-- Install dependencies: `composer install`
-- Setup database: `php migrations/doctrine-migrations.phar migrations:migrate --configuration migrations/migrations-config.php --db-configuration migrations/db-config.php --no-interaction`
+- Start the containers: `make up`
+- Install dependencies: `make install-dependencies`
+- Setup database: `make migrations-run`
 - Open your browser on `http://0.0.0.0:8001/tab/open`
 
+### Usage
+- See full commands list `make help`
+- Access the container: `docker exec -it cafe-fpm bash`
+
 ### Testing
-- Inside the container: `vendor/bin/phpunit tests`
+- Run command: `make test`

@@ -1,5 +1,17 @@
 {% extends 'base.html.twig' %}
-{% block title %}Cafe application{% endblock %}
+{% block title %}Open Tabs{% endblock %}
 {% block content %}
-    dd
+    <div class="row row-cols-4">
+        {% for tableNumber in activeTables.activeTableNumbers() %}
+            <div class="col">
+                <div class="open-table">
+                    <a href="{{ path('tab_status', {tableNumber : tableNumber}) }}">{{ tableNumber }}</a>
+                </div>
+            </div>
+        {% else %}
+            <div class="col">
+                No open tabs. Please <a href="{{ path('tab_open') }}">open a tab</a> and order.
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
