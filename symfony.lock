@@ -2,6 +2,9 @@
     "brick/math": {
         "version": "0.9.1"
     },
+    "composer/package-versions-deprecated": {
+        "version": "1.11.99.1"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -43,6 +46,9 @@
     },
     "eventsauce/eventsauce": {
         "version": "0.8.2"
+    },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "v1.0.2"
     },
     "laminas/laminas-code": {
         "version": "3.4.1"
