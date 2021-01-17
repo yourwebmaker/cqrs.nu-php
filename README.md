@@ -29,8 +29,7 @@ marked as served or cancelled first.
 
 ### Installation
 - Clone this repository: `git clone git@github.com:yourwebmaker/cqrs.nu-php.git`
-- Start the containers: `make up`
-- Install dependencies: `make install-dependencies`
+- Setup the repository: `make setup`
 - Setup database: `make migrations-run`
 - Open your browser on `http://0.0.0.0:8001/tab/open`
 

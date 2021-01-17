@@ -1,0 +1,19 @@
+#!/bin/bash
+BASE_PATH=$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd  )/..
+
+for folder in $(echo $BASE_PATH/{vendor,node_modules,bin,var,var/cache/${APP_ENV},public,public,config,migrations,tests}); do
+    if [ ! -d $folder ]; then
+        mkdir -p $folder
+    fi
+
+    OWNER=$(stat -c "%u" $folder)
+
+    if [[ $OWNER != 33 ]]; then
+        chown -R 33:33 $folder
+    fi
+done
+
+touch $BASE_PATH $BASE_PATH/{composer.json,composer.lock,symfony.lock,.php_cs.cache} &&
+chmod a+rw $BASE_PATH $BASE_PATH/{composer.json,composer.lock,symfony.lock,.php_cs.cache,.gitignore} .env* &&
+chmod -R a+rw $BASE_PATH/{.git/hooks,config,src,migrations,tests,public} &&
+chmod -R a+x $BASE_PATH/{cli,bin}

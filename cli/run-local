@@ -1,0 +1,44 @@
+#!/bin/bash
+
+BASE_PATH=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/..
+BASE_PATH=$(realpath $BASE_PATH)
+
+PARAMS=$(echo $@)
+EXTRAS=
+if echo $PARAMS | egrep -q '\--as-root'; then
+    PARAMS=$(echo $PARAMS | sed 's/--as-root//')
+    EXTRAS=" -u 0:0"
+fi
+
+if echo $PARAMS | egrep -q '\--as-myself'; then
+    PARAMS=$(echo $PARAMS | sed 's/--as-myself//')
+    EXTRAS=" -u $UID:$GID"
+fi
+
+NAME="server-run-local-cqrs.nu-php"
+
+DEBUG=0
+if echo $PARAMS | egrep -q '\--debug'; then
+    PARAMS=$(echo $PARAMS | sed 's/--debug//')
+    DEBUG=1
+    NAME="$NAME-debug"
+fi
+
+ID=$(docker inspect "$NAME" --format "{{.ID}}" 2> /dev/null)
+
+if [ -z "$ID" ] || [ "$(docker inspect $ID --format "{{ .State.Running }}")" = "false" ]; then
+    docker stop "$NAME" &> /dev/null
+    docker rm "$NAME" &> /dev/null
+
+    docker-compose run -d --no-deps --name "$NAME" php-fpm \
+        sh -c "while true; do echo 'beep'; sleep 5; done" >> /dev/null
+
+    [[ $DEBUG == 1 ]] && {
+        docker exec -u 0:0 $NAME sh -c '
+            echo "zend_extension=xdebug.so" >> /usr/local/etc/php/conf.d/xdebug.ini
+            echo "xdebug.var_display_max_depth=5" >> /usr/local/etc/php/conf.d/xdebug.ini
+        '
+    }
+fi
+
+docker exec $EXTRAS $NAME $PARAMS

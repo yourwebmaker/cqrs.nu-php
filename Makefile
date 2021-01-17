@@ -1,7 +1,7 @@
 SHELL=/bin/bash
 
 ifndef PHP_DOCKER_COMMAND
-PHP_DOCKER_COMMAND=docker-compose exec php-fpm
+PHP_DOCKER_COMMAND=cli/run-local
 endif
 
 # Mute all `make` specific output. Comment this out to get some debug information.
@@ -11,11 +11,27 @@ endif
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
+composer-dump-autoload: ## run composer dump-autoload
+	cli/composer dump-autoload
 
+composer-install: ## run composer install
+	cli/composer install -n
+
+docker-build-images:
+	docker-compose build --pull
+
+.PHONY: setup
+setup: docker-build-images fix-permissions install-dependencies up ## initialize the project if something is missing
+
+fix-permissions: ## fix directories and file permissions
+	${PHP_DOCKER_COMMAND}  sudo cli/fix-permissions
+
+images=
+docker-up:
+	docker-compose up -d --remove-orphans $(images)
 
 .PHONY: up
-up: ## start docker containers
-	- docker-compose up -d
+up: docker-up fix-permissions install-dependencies composer-dump-autoload ## start docker containers
 
 .PHONY: down
 down: ## stop docker containers
@@ -24,8 +40,6 @@ down: ## stop docker containers
 .PHONY: status
 status: ## List containers
 	- docker-compose ps
-
-
 
 .PHONY: install-dependencies
 install-dependencies: ## Run composer install
@@ -55,11 +69,13 @@ prune-cache:
 prune-logs:
 	- ${PHP_DOCKER_COMMAND} rm -fR var/log/*
 
-
-
 .PHONY: test
 test: ## Run phpunit
-	- ${PHP_DOCKER_COMMAND} vendor/bin/phpunit
+	${PHP_DOCKER_COMMAND} ./cli/unit-tests
+
+tests-with-coverage: extras=
+tests-with-coverage: fix-permissions
+	cli/run-local --debug ./cli/unit-tests --cover-report
 
 # TODO STATIC ANALYSE
 #.PHONY: analyse

@@ -12,3 +12,14 @@
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
+
+###< tests ###
+/tests/_reports
+/tests/clover.xml
+###> tests ###
+
+###> friendsofphp/php-cs-fixer ###
+/.php_cs
+/.php_cs.cache
+/.phpcs-cache
+###< friendsofphp/php-cs-fixer ###

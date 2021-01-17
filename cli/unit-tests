@@ -1,0 +1,38 @@
+#!/bin/bash
+
+BASE_PATH=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/..
+
+CLOVER=0
+
+PARAMS=$(echo $@)
+if echo $PARAMS | egrep -q '\--show-cover'; then
+    PARAMS=$(echo $PARAMS | sed 's/--show-cover//')
+    PARAMS=" --coverage-text=php://stdout $PARAMS"
+    CLOVER=1
+fi
+
+IN_BROWSER=0
+if echo $PARAMS | egrep -q '\--cover-report-browser'; then
+    PARAMS=$(echo $PARAMS | sed 's/--cover-report-browser//')
+    PARAMS=" --coverage-html=tests/_reports/html $PARAMS"
+    IN_BROWSER=1
+    CLOVER=1
+fi
+
+if echo $PARAMS | egrep -q '\--cover-report'; then
+    PARAMS=$(echo $PARAMS | sed 's/--cover-report//')
+    PARAMS=" --coverage-html=tests/_reports/html $PARAMS"
+    CLOVER=1
+fi
+
+if [ $CLOVER -eq 1 ]; then
+    PARAMS=" --coverage-clover=tests/clover.xml $PARAMS"
+fi
+
+echo "--- Running tests"
+./vendor/bin/phpunit $PARAMS | sed "s|/var/www/html/||g"
+RESULT=${PIPESTATUS[0]}
+
+[ $IN_BROWSER -eq 1 ] && $BROWSER "$BASE_PATH/tests/_reports/html/index.html" 1>>/dev/null
+
+exit $RESULT
