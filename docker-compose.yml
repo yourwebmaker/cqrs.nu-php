@@ -1,17 +1,25 @@
 
 version: "3.1"
 services:
+  web:
+    image: nginx:latest
+    volumes:
+      - ./devops/nginx/site.conf:/etc/nginx/conf.d/default.conf
+      - .:/var/www/html:cached
+    ports:
+      - "8001:80"
+    links:
+      - php-fpm
   php-fpm:
-    image: devilbox/php-fpm:8.0-work
+    build:
+      context: ./
+      dockerfile: devops/Dockerfile
     container_name: cafe-fpm
-    working_dir: /application
     environment:
       CAFE_DATABASE_URL: 'mysql://cafe-user:cafe-pass@mysql:3306/cafe-db?serverVersion=5.7&charset=UTF8'
+      XDEBUG_ENABLED: 1
     volumes:
-      - .:/application:cached
-    ports:
-    - 8001:8000
-    entrypoint: "php -S 0.0.0.0:8000 -t public"
+      - .:/var/www/html:cached
     depends_on:
       - mysql
 
