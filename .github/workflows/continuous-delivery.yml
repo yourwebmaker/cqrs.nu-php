@@ -30,10 +30,9 @@ jobs:
     strategy:
       matrix:
         php:
-          - '7.4'
-          #- '8.0'
+          - '8.0'
         include:
-          - php: '7.4'
+          - php: '8.0'
             coverage: xdebug
       fail-fast: false
     steps:
@@ -49,7 +48,7 @@ jobs:
           coverage: ${{ matrix.coverage }}
       - name: Install Composer dependencies
         run: composer install --no-interaction --no-progress --ansi
-      - name: Enable code coverage for PHP-7.4
+      - name: Enable code coverage for PHP-8.0
         if: ${{ matrix.php == '7.4' }}
         run: echo "COVERAGE=1" >> $GITHUB_ENV
       - name: Run Migration
