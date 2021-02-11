@@ -9,13 +9,8 @@ use Cafe\Application\Write\CloseTabCommand;
 use Cafe\Application\Write\MarkItemsServedCommand;
 use Cafe\Application\Write\OpenTabCommand;
 use Cafe\Application\Write\PlaceOrderCommand;
-use Cafe\Domain\Tab\OrderedItem;
 use Cafe\UserInterface\Web\Form\CloseTabType;
 use Cafe\UserInterface\Web\Form\OpenTabType;
-use Cafe\UserInterface\Web\Form\OrderType;
-use Cafe\UserInterface\Web\Model\OrderItem;
-use Cafe\UserInterface\Web\Model\OrderModel;
-use Cafe\UserInterface\Web\StaticData\MenuItem;
 use Cafe\UserInterface\Web\StaticData\StaticData;
 use League\Tactician\CommandBus;
 use Ramsey\Uuid\Uuid;
@@ -68,39 +63,18 @@ final class TabController extends AbstractController
     {
         $menu = StaticData::getMenu();
 
-        $items = array_map(fn(MenuItem $menuItem) => new OrderItem(
-            $menuItem->menuNumber,
-            $menuItem->description,
-            0
-        ), $menu);
+        if ($request->isMethod(Request::METHOD_POST)) {
 
-        $orderModel = new OrderModel($items);
-        $form = $this->createForm(OrderType::class, $orderModel);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            //todo move this inside the handler
-            $orderedItems = [];
-            foreach ($orderModel->items as $item) {
-                for ($i = 0; $i < $item->numberToOrder; $i++) {
-                    $orderedItems[] = new OrderedItem(
-                        $item->menuNumber,
-                        $menu[$item->menuNumber]->description,
-                        $menu[$item->menuNumber]->isDrink,
-                        $menu[$item->menuNumber]->price,
-                    );
-                }
-            }
-
+            $orderedItems = array_map(fn ($value)  => (int) $value, $request->request->get('quantity'));
             $tabId = $this->queries->tabIdForTable($tableNumber);
-
             $this->commandBus->handle(new PlaceOrderCommand($tabId, $orderedItems));
 
             return $this->redirectToRoute('tab_status', ['tableNumber' => $tableNumber]);
         }
 
         return $this->render('tab/order.html.twig', [
-            'form' => $form->createView(),
+            'menu' => $menu,
+            'tableNumber' => $tableNumber,
         ]);
     }
 
