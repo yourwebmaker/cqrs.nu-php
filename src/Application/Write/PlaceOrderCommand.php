@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Cafe\Application\Write;
 
-use Cafe\Domain\Tab\OrderedItem;
-
 class PlaceOrderCommand
 {
     public string $tabId;
-    /** @var array<OrderedItem> */
+    /** @var array<int, int> */
     public array $items;
 
     public function __construct(string $tabId, array $items)

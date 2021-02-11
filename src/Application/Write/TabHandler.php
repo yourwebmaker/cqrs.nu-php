@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cafe\Application\Write;
 
+use Cafe\Domain\Tab\OrderedItem;
 use Cafe\Domain\Tab\Tab;
 use Cafe\Domain\Tab\TabRepository;
 use Cafe\UserInterface\Web\StaticData\MenuItem;
@@ -27,7 +28,22 @@ class TabHandler
     public function handlePlaceOrderCommand(PlaceOrderCommand $command) : void
     {
         $tab = $this->repository->get($command->tabId);
-        $tab->order($command->items);
+        //Todo move this to view model
+        $menu = StaticData::getMenu();
+
+        $orderedItems = [];
+        foreach ($command->items as $itemNumber => $quantity) {
+            for ($i = 0; $i < $quantity; $i++) {
+                $orderedItems[] = new OrderedItem(
+                    $itemNumber,
+                    $menu[$itemNumber]->description,
+                    $menu[$itemNumber]->isDrink,
+                    $menu[$itemNumber]->price,
+                );
+            }
+        }
+
+        $tab->order($orderedItems);
         $this->repository->save($tab);
     }
 

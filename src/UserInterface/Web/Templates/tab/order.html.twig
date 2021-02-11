@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block title %}Place order{% endblock %}
 {% block content %}
-    <form>
+    <form method="post" action="{{ path('tab_order', {'tableNumber': tableNumber}) }}">
         <fieldset>
             <table class="table table-bordered">
                 <thead class="thead-light">
@@ -9,7 +9,6 @@
                         <th scope="col">Menu #</th>
                         <th scope="col">Description</th>
                         <th scope="col">Number To Order</th>
-                        <th scope="col">Notes</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -17,9 +16,6 @@
                 <tr>
                     <td>{{ item.menuNumber }}</td>
                     <td>{{ item.description }}</td>
-                    <td>
-                        <input type="number" min="1" name="quantity[{{ item.menuNumber }}]">
-                    </td>
                     <td>
                         <input type="number" min="1" name="quantity[{{ item.menuNumber }}]">
                     </td>
