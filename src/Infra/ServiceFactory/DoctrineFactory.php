@@ -9,13 +9,10 @@ use Doctrine\DBAL\DriverManager;
 
 class DoctrineFactory
 {
-    public function create(string $databaseDns = ''): Connection
+    public function create(string $url): Connection
     {
-
-        $connectionParams = array(
-            'url' => $databaseDns,
-        );
-        return  DriverManager::getConnection($connectionParams);
-
+        return  DriverManager::getConnection([
+            'url' => $url,
+        ]);
     }
 }
