@@ -49,8 +49,8 @@ class TabEverythingTest extends WebTestCase
         $crawler = $this->client->request('GET', '/tab/' . $tableNumber . '/order');
 
         $form = $crawler->selectButton('Place Order')->form();
-        $form['order[items][1][numberToOrder]'] = 1;
-        $form['order[items][14][numberToOrder]'] = 1;
+        $form['quantity[1]'] = 1;
+        $form['quantity[14]'] = 1;
 
         $this->client->submit($form);
 
