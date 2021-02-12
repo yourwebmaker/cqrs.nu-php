@@ -10,15 +10,11 @@ use EventSauce\EventSourcing\Serialization\SerializablePayload;
 //todo this class has the same code as DrinksOrdered. Maybe be create an abstract one?
 final class FoodOrdered implements SerializablePayload
 {
-    public string $tabId;
-    /** @var array<OrderedItem> */
-    public array $items;
-
-    public function __construct(string $tabId, array $items)
-    {
-        $this->tabId = $tabId;
-        $this->items = $items;
-    }
+    public function __construct(
+        public string $tabId,
+        /** @var array<OrderedItem> */
+        public array $items
+    ) {}
 
     public function toPayload(): array
     {
