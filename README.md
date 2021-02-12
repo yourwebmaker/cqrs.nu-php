@@ -22,8 +22,8 @@ Upon closing a tab, it must be paid for in full. A tab with unserved items canno
 marked as served or cancelled first.
 
 ### Screenshots
-<img src="screenshots/1-home.png" width="200"/>
-<img src="screenshots/2-opening-tab.png" width="200"/>
+<figure><img src="screenshots/1-home.png" width="200"/></figure>
+<figure><img src="screenshots/2-opening-tab.png" width="200"/></figure>
 <img src="screenshots/3-ordering.png" width="200"/>
 <img src="screenshots/4-tab-status.png" width="200"/>
 <img src="screenshots/5-chef-todo.png" width="200"/>
