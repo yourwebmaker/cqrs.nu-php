@@ -23,6 +23,7 @@
     <file>src/Domain</file>
     <file>src/Application</file>
     <file>src/UserInterface</file>
+    <file>src/Infra</file>
     <file>tests/</file>
     <exclude-pattern>src/Kernel.php</exclude-pattern>
 

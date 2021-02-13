@@ -24,7 +24,7 @@ class TacticianFactory
     {
         $handlerMiddleware = new CommandHandlerMiddleware(
             new ClassNameExtractor(),
-            new class($this->handler) implements HandlerLocator
+            new class ($this->handler) implements HandlerLocator
             {
                 private TabHandler $handler;
 

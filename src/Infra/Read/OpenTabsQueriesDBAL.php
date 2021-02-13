@@ -10,6 +10,8 @@ use Cafe\Application\Read\OpenTabs\TabStatus;
 use Cafe\Application\Read\OpenTabsQueries;
 use Doctrine\DBAL\Connection;
 
+use function array_map;
+
 class OpenTabsQueriesDBAL implements OpenTabsQueries
 {
     private Connection $connection;
@@ -45,6 +47,7 @@ class OpenTabsQueriesDBAL implements OpenTabsQueries
     public function tabIdForTable(int $tableNumber): string
     {
         $sql = 'select tab_id from read_model_tab where table_number = :table_number';
+
         return $this->connection->fetchOne($sql, ['table_number' => $tableNumber]);
     }
 
@@ -53,9 +56,9 @@ class OpenTabsQueriesDBAL implements OpenTabsQueries
         $tabId = $this->tabIdForTable($tableNumber);
         $items = $this->hydrateItems($tabId);
 
-        $toServe = [];
+        $toServe       = [];
         $inPreparation = [];
-        $served = [];
+        $served        = [];
 
         foreach ($items as $item) {
             if ($item->status === TabItem::STATUS_TO_SERVE) {
@@ -66,9 +69,11 @@ class OpenTabsQueriesDBAL implements OpenTabsQueries
                 $inPreparation[] = $item;
             }
 
-            if ($item->status === TabItem::STATUS_SERVED) {
-                $served[] = $item;
+            if ($item->status !== TabItem::STATUS_SERVED) {
+                continue;
             }
+
+            $served[] = $item;
         }
 
         return new TabStatus($tabId, $tableNumber, $toServe, $inPreparation, $served);
@@ -87,11 +92,19 @@ class OpenTabsQueriesDBAL implements OpenTabsQueries
      */
     private function hydrateItems(string $tabId): array
     {
-        $rowsItems = $this->connection->fetchAllAssociative('select * from read_model_tab_item where tab_id = :tab_id', [
-            'tab_id' => $tabId,
-        ]);
+        $sql       = 'select * from read_model_tab_item where tab_id = :tab_id';
+        $rowsItems = $this->connection->fetchAllAssociative($sql, ['tab_id' => $tabId]);
 
-        $items = array_map(fn(array $row) => new TabItem((int)$row['menu_number'], $row['description'], (float)$row['price'], $row['status']), $rowsItems);
+        $items = array_map(
+            static fn (array $row) => new TabItem(
+                (int) $row['menu_number'],
+                $row['description'],
+                (float) $row['price'],
+                $row['status']
+            ),
+            $rowsItems
+        );
+
         return $items;
     }
 }

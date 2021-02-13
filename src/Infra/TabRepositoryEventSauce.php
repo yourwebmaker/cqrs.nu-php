@@ -9,6 +9,8 @@ use Cafe\Domain\Tab\TabRepository;
 use EventSauce\EventSourcing\AggregateRootRepository;
 use EventSauce\EventSourcing\UuidAggregateRootId;
 
+use function assert;
+
 class TabRepositoryEventSauce implements TabRepository
 {
     private AggregateRootRepository $repository;
@@ -25,10 +27,9 @@ class TabRepositoryEventSauce implements TabRepository
 
     public function get(string $tabId): Tab
     {
-        /** @var Tab $tab */
-        $tab = $this->repository->retrieve(UuidAggregateRootId::fromString($tabId));// todo use annonymous class
+        $tab = $this->repository->retrieve(UuidAggregateRootId::fromString($tabId));
+        assert($tab instanceof Tab);// todo use annonymous class
 
         return $tab;
     }
-
 }
