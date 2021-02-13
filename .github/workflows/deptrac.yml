@@ -1,0 +1,12 @@
+name: Deptrac
+
+on: push
+
+jobs:
+  deptrac:
+    name: deptrac
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: deptrac
+        uses: smoench/deptrac-action@master
