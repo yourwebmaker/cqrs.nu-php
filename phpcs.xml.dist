@@ -16,8 +16,12 @@
         <exclude name="SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedMethod"/>
     </rule>
 
+    <rule ref="PSR1.Methods.CamelCapsMethodName">
+        <exclude-pattern>tests/*</exclude-pattern>
+    </rule>
+
     <file>src/Domain/Tab</file>
     <file>src/Application</file>
-    <!--<file>tests/</file>-->
+    <file>tests/</file>
 
 </ruleset>
