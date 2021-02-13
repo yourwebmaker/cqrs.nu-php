@@ -8,12 +8,17 @@ use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
 final class FoodPrepared implements SerializablePayload
 {
-    public function __construct(
-        public string $tabId,
-        public string $groupId,
-        /** @var int[] */
-        public array $menuNumbers
-    ) {}
+    public string $tabId;
+    public string $groupId;
+    /** @var int[] */
+    public array $menuNumbers;
+
+    public function __construct(string $tabId, string $groupId, array $menuNumbers)
+    {
+        $this->tabId = $tabId;
+        $this->groupId = $groupId;
+        $this->menuNumbers = $menuNumbers;
+    }
 
     public function toPayload(): array
     {
