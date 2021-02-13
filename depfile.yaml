@@ -25,6 +25,7 @@ ruleset:
     - Application
   Application:
     - Domain
+    - UerInterface # todo this is because of this Cafe\Application\Write\TabHandler must not depend on Cafe\UserInterface\Web\StaticData\StaticData (Application on UserInterface)
   Infra:
     - Application
     - Domain
