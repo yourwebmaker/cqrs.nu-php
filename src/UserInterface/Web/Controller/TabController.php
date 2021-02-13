@@ -19,6 +19,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use function array_map;
+
 final class TabController extends AbstractController
 {
     private OpenTabsQueries $queries;
@@ -26,7 +28,7 @@ final class TabController extends AbstractController
 
     public function __construct(OpenTabsQueries $queries, CommandBus $commandBus)
     {
-        $this->queries = $queries;
+        $this->queries    = $queries;
         $this->commandBus = $commandBus;
     }
 
@@ -39,7 +41,6 @@ final class TabController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $tableNumber = $form->get('tableNumber')->getData();
 
             $this->commandBus->handle(new OpenTabCommand(
@@ -59,14 +60,13 @@ final class TabController extends AbstractController
     /**
      * @Route(path="tab/{tableNumber}/order", name="tab_order")
      */
-    public function order(int $tableNumber, Request $request) : Response
+    public function order(int $tableNumber, Request $request): Response
     {
         $menu = StaticData::getMenu();
 
         if ($request->isMethod(Request::METHOD_POST)) {
-
-            $orderedItems = array_map(fn ($value)  => (int) $value, $request->request->get('quantity'));
-            $tabId = $this->queries->tabIdForTable($tableNumber);
+            $orderedItems = array_map(static fn ($value) => (int) $value, $request->request->get('quantity'));
+            $tabId        = $this->queries->tabIdForTable($tableNumber);
             $this->commandBus->handle(new PlaceOrderCommand($tabId, $orderedItems));
 
             return $this->redirectToRoute('tab_status', ['tableNumber' => $tableNumber]);
@@ -81,11 +81,11 @@ final class TabController extends AbstractController
     /**
      * @Route(path="tab/{tableNumber}/status", name="tab_status")
      */
-    public function status(int $tableNumber) : Response
+    public function status(int $tableNumber): Response
     {
         return $this->render('tab/status.html.twig', [
             'tableNumber' => $tableNumber,
-            'tab' => $this->queries->tabForTable($tableNumber)
+            'tab' => $this->queries->tabForTable($tableNumber),
         ]);
     }
 
@@ -94,8 +94,8 @@ final class TabController extends AbstractController
      */
     public function markServed(int $tableNumber, Request $request)
     {
-        $menuNumbers = array_map(fn(string $itemString) => (int) $itemString, $request->request->get('items'));
-        $tabId = $this->queries->tabIdForTable($tableNumber);
+        $menuNumbers = array_map(static fn (string $itemString) => (int) $itemString, $request->request->get('items'));
+        $tabId       = $this->queries->tabIdForTable($tableNumber);
         $this->commandBus->handle(new MarkItemsServedCommand($tabId, $menuNumbers));
 
         return $this->redirectToRoute('tab_status', ['tableNumber' => $tableNumber]);
@@ -110,7 +110,6 @@ final class TabController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $this->commandBus->handle(new CloseTabCommand(
                 $this->queries->tabIdForTable($tableNumber),
                 $form->get('amountPaid')->getData()

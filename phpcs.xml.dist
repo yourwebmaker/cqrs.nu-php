@@ -20,8 +20,9 @@
         <exclude-pattern>tests/*</exclude-pattern>
     </rule>
 
-    <file>src/Domain/Tab</file>
+    <file>src/Domain</file>
     <file>src/Application</file>
+    <file>src/UserInterface</file>
     <file>tests/</file>
     <exclude-pattern>src/Kernel.php</exclude-pattern>
 

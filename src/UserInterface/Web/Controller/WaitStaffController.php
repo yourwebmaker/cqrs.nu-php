@@ -13,11 +13,8 @@ class WaitStaffController extends AbstractController
     /**
      * @Route(name="waitstaff_todo", path="waitstaff/{id}/todo")
      */
-    public function todo(string $id) : Response
+    public function todo(string $id): Response
     {
-        return $this->render('wait_staff/todo.html.twig', [
-            'waiter' => $id,
-            //'model' => $this->query->todoListForWaiter($id)
-        ]);
+        return $this->render('wait_staff/todo.html.twig', ['waiter' => $id]);
     }
 }
