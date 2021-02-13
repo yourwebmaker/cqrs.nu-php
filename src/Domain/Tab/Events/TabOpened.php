@@ -8,11 +8,17 @@ use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
 final class TabOpened implements SerializablePayload
 {
-    public function __construct(
-        public string $tabId,
-        public int $tableNumber,
-        public string $waiter
-    ){}
+    public string $tabId;
+    public int $tableNumber;
+    public string $waiter;
+
+    //todo PHP 8 constructor promotion here.
+    public function __construct(string $tabId, $tableNumber, $waiter)
+    {
+        $this->tabId = $tabId;
+        $this->tableNumber = $tableNumber;
+        $this->waiter = $waiter;
+    }
 
     public static function fromPayload(array $payload) : self
     {
