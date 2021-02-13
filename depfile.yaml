@@ -27,4 +27,5 @@ ruleset:
     - Domain
   Infra:
     - Application
+    - Domain
   Domain:
