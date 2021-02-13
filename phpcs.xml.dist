@@ -23,5 +23,6 @@
     <file>src/Domain/Tab</file>
     <file>src/Application</file>
     <file>tests/</file>
+    <exclude-pattern>src/Kernel.php</exclude-pattern>
 
 </ruleset>
