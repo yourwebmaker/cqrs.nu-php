@@ -66,12 +66,10 @@ test: ## Run phpunit
 #analyse: ## Run static analyse
 #	- ${PHP_DOCKER_COMMAND} ...dev tool command
 
-# TODO CODE STYLE CHECK
-#.PHONY: cs
-#cs: ## Check code style
-#	- ${PHP_DOCKER_COMMAND} ...dev tool command --dry-run
+.PHONY: cs
+cs: ## Check code style
+	- ${PHP_DOCKER_COMMAND} vendor/bin/phpcs
 
-# TODO CODE STYLE FIX
-#.PHONY: cs-fix
-#cs-fix: ## Fix code style
-#	- ${PHP_DOCKER_COMMAND} ...dev tool command
+.PHONY: cs-fix
+cs-fix: ## Fix code style
+	- ${PHP_DOCKER_COMMAND} vendor/bin/phpcbf
