@@ -15,10 +15,10 @@ final class TabClosed implements SerializablePayload
 
     public function __construct(string $tabId, float $amountPaid, float $orderValue, float $tipValue)
     {
-        $this->tabId = $tabId;
+        $this->tabId      = $tabId;
         $this->amountPaid = $amountPaid;
         $this->orderValue = $orderValue;
-        $this->tipValue = $tipValue;
+        $this->tipValue   = $tipValue;
     }
 
     public function toPayload(): array

@@ -10,9 +10,14 @@
 
     <config name="php_version" value="80001"/>
 
-    <rule ref="Doctrine"/>
+    <rule ref="Doctrine">
+        <exclude name="SlevomatCodingStandard.TypeHints.ParameterTypeHint"/>
+        <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint"/>
+        <exclude name="SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedMethod"/>
+    </rule>
 
-    <file>src/</file>
-    <file>tests/</file>
+    <file>src/Domain/Tab</file>
+    <file>src/Application</file>
+    <!--<file>tests/</file>-->
 
 </ruleset>

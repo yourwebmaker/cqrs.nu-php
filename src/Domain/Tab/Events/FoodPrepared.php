@@ -15,8 +15,8 @@ final class FoodPrepared implements SerializablePayload
 
     public function __construct(string $tabId, string $groupId, array $menuNumbers)
     {
-        $this->tabId = $tabId;
-        $this->groupId = $groupId;
+        $this->tabId       = $tabId;
+        $this->groupId     = $groupId;
         $this->menuNumbers = $menuNumbers;
     }
 
@@ -25,7 +25,7 @@ final class FoodPrepared implements SerializablePayload
         return [
             'tabId' => $this->tabId,
             'groupId' => $this->groupId,
-            'menuNumbers' => $this->menuNumbers
+            'menuNumbers' => $this->menuNumbers,
         ];
     }
 

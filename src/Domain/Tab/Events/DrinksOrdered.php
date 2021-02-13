@@ -7,6 +7,8 @@ namespace Cafe\Domain\Tab\Events;
 use Cafe\Domain\Tab\OrderedItem;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
+use function array_map;
+
 final class DrinksOrdered implements SerializablePayload
 {
     public string $tabId;
@@ -23,7 +25,7 @@ final class DrinksOrdered implements SerializablePayload
     {
         return [
             'tabId' => $this->tabId,
-            'items' => array_map(fn(OrderedItem $item) => $item->jsonSerialize(), $this->items)
+            'items' => array_map(static fn (OrderedItem $item) => $item->jsonSerialize(), $this->items),
         ];
     }
 
@@ -31,7 +33,7 @@ final class DrinksOrdered implements SerializablePayload
     {
         return new self(
             $payload['tabId'],
-            array_map(fn(array $item) => new OrderedItem(
+            array_map(static fn (array $item) => new OrderedItem(
                 $item['menuNumber'],
                 $item['description'],
                 $item['isDrink'],

@@ -11,7 +11,7 @@ class CloseTabCommand
 
     public function __construct(string $tabId, float $amountPaid)
     {
-        $this->tabId = $tabId;
+        $this->tabId      = $tabId;
         $this->amountPaid = $amountPaid;
     }
 }

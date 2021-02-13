@@ -13,8 +13,8 @@ class MarkFoodPreparedCommand
 
     public function __construct(string $tabId, string $groupId, array $menuNumbers)
     {
-        $this->tabId = $tabId;
-        $this->groupId = $groupId;
+        $this->tabId       = $tabId;
+        $this->groupId     = $groupId;
         $this->menuNumbers = $menuNumbers;
     }
 }

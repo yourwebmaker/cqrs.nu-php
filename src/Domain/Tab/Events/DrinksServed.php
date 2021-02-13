@@ -14,7 +14,7 @@ final class DrinksServed implements SerializablePayload
 
     public function __construct(string $tabId, array $menuNumbers)
     {
-        $this->tabId = $tabId;
+        $this->tabId       = $tabId;
         $this->menuNumbers = $menuNumbers;
     }
 
@@ -22,7 +22,7 @@ final class DrinksServed implements SerializablePayload
     {
         return [
             'tabId' => $this->tabId,
-            'menuNumbers' => $this->menuNumbers
+            'menuNumbers' => $this->menuNumbers,
         ];
     }
 

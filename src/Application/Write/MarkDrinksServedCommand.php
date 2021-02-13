@@ -12,7 +12,7 @@ class MarkDrinksServedCommand
 
     public function __construct(string $tabId, array $menuNumbers)
     {
-        $this->tabId = $tabId;
+        $this->tabId       = $tabId;
         $this->menuNumbers = $menuNumbers;
     }
 }
