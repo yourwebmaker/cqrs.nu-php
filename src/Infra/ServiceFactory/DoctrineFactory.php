@@ -11,8 +11,6 @@ class DoctrineFactory
 {
     public function create(string $url): Connection
     {
-        return  DriverManager::getConnection([
-            'url' => $url,
-        ]);
+        return DriverManager::getConnection(['url' => $url]);
     }
 }

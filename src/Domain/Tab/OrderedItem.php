@@ -15,13 +15,13 @@ final class OrderedItem implements JsonSerializable
 
     public function __construct(int $menuNumber, string $description, bool $isDrink, float $price)
     {
-        $this->menuNumber = $menuNumber;
+        $this->menuNumber  = $menuNumber;
         $this->description = $description;
-        $this->isDrink = $isDrink;
-        $this->price = $price;
+        $this->isDrink     = $isDrink;
+        $this->price       = $price;
     }
 
-    public function jsonSerialize() : array
+    public function jsonSerialize(): array
     {
         return [
             'menuNumber' => $this->menuNumber,

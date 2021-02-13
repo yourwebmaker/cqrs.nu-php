@@ -8,6 +8,10 @@ use Cafe\Application\Read\OpenTabs\Invoice\Line;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
+use function array_values;
+use function assert;
+use function count;
+
 final class TabInvoice
 {
     public string $tabId;
@@ -17,19 +21,21 @@ final class TabInvoice
 
     public function __construct(string $tabId, int $tableNumber, array $items)
     {
-        $this->tabId = $tabId;
+        $this->tabId       = $tabId;
         $this->tableNumber = $tableNumber;
-        $this->items = new ArrayCollection($items);
+        $this->items       = new ArrayCollection($items);
     }
 
     public function getLines(): array
     {
         $groupedItems = [];
-        /** @var TabItem $item */
         foreach ($this->items as $item) {
-            if ($item->status === TabItem::STATUS_SERVED) {
-                $groupedItems[$item->menuNumber][] = $item;
+            assert($item instanceof TabItem);
+            if ($item->status !== TabItem::STATUS_SERVED) {
+                continue;
             }
+
+            $groupedItems[$item->menuNumber][] = $item;
         }
 
         $lines = [];
@@ -49,17 +55,19 @@ final class TabInvoice
 
     public function hasUnservedItems(): bool
     {
-        return $this->items->filter(fn(TabItem $item) => $item->status !== TabItem::STATUS_SERVED)->count() > 0;
+        return $this->items->filter(static fn (TabItem $item) => $item->status !== TabItem::STATUS_SERVED)->count() > 0;
     }
 
     public function getTotal(): float
     {
         $total = 0.0;
-        /** @var TabItem $item */
         foreach ($this->items as $item) {
-            if($item->status === TabItem::STATUS_SERVED) {
-                $total+= $item->price;
+            assert($item instanceof TabItem);
+            if ($item->status !== TabItem::STATUS_SERVED) {
+                continue;
             }
+
+            $total += $item->price;
         }
 
         return $total;

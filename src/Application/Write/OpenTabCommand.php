@@ -12,8 +12,8 @@ final class OpenTabCommand
 
     public function __construct(string $tabId, int $tableNumber, string $waiter)
     {
-        $this->tabId = $tabId;
+        $this->tabId       = $tabId;
         $this->tableNumber = $tableNumber;
-        $this->waiter = $waiter;
+        $this->waiter      = $waiter;
     }
 }

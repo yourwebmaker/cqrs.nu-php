@@ -24,7 +24,7 @@ class TabRepositoryFactory
         $this->connection = $connection;
     }
 
-    public function create() : TabRepository
+    public function create(): TabRepository
     {
         return new TabRepositoryEventSauce(
             new ConstructingAggregateRootRepository(
@@ -34,7 +34,7 @@ class TabRepositoryFactory
                     new ConstructingMessageSerializer(),
                     'aggregate_tab'
                 ),
-                 new SynchronousMessageDispatcher(
+                new SynchronousMessageDispatcher(
                     new TabProjector($this->connection),
                     new ChefTodoProjector($this->connection),
                 )

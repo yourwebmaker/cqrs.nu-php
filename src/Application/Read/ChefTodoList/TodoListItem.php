@@ -11,7 +11,7 @@ final class TodoListItem
 
     public function __construct(int $menuNumber, string $description)
     {
-        $this->menuNumber = $menuNumber;
+        $this->menuNumber  = $menuNumber;
         $this->description = $description;
     }
 }

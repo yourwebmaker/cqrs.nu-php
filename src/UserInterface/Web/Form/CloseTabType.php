@@ -15,9 +15,6 @@ class CloseTabType extends AbstractType
     {
         $builder
             ->add('amountPaid', MoneyType::class)
-            ->add('save', SubmitType::class, [
-                'label' => 'Close Tab',
-            ])
-        ;
+            ->add('save', SubmitType::class, ['label' => 'Close Tab']);
     }
 }

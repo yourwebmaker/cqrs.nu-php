@@ -13,9 +13,9 @@ final class MenuItem
 
     public function __construct(int $menuNumber, string $description, float $price, bool $isDrink = false)
     {
-        $this->menuNumber = $menuNumber;
+        $this->menuNumber  = $menuNumber;
         $this->description = $description;
-        $this->price = $price;
-        $this->isDrink = $isDrink;
+        $this->price       = $price;
+        $this->isDrink     = $isDrink;
     }
 }

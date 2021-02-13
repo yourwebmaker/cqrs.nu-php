@@ -14,12 +14,15 @@ interface OpenTabsQueries
      * @return array<int>
      */
     public function activeTableNumbers(): array;
+
     public function invoiceForTable(int $tableNumber): TabInvoice;
-    public function tabIdForTable(int $tableNumber) : string;
-    public function tabForTable(int $tableNumber) : TabStatus;
+
+    public function tabIdForTable(int $tableNumber): string;
+
+    public function tabForTable(int $tableNumber): TabStatus;
 
     /**
      * @return array<int, array<TabItem>>
      */
-    public function todoListForWaiter(string $waiter) : array;
+    public function todoListForWaiter(string $waiter): array;
 }

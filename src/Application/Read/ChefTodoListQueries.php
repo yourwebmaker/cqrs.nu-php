@@ -11,5 +11,5 @@ interface ChefTodoListQueries
     /**
      * @return array<TodoListGroup>
      */
-    public function getTodoList() : array;
+    public function getTodoList(): array;
 }

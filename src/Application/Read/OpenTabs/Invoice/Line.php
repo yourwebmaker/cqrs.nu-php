@@ -14,8 +14,8 @@ class Line
     public function __construct(string $description, int $quantity, float $priceEach, float $subTotal)
     {
         $this->description = $description;
-        $this->quantity = $quantity;
-        $this->priceEach = $priceEach;
-        $this->subTotal = $subTotal;
+        $this->quantity    = $quantity;
+        $this->priceEach   = $priceEach;
+        $this->subTotal    = $subTotal;
     }
 }

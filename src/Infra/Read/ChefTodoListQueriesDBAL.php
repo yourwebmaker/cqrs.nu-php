@@ -20,7 +20,7 @@ class ChefTodoListQueriesDBAL implements ChefTodoListQueries
 
     public function getTodoList(): array
     {
-        $groups = $itemsByGroupId = [];
+        $groups    = $itemsByGroupId = [];
         $rowsItems = $this->connection->fetchAllAssociative('select * from read_model_chef_todo_item');
 
         foreach ($rowsItems as $i => $row) {
@@ -32,6 +32,7 @@ class ChefTodoListQueriesDBAL implements ChefTodoListQueries
             foreach ($itemRows as $i => $itemRow) {
                 $items[] = new TodoListItem((int) $itemRow['menu_number'], $itemRow['description']);
             }
+
             $groups[] = new TodoListGroup($groupId, $itemRows[$i]['tab_id'], $items);
         }
 

@@ -20,9 +20,6 @@ class OpenTabType extends AbstractType
             ->add('waiter', ChoiceType::class, [
                 'choices' => StaticData::getWaitStaff(),
             ])
-            ->add('save', SubmitType::class, [
-                'label' => 'Open Tab',
-            ])
-        ;
+            ->add('save', SubmitType::class, ['label' => 'Open Tab']);
     }
 }
