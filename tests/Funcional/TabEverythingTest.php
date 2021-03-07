@@ -123,7 +123,7 @@ class TabEverythingTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', '/tab/' . $tableNumber . '/close');
 
-        $form                          = $crawler->selectButton('Close Tab')->form();
+        $form               = $crawler->selectButton('Close Tab')->form();
         $form['amountPaid'] = 50;
 
         $this->client->submit($form);
