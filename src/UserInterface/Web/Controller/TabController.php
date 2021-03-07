@@ -9,7 +9,6 @@ use Cafe\Application\Write\CloseTabCommand;
 use Cafe\Application\Write\MarkItemsServedCommand;
 use Cafe\Application\Write\OpenTabCommand;
 use Cafe\Application\Write\PlaceOrderCommand;
-use Cafe\UserInterface\Web\Form\CloseTabType;
 use Cafe\UserInterface\Web\StaticData\StaticData;
 use League\Tactician\CommandBus;
 use Ramsey\Uuid\Uuid;
@@ -101,25 +100,25 @@ final class TabController extends AbstractController
     }
 
     /**
-     * @Route(path="tab/{tableNumber}/close", name="tab_close")
+     * @Route(path="tab/{tableNumber}/close", name="tab_close_get", methods={"GET"})
      */
-    public function close(int $tableNumber, Request $request): Response
+    public function closeGet(int $tableNumber, Request $request): Response
     {
-        $form = $this->createForm(CloseTabType::class);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->commandBus->handle(new CloseTabCommand(
-                $this->queries->tabIdForTable($tableNumber),
-                $form->get('amountPaid')->getData()
-            ));
-
-            return $this->redirectToRoute('home');
-        }
-
         return $this->render('tab/close.html.twig', [
-            'form' => $form->createView(),
             'invoice' => $this->queries->invoiceForTable($tableNumber),
         ]);
+    }
+
+    /**
+     * @Route(path="tab/{tableNumber}/close", name="tab_close_post", methods={"POST"})
+     */
+    public function closePost(int $tableNumber, Request $request): Response
+    {
+        $this->commandBus->handle(new CloseTabCommand(
+            $this->queries->tabIdForTable($tableNumber),
+            (float) $request->request->getDigits('amountPaid')
+        ));
+
+        return $this->redirectToRoute('home');
     }
 }
