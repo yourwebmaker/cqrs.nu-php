@@ -283,9 +283,6 @@
             ".env"
         ]
     },
-    "symfony/form": {
-        "version": "v5.1.8"
-    },
     "symfony/framework-bundle": {
         "version": "5.1",
         "recipe": {
@@ -318,9 +315,6 @@
     "symfony/intl": {
         "version": "v5.1.8"
     },
-    "symfony/options-resolver": {
-        "version": "v5.1.8"
-    },
     "symfony/orm-pack": {
         "version": "v2.0.0"
     },
@@ -344,12 +338,6 @@
     },
     "symfony/profiler-pack": {
         "version": "v1.0.5"
-    },
-    "symfony/property-access": {
-        "version": "v5.1.8"
-    },
-    "symfony/property-info": {
-        "version": "v5.1.8"
     },
     "symfony/routing": {
         "version": "5.1",
