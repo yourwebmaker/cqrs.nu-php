@@ -2,7 +2,7 @@
 {% block title %}Tab Status{% endblock %}
 {% block content %}
     <h3>Tab For Table {{tableNumber}}</h3>
-    <a href="{{ path('tab_close', {tableNumber: tableNumber}) }}" class="btn btn-success">Close Table</a>
+    <a href="{{ path('tab_close_get', {tableNumber: tableNumber}) }}" class="btn btn-success">Close Table</a>
     <a href="{{ path('tab_order', {tableNumber: tableNumber}) }}" class="btn btn-success">Order Food/Drink</a>
 
     {% if tab.hasItemsToServe %}

@@ -38,5 +38,20 @@
         </div>
     {% endif %}
 
-    {{ form(form) }}
+    <form name="close_tab" method="post" _lpchecked="1">
+        <div id="close_tab">
+            <div class="form-group">
+                <label for="close_tab_amountPaid" class="required">Amount paid</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">€ </span>
+                    </div>
+                    <input type="text" id="close_tab_amountPaid" name="amountPaid" required="required" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" id="close_tab_save" name="save" class="btn-primary btn">Close Tab</button>
+            </div>
+        </div>
+    </form>
 {% endblock %}
