@@ -31,9 +31,9 @@ class TabEverythingTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', '/tab/open');
 
-        $form                          = $crawler->selectButton('Open Tab')->form();
-        $form['open_tab[tableNumber]'] = $this->tableNumber;
-        $form['open_tab[waiter]']      = 'Anastasia';
+        $form                = $crawler->selectButton('Open Tab')->form();
+        $form['tableNumber'] = $this->tableNumber;
+        $form['waiter']      = 'Anastasia';
 
         $this->client->submit($form);
 
