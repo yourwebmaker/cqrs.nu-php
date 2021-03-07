@@ -156,7 +156,7 @@ class TabTest extends TestCase
     /**
      * @test
      */
-    public function cannot_server_an_ordered_drink_twice(): void
+    public function cannot_serve_an_ordered_drink_twice(): void
     {
         $this->expectException(DrinksNotOutstanding::class);
 
@@ -169,7 +169,7 @@ class TabTest extends TestCase
     /**
      * @test
      */
-    public function cannot_server_a_drink_if_the_table_is_colsed(): void
+    public function cannot_serve_a_drink_if_the_table_is_colsed(): void
     {
         $this->expectException(TabNotOpen::class);
 
