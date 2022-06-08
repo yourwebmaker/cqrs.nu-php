@@ -147,7 +147,6 @@ final class Tab implements AggregateRoot
 
     private function applyDrinksOrdered(DrinksOrdered $event): void
     {
-        $this->outstandingDrinks = new ArrayCollection();
         foreach ($event->items as $item) {
             $this->outstandingDrinks->add($item);
         }
@@ -155,7 +154,6 @@ final class Tab implements AggregateRoot
 
     private function applyFoodOrdered(FoodOrdered $event): void
     {
-        $this->outstandingFood = new ArrayCollection();
         foreach ($event->items as $item) {
             $this->outstandingFood->add($item);
         }
