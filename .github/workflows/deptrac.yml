@@ -10,4 +10,4 @@ jobs:
       - name: deptrac
         uses: docker://smoench/deptrac-action:latest
         with:
-          args: analyse depfile.yaml
+          args: analyse deptrac.yaml
