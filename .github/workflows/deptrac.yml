@@ -1,6 +1,5 @@
+on: [push, pull_request]
 name: Deptrac
-
-on: push
 
 jobs:
   deptrac:
@@ -9,4 +8,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: deptrac
-        uses: smoench/deptrac-action@master
+        uses: docker://smoench/deptrac-action:latest
+        with:
+          args: analyse depfile.yaml
