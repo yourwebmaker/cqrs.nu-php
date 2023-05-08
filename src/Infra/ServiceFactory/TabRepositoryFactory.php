@@ -10,7 +10,9 @@ use Cafe\Infra\Read\ChefTodoProjector;
 use Cafe\Infra\Read\TabProjector;
 use Cafe\Infra\TabRepositoryEventSauce;
 use Doctrine\DBAL\Connection;
-use EventSauce\DoctrineMessageRepository\DoctrineMessageRepository;
+use EventSauce\MessageRepository\DoctrineMessageRepository\DoctrineUuidV4MessageRepository;
+use EventSauce\MessageRepository\TableSchema\DefaultTableSchema;
+use EventSauce\UuidEncoding\BinaryUuidEncoder;
 use EventSauce\EventSourcing\ConstructingAggregateRootRepository;
 use EventSauce\EventSourcing\Serialization\ConstructingMessageSerializer;
 use EventSauce\EventSourcing\SynchronousMessageDispatcher;
@@ -29,10 +31,10 @@ class TabRepositoryFactory
         return new TabRepositoryEventSauce(
             new ConstructingAggregateRootRepository(
                 Tab::class,
-                new DoctrineMessageRepository(
-                    $this->connection,
-                    new ConstructingMessageSerializer(),
-                    'aggregate_tab'
+                new DoctrineUuidV4MessageRepository(
+                    connection: $this->connection,
+                    tableName: 'aggregate_tab',
+                    serializer: new ConstructingMessageSerializer(),
                 ),
                 new SynchronousMessageDispatcher(
                     new TabProjector($this->connection),

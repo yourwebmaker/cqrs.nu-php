@@ -63,7 +63,7 @@ final class TabController extends AbstractController
         $menu = StaticData::getMenu();
 
         if ($request->isMethod(Request::METHOD_POST)) {
-            $orderedItems = array_map(static fn ($value) => (int) $value, $request->request->get('quantity'));
+            $orderedItems = array_map(static fn ($value) => $value, $request->request->all('quantity'));
             $tabId        = $this->queries->tabIdForTable($tableNumber);
             $this->commandBus->handle(new PlaceOrderCommand($tabId, $orderedItems));
 
@@ -92,7 +92,7 @@ final class TabController extends AbstractController
      */
     public function markServed(int $tableNumber, Request $request)
     {
-        $menuNumbers = array_map(static fn (string $itemString) => (int) $itemString, $request->request->get('items'));
+        $menuNumbers = array_map(static fn (string $itemString) => (int) $itemString, $request->request->all('items'));
         $tabId       = $this->queries->tabIdForTable($tableNumber);
         $this->commandBus->handle(new MarkItemsServedCommand($tabId, $menuNumbers));
 

@@ -31,7 +31,7 @@ final class TabClosed implements SerializablePayload
         ];
     }
 
-    public static function fromPayload(array $payload): SerializablePayload
+    public static function fromPayload(array $payload): static
     {
         return new self(
             $payload['tabId'],

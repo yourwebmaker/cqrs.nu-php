@@ -18,16 +18,15 @@ final class Version20201026165342 extends AbstractMigration
     {
         //Tab aggregate table
         $this->addSql('
-            CREATE TABLE IF NOT EXISTS aggregate_tab (
-                event_id VARCHAR(36) NOT NULL,
-                event_type VARCHAR(100) NOT NULL,
-                aggregate_root_id VARCHAR(36) NOT NULL,
-                aggregate_root_version MEDIUMINT(36) UNSIGNED NOT NULL,
-                time_of_recording DATETIME(6) NOT NULL,
-                payload JSON NOT NULL,
-                INDEX aggregate_root_id (aggregate_root_id),
-                UNIQUE KEY unique_id_and_version (aggregate_root_id, aggregate_root_version ASC)
-            ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci ENGINE = InnoDB
+            CREATE TABLE IF NOT EXISTS `aggregate_tab` (
+                `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+                `event_id` BINARY(16) NOT NULL,
+                `aggregate_root_id` BINARY(16) NOT NULL,
+                `version` int(20) unsigned NULL,
+                `payload` varchar(16001) NOT NULL,
+                PRIMARY KEY (`id` ASC),
+                KEY `reconstitution` (`aggregate_root_id`, `version` ASC)
+            ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci ENGINE=InnoDB;
         ');
 
         //Tab Read Model

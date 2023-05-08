@@ -19,7 +19,7 @@ final class TabOpened implements SerializablePayload
         $this->waiter      = $waiter;
     }
 
-    public static function fromPayload(array $payload): self
+    public static function fromPayload(array $payload): static
     {
         return new self($payload['tabId'], $payload['tableNumber'], $payload['waiter']);
     }

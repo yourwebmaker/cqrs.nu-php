@@ -17,7 +17,7 @@
                     <td>{{ item.menuNumber }}</td>
                     <td>{{ item.description }}</td>
                     <td>
-                        <input type="number" min="1" name="quantity[{{ item.menuNumber }}]">
+                        <input type="number" name="quantity[{{ item.menuNumber }}]" value="0">
                     </td>
                 </tr>
                 {% endfor %}
