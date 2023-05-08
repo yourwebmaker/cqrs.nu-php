@@ -6,9 +6,8 @@
     <arg name="basepath" value="."/>
     <arg name="cache" value=".phpcs-cache"/>
     <arg name="colors"/>
+    <arg name="parallel" value="80"/>
     <arg name="extensions" value="php"/>
-
-    <config name="php_version" value="80001"/>
 
     <rule ref="Doctrine">
         <exclude name="SlevomatCodingStandard.TypeHints.ParameterTypeHint"/>
