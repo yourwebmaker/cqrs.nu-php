@@ -8,8 +8,6 @@ use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
 final class TabClosed implements SerializablePayload
 {
-    public string $tabId;
-
     public function __construct(
         public string $tabId,
         public float $amountPaid,
