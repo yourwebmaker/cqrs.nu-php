@@ -13,11 +13,8 @@ use function assert;
 
 class TabRepositoryEventSauce implements TabRepository
 {
-    private AggregateRootRepository $repository;
-
-    public function __construct(AggregateRootRepository $repository)
+    public function __construct(private AggregateRootRepository $repository)
     {
-        $this->repository = $repository;
     }
 
     public function save(Tab $tab): void

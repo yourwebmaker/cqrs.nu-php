@@ -8,27 +8,16 @@ use function count;
 
 final class TabStatus
 {
-    public string $tabId;
-    public int $tableNumber;
-    /** @var array<TabItem> */
-    public array $toServe;
-    /** @var array<TabItem> */
-    public array $inPreparation;
-    /** @var array<TabItem> */
-    public array $served;
-
-    public function __construct(string $tabId, int $tableNumber, array $toServe, array $inPreparation, array $served)
-    {
-        $this->tabId         = $tabId;
-        $this->tableNumber   = $tableNumber;
-        $this->toServe       = $toServe;
-        $this->inPreparation = $inPreparation;
-        $this->served        = $served;
+    public function __construct(
+        public string $tabId,
+        public int $tableNumber,
+        public array $toServe,
+        public array $inPreparation,
+        public array $served,
+    ) {
     }
 
-    /**
-     * @return array<TabItem>
-     */
+    /** @return array<TabItem> */
     public function getItemsToServe(): array
     {
         return $this->toServe;

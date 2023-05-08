@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Cafe\Domain\Tab;
 
-final class TabId implements \EventSauce\EventSourcing\AggregateRootId
+use EventSauce\EventSourcing\AggregateRootId;
+
+final class TabId implements AggregateRootId
 {
     private function __construct(private string $id)
     {

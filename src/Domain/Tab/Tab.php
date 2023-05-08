@@ -164,7 +164,7 @@ final class Tab implements AggregateRoot
     {
         foreach ($event->menuNumbers as $num) {
             $item = $this->outstandingDrinks->filter(
-                static fn (OrderedItem $drink) => $drink->menuNumber === $num
+                static fn (OrderedItem $drink) => $drink->menuNumber === $num,
             )->first();
 
             assert($item instanceof OrderedItem);
@@ -177,7 +177,7 @@ final class Tab implements AggregateRoot
     {
         foreach ($event->menuNumbers as $num) {
             $item = $this->outstandingFood->filter(
-                static fn (OrderedItem $food) => $food->menuNumber === $num
+                static fn (OrderedItem $food) => $food->menuNumber === $num,
             )->first();
 
             assert($item instanceof OrderedItem);
@@ -201,25 +201,19 @@ final class Tab implements AggregateRoot
         $this->open = false;
     }
 
-    /**
-     * @param array<int> $menuNumbers
-     */
+    /** @param array<int> $menuNumbers */
     private function areDrinksOutstanding(array $menuNumbers): bool
     {
         return $this->areAllInList($menuNumbers, $this->outstandingDrinks->toArray());
     }
 
-    /**
-     * @param array<int> $menuNumbers
-     */
+    /** @param array<int> $menuNumbers */
     private function isFoodOutstanding(array $menuNumbers): bool
     {
         return $this->areAllInList($menuNumbers, $this->outstandingFood->toArray());
     }
 
-    /**
-     * @param array<int> $menuNumbers
-     */
+    /** @param array<int> $menuNumbers */
     private function isFoodPrepared(array $menuNumbers): bool
     {
         return $this->areAllInList($menuNumbers, $this->preparedFood->toArray());

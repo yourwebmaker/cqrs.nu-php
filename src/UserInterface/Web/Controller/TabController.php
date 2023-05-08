@@ -21,18 +21,11 @@ use function array_map;
 
 final class TabController extends AbstractController
 {
-    private OpenTabsQueries $queries;
-    private CommandBus $commandBus;
-
-    public function __construct(OpenTabsQueries $queries, CommandBus $commandBus)
+    public function __construct(private OpenTabsQueries $queries, private CommandBus $commandBus)
     {
-        $this->queries    = $queries;
-        $this->commandBus = $commandBus;
     }
 
-    /**
-     * @Route(path="tab/open", name="tab_open_get", methods={"GET"})
-     */
+    /** @Route(path="tab/open", name="tab_open_get", methods={"GET"}) */
     public function openGet(Request $request): Response
     {
         return $this->render('tab/open.html.twig', [
@@ -40,9 +33,7 @@ final class TabController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route(path="tab/open", name="tab_open_post", methods={"POST"})
-     */
+    /** @Route(path="tab/open", name="tab_open_post", methods={"POST"}) */
     public function openPost(Request $request): Response
     {
         $tableNumber = $request->request->getInt('tableNumber');
@@ -55,9 +46,7 @@ final class TabController extends AbstractController
         return $this->redirectToRoute('tab_order', ['tableNumber' => $tableNumber]);
     }
 
-    /**
-     * @Route(path="tab/{tableNumber}/order", name="tab_order")
-     */
+    /** @Route(path="tab/{tableNumber}/order", name="tab_order") */
     public function order(int $tableNumber, Request $request): Response
     {
         $menu = StaticData::getMenu();
@@ -76,9 +65,7 @@ final class TabController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route(path="tab/{tableNumber}/status", name="tab_status")
-     */
+    /** @Route(path="tab/{tableNumber}/status", name="tab_status") */
     public function status(int $tableNumber): Response
     {
         return $this->render('tab/status.html.twig', [
@@ -87,9 +74,7 @@ final class TabController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route(path="tab/{tableNumber}/mark-served", name="tab_mark_served")
-     */
+    /** @Route(path="tab/{tableNumber}/mark-served", name="tab_mark_served") */
     public function markServed(int $tableNumber, Request $request)
     {
         $menuNumbers = array_map(static fn (string $itemString) => (int) $itemString, $request->request->all('items'));
@@ -99,9 +84,7 @@ final class TabController extends AbstractController
         return $this->redirectToRoute('tab_status', ['tableNumber' => $tableNumber]);
     }
 
-    /**
-     * @Route(path="tab/{tableNumber}/close", name="tab_close_get", methods={"GET"})
-     */
+    /** @Route(path="tab/{tableNumber}/close", name="tab_close_get", methods={"GET"}) */
     public function closeGet(int $tableNumber, Request $request): Response
     {
         return $this->render('tab/close.html.twig', [
@@ -109,14 +92,12 @@ final class TabController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route(path="tab/{tableNumber}/close", name="tab_close_post", methods={"POST"})
-     */
+    /** @Route(path="tab/{tableNumber}/close", name="tab_close_post", methods={"POST"}) */
     public function closePost(int $tableNumber, Request $request): Response
     {
         $this->commandBus->handle(new CloseTabCommand(
             $this->queries->tabIdForTable($tableNumber),
-            (float) $request->request->getDigits('amountPaid')
+            (float) $request->request->getDigits('amountPaid'),
         ));
 
         return $this->redirectToRoute('home');

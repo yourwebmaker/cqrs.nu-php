@@ -6,15 +6,7 @@ namespace Cafe\Application\Read\ChefTodoList;
 
 final class TodoListGroup
 {
-    public string $groupId;
-    public string $tabId;
-    /** @var array<TodoListItem> */
-    public array $items;
-
-    public function __construct(string $groupId, string $tabId, array $items)
+    public function __construct(public string $groupId, public string $tabId, public array $items)
     {
-        $this->groupId = $groupId;
-        $this->tabId   = $tabId;
-        $this->items   = $items;
     }
 }

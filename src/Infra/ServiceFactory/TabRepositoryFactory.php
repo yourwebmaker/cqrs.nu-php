@@ -10,20 +10,15 @@ use Cafe\Infra\Read\ChefTodoProjector;
 use Cafe\Infra\Read\TabProjector;
 use Cafe\Infra\TabRepositoryEventSauce;
 use Doctrine\DBAL\Connection;
-use EventSauce\MessageRepository\DoctrineMessageRepository\DoctrineUuidV4MessageRepository;
-use EventSauce\MessageRepository\TableSchema\DefaultTableSchema;
-use EventSauce\UuidEncoding\BinaryUuidEncoder;
 use EventSauce\EventSourcing\ConstructingAggregateRootRepository;
 use EventSauce\EventSourcing\Serialization\ConstructingMessageSerializer;
 use EventSauce\EventSourcing\SynchronousMessageDispatcher;
+use EventSauce\MessageRepository\DoctrineMessageRepository\DoctrineUuidV4MessageRepository;
 
 class TabRepositoryFactory
 {
-    private Connection $connection;
-
-    public function __construct(Connection $connection)
+    public function __construct(private Connection $connection)
     {
-        $this->connection = $connection;
     }
 
     public function create(): TabRepository
@@ -39,8 +34,8 @@ class TabRepositoryFactory
                 new SynchronousMessageDispatcher(
                     new TabProjector($this->connection),
                     new ChefTodoProjector($this->connection),
-                )
-            )
+                ),
+            ),
         );
     }
 }
