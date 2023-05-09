@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% block title %}Open Tabs{% endblock %}
+{% block title %}{{ 'home.opened'|trans }}{% endblock %}
 {% block content %}
     <div class="row row-cols-4">
         {% for tableNumber in activeTables.activeTableNumbers() %}
