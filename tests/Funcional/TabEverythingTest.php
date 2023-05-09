@@ -24,9 +24,7 @@ class TabEverythingTest extends WebTestCase
         $this->client      = self::createClient();
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function can_open_tab(): int
     {
         $crawler = $this->client->request('GET', '/tab/open');

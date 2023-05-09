@@ -8,8 +8,6 @@ use Cafe\Application\Read\ChefTodoList\TodoListGroup;
 
 interface ChefTodoListQueries
 {
-    /**
-     * @return array<TodoListGroup>
-     */
+    /** @return array<TodoListGroup> */
     public function getTodoList(): array;
 }

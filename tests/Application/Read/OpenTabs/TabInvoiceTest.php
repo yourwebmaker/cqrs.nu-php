@@ -24,25 +24,19 @@ class TabInvoiceTest extends TestCase
         $this->invoice = new TabInvoice('tabId', $this->tableNumber, $items);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function get_total(): void
     {
         self::assertEquals(8.00, $this->invoice->getTotal());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function get_total_sums_only_served_items(): void
     {
         self::assertEquals(8.00, $this->invoice->getTotal());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function get_lines(): void
     {
         $lines = [
@@ -53,9 +47,7 @@ class TabInvoiceTest extends TestCase
         self::assertEquals($lines, $this->invoice->getLines());
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function has_unserved_items(): void
     {
         self::assertTrue($this->invoice->hasUnservedItems());

@@ -2,7 +2,7 @@
 version: "3.1"
 services:
   php-fpm:
-    image: devilbox/php-fpm:8.0-work
+    image: devilbox/php-fpm:8.2-work
     container_name: cafe-fpm
     working_dir: /application
     environment:

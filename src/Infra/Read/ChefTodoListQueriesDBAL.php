@@ -11,11 +11,8 @@ use Doctrine\DBAL\Connection;
 
 class ChefTodoListQueriesDBAL implements ChefTodoListQueries
 {
-    private Connection $connection;
-
-    public function __construct(Connection $connection)
+    public function __construct(private Connection $connection)
     {
-        $this->connection = $connection;
     }
 
     public function getTodoList(): array

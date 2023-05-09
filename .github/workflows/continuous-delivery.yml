@@ -30,9 +30,9 @@ jobs:
     strategy:
       matrix:
         php:
-          - '8.0'
+          - '8.2'
         include:
-          - php: '8.0'
+          - php: '8.2'
             coverage: xdebug
       fail-fast: false
     steps:

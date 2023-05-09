@@ -17,18 +17,11 @@ use function array_map;
 
 final class ChefController extends AbstractController
 {
-    private ChefTodoListQueries $query;
-    private CommandBus $commandBus;
-
-    public function __construct(ChefTodoListQueries $query, CommandBus $commandBus)
+    public function __construct(private ChefTodoListQueries $query, private CommandBus $commandBus)
     {
-        $this->query      = $query;
-        $this->commandBus = $commandBus;
     }
 
-    /**
-     * @Route(path="/chef", name="chef_index")
-     */
+    /** @Route(path="/chef", name="chef_index") */
     public function index(): Response
     {
         return $this->render('chef/index.html.twig', [
@@ -36,12 +29,10 @@ final class ChefController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route(path="/chef/markprepared", name="chef_markprepared")
-     */
+    /** @Route(path="/chef/markprepared", name="chef_markprepared") */
     public function markPrepared(Request $request): RedirectResponse
     {
-        $menuNumbers = array_map(static fn (string $itemString) => (int) $itemString, $request->request->get('items'));
+        $menuNumbers = array_map(static fn (string $itemString) => (int) $itemString, $request->request->all('items'));
         $tabIdString = $request->request->get('tabId');
         $groupId     = $request->request->get('groupId');
 

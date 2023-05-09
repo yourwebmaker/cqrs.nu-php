@@ -17,11 +17,8 @@ use function is_int;
 
 class ChefTodoProjector implements Consumer
 {
-    private Connection $connection;
-
-    public function __construct(Connection $connection)
+    public function __construct(private Connection $connection)
     {
-        $this->connection = $connection;
     }
 
     public function handle(Message $message): void

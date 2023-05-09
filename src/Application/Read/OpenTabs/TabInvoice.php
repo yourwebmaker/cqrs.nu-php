@@ -14,16 +14,12 @@ use function count;
 
 final class TabInvoice
 {
-    public string $tabId;
-    public int $tableNumber;
     /** @var Collection<TabItem> */
     public Collection $items;
 
-    public function __construct(string $tabId, int $tableNumber, array $items)
+    public function __construct(public string $tabId, public int $tableNumber, array $items)
     {
-        $this->tabId       = $tabId;
-        $this->tableNumber = $tableNumber;
-        $this->items       = new ArrayCollection($items);
+        $this->items = new ArrayCollection($items);
     }
 
     public function getLines(): array
@@ -45,7 +41,7 @@ final class TabInvoice
                     $item->description,
                     count($groupedItems[$menuNumber]),
                     $item->price,
-                    count($groupedItems[$menuNumber]) * $item->price
+                    count($groupedItems[$menuNumber]) * $item->price,
                 );
             }
         }

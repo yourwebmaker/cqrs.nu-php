@@ -14,16 +14,11 @@ use function array_map;
 
 class OpenTabsQueriesDBAL implements OpenTabsQueries
 {
-    private Connection $connection;
-
-    public function __construct(Connection $connection)
+    public function __construct(private Connection $connection)
     {
-        $this->connection = $connection;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function activeTableNumbers(): array
     {
         $sql = 'select table_number from read_model_tab order by table_number asc';
@@ -79,17 +74,13 @@ class OpenTabsQueriesDBAL implements OpenTabsQueries
         return new TabStatus($tabId, $tableNumber, $toServe, $inPreparation, $served);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function todoListForWaiter(string $waiter): array
     {
         // TODO: Implement todoListForWaiter() method.
     }
 
-    /**
-     * @return array<TabItem>
-     */
+    /** @return array<TabItem> */
     private function hydrateItems(string $tabId): array
     {
         $sql       = 'select * from read_model_tab_item where tab_id = :tab_id';
@@ -100,9 +91,9 @@ class OpenTabsQueriesDBAL implements OpenTabsQueries
                 (int) $row['menu_number'],
                 $row['description'],
                 (float) $row['price'],
-                $row['status']
+                $row['status'],
             ),
-            $rowsItems
+            $rowsItems,
         );
 
         return $items;
