@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 return [
     'home' => ['opened' => 'Comandas abertas'],
     'tab' => [
@@ -8,7 +11,7 @@ return [
         'close' => 'Fechar comanda',
         'for_table' => 'Comanda pra a mesa #%number%',
         'has_unserved_items' => "There're unserved items for this table. You won't be able to close it.",
-        'total' => "Total",
+        'total' => 'Total',
         'amount_paid' => 'Total pago',
         'no_open' => 'Não nenhuma comanda aberta. <a href="%open_tab_url%">Abra uma</a> e faça os pedidos',
     ],
@@ -24,9 +27,7 @@ return [
         'subtotal' => 'Sub-total',
         'price_unit' => 'Preço unitário',
     ],
-    'order' => [
-        'order' => 'Fazer pedido',
-    ],
+    'order' => ['order' => 'Fazer pedido'],
     'chef' => [
         'todo' => 'Cozinha',
         'no_items' => 'Não há items a serem preparados',
@@ -35,7 +36,5 @@ return [
         'todo' => 'Comandas por garçom',
         'waiter' => 'Waiter',
     ],
-    'app' => [
-        'name' => 'Comanda Fácil',
-    ]
+    'app' => ['name' => 'Comanda Fácil'],
 ];

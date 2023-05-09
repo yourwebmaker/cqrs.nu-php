@@ -1,6 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 return [
-    'home' => [
-        'opened' => 'Open tabs'
-    ]
+    'home' => ['opened' => 'Open tabs'],
 ];
