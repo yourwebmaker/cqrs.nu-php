@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
-{% block title %}Close tab{% endblock %}
+{% block title %}{{ 'tab.close'|trans }}{% endblock %}
 {% block content %}
 
     <table class="table table-bordered">
         <thead class="thead-light">
             <tr>
-                <th scope="col">Description</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Price each</th>
-                <th scope="col">Sub total</th>
+                <th scope="col">{{ 'item.description'|trans }}</th>
+                <th scope="col">{{ 'item.quantity'|trans }}</th>
+                <th scope="col">{{ 'item.price_unit'|trans }}</th>
+                <th scope="col">{{ 'item.subtotal'|trans }}</th>
             </tr>
         </thead>
 
@@ -25,7 +25,7 @@
 
         <tfoot>
             <tr>
-                <td colspan="4"><strong>Total: {{ invoice.total|format_currency('EUR') }}</strong></td>
+                <td colspan="4"><strong>{{ 'tab.total'|trans }}: {{ invoice.total|format_currency('EUR') }}</strong></td>
             </tr>
         </tfoot>
     </table>
@@ -34,14 +34,14 @@
 
     {% if invoice.hasUnservedItems() %}
         <div class="alert alert-danger" role="alert">
-            There're unserved items for this table. You won't be able to close it.
+            {{ 'tab.has_unserved_items'|trans }}
         </div>
     {% endif %}
 
     <form name="close_tab" method="post" _lpchecked="1">
         <div id="close_tab">
             <div class="form-group">
-                <label for="close_tab_amountPaid" class="required">Amount paid</label>
+                <label for="close_tab_amountPaid" class="required">{{ 'tab.amount_paid'|trans }}</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text">€ </span>
@@ -50,7 +50,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <button type="submit" id="close_tab_save" name="save" class="btn-primary btn">Close Tab</button>
+                <button type="submit" id="close_tab_save" name="save" class="btn-primary btn">{{ 'tab.close'|trans }}</button>
             </div>
         </div>
     </form>

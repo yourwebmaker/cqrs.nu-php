@@ -24,7 +24,7 @@ final class ChefController extends AbstractController
     /** @Route(path="/chef", name="chef_index") */
     public function index(): Response
     {
-        return $this->render('chef/index.html.twig', [
+        return $this->render('chef/todo.html.twig', [
             'groups' => $this->query->getTodoList(),
         ]);
     }
