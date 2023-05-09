@@ -15,11 +15,8 @@ use function is_int;
 
 class TabHandler
 {
-    private TabRepository $repository;
-
-    public function __construct(TabRepository $repository)
+    public function __construct(private TabRepository $repository)
     {
-        $this->repository = $repository;
     }
 
     public function handleOpenTabCommand(OpenTabCommand $command): void

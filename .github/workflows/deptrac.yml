@@ -1,4 +1,4 @@
-on: [push, pull_request]
+on: [push]
 name: Deptrac
 
 jobs:
@@ -10,4 +10,4 @@ jobs:
       - name: deptrac
         uses: docker://smoench/deptrac-action:latest
         with:
-          args: analyse deptrac.yaml
+          args: analyse

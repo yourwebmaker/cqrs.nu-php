@@ -22,7 +22,6 @@ use Doctrine\Common\Collections\Collection;
 use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\AggregateRootBehaviourWithRequiredHistory;
 use EventSauce\EventSourcing\AggregateRootId;
-use EventSauce\EventSourcing\UuidAggregateRootId;
 
 use function array_map;
 use function array_search;
@@ -53,7 +52,7 @@ final class Tab implements AggregateRoot
 
     public static function open(string $tabId, int $tableNumber, string $waiter): self
     {
-        $tab = new static(UuidAggregateRootId::fromString($tabId));
+        $tab = new static(TabId::fromString($tabId));
 
         $tab->recordThat(new TabOpened($tabId, $tableNumber, $waiter));
 
@@ -163,7 +162,7 @@ final class Tab implements AggregateRoot
     {
         foreach ($event->menuNumbers as $num) {
             $item = $this->outstandingDrinks->filter(
-                static fn (OrderedItem $drink) => $drink->menuNumber === $num
+                static fn (OrderedItem $drink) => $drink->menuNumber === $num,
             )->first();
 
             assert($item instanceof OrderedItem);
@@ -176,7 +175,7 @@ final class Tab implements AggregateRoot
     {
         foreach ($event->menuNumbers as $num) {
             $item = $this->outstandingFood->filter(
-                static fn (OrderedItem $food) => $food->menuNumber === $num
+                static fn (OrderedItem $food) => $food->menuNumber === $num,
             )->first();
 
             assert($item instanceof OrderedItem);
@@ -200,25 +199,19 @@ final class Tab implements AggregateRoot
         $this->open = false;
     }
 
-    /**
-     * @param array<int> $menuNumbers
-     */
+    /** @param array<int> $menuNumbers */
     private function areDrinksOutstanding(array $menuNumbers): bool
     {
         return $this->areAllInList($menuNumbers, $this->outstandingDrinks->toArray());
     }
 
-    /**
-     * @param array<int> $menuNumbers
-     */
+    /** @param array<int> $menuNumbers */
     private function isFoodOutstanding(array $menuNumbers): bool
     {
         return $this->areAllInList($menuNumbers, $this->outstandingFood->toArray());
     }
 
-    /**
-     * @param array<int> $menuNumbers
-     */
+    /** @param array<int> $menuNumbers */
     private function isFoodPrepared(array $menuNumbers): bool
     {
         return $this->areAllInList($menuNumbers, $this->preparedFood->toArray());

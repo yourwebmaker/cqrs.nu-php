@@ -10,9 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class WaitStaffController extends AbstractController
 {
-    /**
-     * @Route(name="waitstaff_todo", path="waitstaff/{id}/todo")
-     */
+    /** @Route(name="waitstaff_todo", path="waitstaff/{id}/todo") */
     public function todo(string $id): Response
     {
         return $this->render('wait_staff/todo.html.twig', ['waiter' => $id]);

@@ -13,11 +13,8 @@ use League\Tactician\Handler\MethodNameInflector\HandleClassNameInflector;
 
 class TacticianFactory
 {
-    private TabHandler $handler;
-
-    public function __construct(TabHandler $handler)
+    public function __construct(private TabHandler $handler)
     {
-        $this->handler = $handler;
     }
 
     public function create(): CommandBus
@@ -26,11 +23,8 @@ class TacticianFactory
             new ClassNameExtractor(),
             new class ($this->handler) implements HandlerLocator
             {
-                private TabHandler $handler;
-
-                public function __construct(TabHandler $handler)
+                public function __construct(private TabHandler $handler)
                 {
-                    $this->handler = $handler;
                 }
 
                 public function getHandlerForCommand($commandName)

@@ -10,9 +10,7 @@ use Cafe\Application\Read\OpenTabs\TabStatus;
 
 interface OpenTabsQueries
 {
-    /**
-     * @return array<int>
-     */
+    /** @return array<int> */
     public function activeTableNumbers(): array;
 
     public function invoiceForTable(int $tableNumber): TabInvoice;
@@ -21,8 +19,6 @@ interface OpenTabsQueries
 
     public function tabForTable(int $tableNumber): TabStatus;
 
-    /**
-     * @return array<int, array<TabItem>>
-     */
+    /** @return array<int, array<TabItem>> */
     public function todoListForWaiter(string $waiter): array;
 }

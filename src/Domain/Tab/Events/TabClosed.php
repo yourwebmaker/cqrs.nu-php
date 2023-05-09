@@ -8,17 +8,12 @@ use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
 final class TabClosed implements SerializablePayload
 {
-    public string $tabId; //todo use simple strings for this shit.
-    public float $amountPaid;
-    public float $orderValue;
-    public float $tipValue;
-
-    public function __construct(string $tabId, float $amountPaid, float $orderValue, float $tipValue)
-    {
-        $this->tabId      = $tabId;
-        $this->amountPaid = $amountPaid;
-        $this->orderValue = $orderValue;
-        $this->tipValue   = $tipValue;
+    public function __construct(
+        public string $tabId,
+        public float $amountPaid,
+        public float $orderValue,
+        public float $tipValue,
+    ) {
     }
 
     public function toPayload(): array
@@ -31,7 +26,7 @@ final class TabClosed implements SerializablePayload
         ];
     }
 
-    public static function fromPayload(array $payload): SerializablePayload
+    public static function fromPayload(array $payload): static
     {
         return new self(
             $payload['tabId'],
