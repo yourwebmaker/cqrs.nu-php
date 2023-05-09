@@ -29,7 +29,7 @@ class TabEverythingTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', '/tab/open');
 
-        $form                = $crawler->selectButton('Open Tab')->form();
+        $form                = $crawler->selectButton('save')->form();
         $form['tableNumber'] = $this->tableNumber;
         $form['waiter']      = 'Anastasia';
 
@@ -48,7 +48,7 @@ class TabEverythingTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', '/tab/' . $tableNumber . '/order');
 
-        $form                 = $crawler->selectButton('Place Order')->form();
+        $form                 = $crawler->selectButton('place_order')->form();
         $form['quantity[1]']  = 1;
         $form['quantity[14]'] = 1;
 
@@ -121,7 +121,7 @@ class TabEverythingTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', '/tab/' . $tableNumber . '/close');
 
-        $form               = $crawler->selectButton('Close Tab')->form();
+        $form               = $crawler->selectButton('save')->form();
         $form['amountPaid'] = 50;
 
         $this->client->submit($form);

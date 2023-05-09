@@ -1,0 +1,13 @@
+framework:
+    default_locale: pt_BR
+    translator:
+        default_path: '%kernel.project_dir%/src/UserInterface/Web/translations'
+        fallbacks:
+            - en
+#        providers:
+#            crowdin:
+#                dsn: '%env(CROWDIN_DSN)%'
+#            loco:
+#                dsn: '%env(LOCO_DSN)%'
+#            lokalise:
+#                dsn: '%env(LOKALISE_DSN)%'

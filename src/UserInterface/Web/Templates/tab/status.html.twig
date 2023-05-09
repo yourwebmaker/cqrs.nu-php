@@ -1,19 +1,19 @@
 {% extends 'base.html.twig' %}
-{% block title %}Tab Status{% endblock %}
+{% block title %}{{ 'tab.status'|trans }}{% endblock %}
 {% block content %}
-    <h3>Tab For Table {{tableNumber}}</h3>
-    <a href="{{ path('tab_close_get', {tableNumber: tableNumber}) }}" class="btn btn-success">Close Table</a>
-    <a href="{{ path('tab_order', {tableNumber: tableNumber}) }}" class="btn btn-success">Order Food/Drink</a>
+    <h3>{{ 'tab.for_table'|trans({'%number%': tableNumber}) }}</h3>
+    <a href="{{ path('tab_close_get', {tableNumber: tableNumber}) }}" class="btn btn-success">{{ 'tab.close'|trans }}</a>
+    <a href="{{ path('tab_order', {tableNumber: tableNumber}) }}" class="btn btn-success">{{ 'order.order'|trans }}</a>
 
     {% if tab.hasItemsToServe %}
         <form action="{{ path('tab_mark_served', {'tableNumber': tableNumber}) }}" method="post">
-        <h3>Items To Serve</h3>
+        <h3>{{ 'item.to_serve'|trans }}</h3>
         <table class="table table-bordered">
             <thead class="thead-light">
             <tr>
-                <th scope="col">Menu #</th>
-                <th scope="col">Description</th>
-                <th scope="col">Mark Served</th>
+                <th scope="col">{{ 'item.number'|trans }}</th>
+                <th scope="col">{{ 'item.description'|trans }}</th>
+                <th scope="col">{{ 'item.mark_as_served'|trans }}</th>
             </tr>
             </thead>
             <tbody>
@@ -26,17 +26,17 @@
             {% endfor %}
             </tbody>
         </table>
-        <button type="submit" class="btn btn-primary" name="mark-served">Mark Served</button>
+        <button type="submit" class="btn btn-primary" name="mark-served">{{ 'item.mark_as_served'|trans }}</button>
         </form>
     {% endif %}
 
     {% if tab.hasItemsInPreparation() %}
-        <h3>Food In Preparation</h3>
+        <h3>{{ 'item.in_preparation'|trans }}</h3>
         <table class="table table-bordered">
             <thead class="thead-light">
                 <tr>
-                    <th scope="col">Menu #</th>
-                    <th scope="col">Description</th>
+                    <th scope="col">{{ 'item.number'|trans }}</th>
+                    <th scope="col">{{ 'item.description'|trans }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,12 +51,12 @@
     {% endif %}
 
     {% if tab.hasItemsServed() %}
-        <h3>Items Already Served</h3>
+        <h3>{{ 'item.served'|trans }}</h3>
         <table class="table table-bordered">
             <thead class="thead-light">
                 <tr>
-                    <th scope="col">Menu #</th>
-                    <th scope="col">Description</th>
+                    <th scope="col">{{ 'item.number'|trans }}</th>
+                    <th scope="col">{{ 'item.description'|trans }}</th>
                 </tr>
             </thead>
             <tbody>

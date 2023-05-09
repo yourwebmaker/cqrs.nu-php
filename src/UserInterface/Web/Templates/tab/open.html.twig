@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
-{% block title %}Open tab{% endblock %}
+{% block title %}{{ 'tab.open'|trans }}{% endblock %}
 {% block content %}
     <form name="open_tab" method="post">
         <div id="open_tab">
             <div class="form-group">
-                <label for="open_tab_tableNumber" class="required">Table number</label>
+                <label for="open_tab_tableNumber" class="required">{{ 'tab.table_number'|trans }}</label>
                 <input type="number" id="open_tab_tableNumber" name="tableNumber" required="required" class="form-control">
             </div>
             <div class="form-group">
-                    <label class="required" for="open_tab_waiter">Waiter</label>
+                    <label class="required" for="open_tab_waiter">{{ 'waiter.waiter'|trans }}</label>
                     <select id="open_tab_waiter" name="waiter" class="form-control">
                         {% for waiter in waiters %}
                         <option value="{{ waiter }}">{{ waiter }}</option>
@@ -16,7 +16,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <button type="submit" id="open_tab_save" name="save" class="btn-primary btn">Open Tab</button>
+                <button type="submit" id="open_tab_save" name="save" class="btn-primary btn">{{ 'tab.open'|trans }}</button>
             </div>
         </div>
     </form>

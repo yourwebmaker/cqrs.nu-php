@@ -8,11 +8,11 @@
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
         <link rel="stylesheet" href="/style.css">
-        <title>{% block title %}Cafe!{% endblock %}</title>
+        <title>{% block title %}{{ 'app.name'|trans }}{% endblock %}</title>
     </head>
     <body>
         <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="{{ path('home') }}">Cafe</a>
+            <a class="navbar-brand" href="{{ path('home') }}">{{ 'app.name'|trans }}</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -20,10 +20,10 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('tab_open_get') }}">Open Tab</a>
+                        <a class="nav-link" href="{{ path('tab_open_get') }}">{{ 'tab.open'|trans }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('chef_index') }}">Chef Todo List</a>
+                        <a class="nav-link" href="{{ path('chef_index') }}">{{ 'chef.todo'|trans }}</a>
                     </li>
                 </ul>
             </div>
@@ -33,7 +33,7 @@
                 <nav class="col-md-2 d-none d-md-block bg-light sidebar">
                     <div class="sidebar-sticky">
                         <ul class="list-unstyled">
-                            <li><h6>Wait Staff Todo Lists</h6>
+                            <li><h6>{{ 'waiter.todo'|trans }}</h6>
                                 <ul>
                                     {% for w in staticData.getWaitStaff() %}
                                         <li><a href="{{ path('waitstaff_todo', {id : w}) }}">{{ w }}</a></li>

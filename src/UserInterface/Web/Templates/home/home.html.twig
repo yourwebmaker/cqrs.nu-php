@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% block title %}Open Tabs{% endblock %}
+{% block title %}{{ 'home.opened'|trans }}{% endblock %}
 {% block content %}
     <div class="row row-cols-4">
         {% for tableNumber in activeTables.activeTableNumbers() %}
@@ -10,7 +10,7 @@
             </div>
         {% else %}
             <div class="col">
-                No open tabs. Please <a href="{{ path('tab_open') }}">open a tab</a> and order.
+                {{ 'tab.no_open'|trans({'%open_tab_url%': open_tab_url})|raw }}
             </div>
         {% endfor %}
     </div>

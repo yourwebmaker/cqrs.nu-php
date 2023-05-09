@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% block title %}Chef Todo List{% endblock %}
+{% block title %}{{ 'chef.todo'|trans }}{% endblock %}
 {% block content %}
     {% for group in groups %}
         <form action="{{ path('chef_markprepared') }}" method="post">
@@ -8,9 +8,9 @@
             <table class="table table-bordered">
                 <thead class="thead-light">
                 <tr>
-                    <th scope="col">Menu #</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Prepared</th>
+                    <th scope="col">{{ 'item.number'|trans }}</th>
+                    <th scope="col">{{ 'item.description'|trans }}</th>
+                    <th scope="col">{{ 'item.mark_as_prepared'|trans }}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -24,10 +24,10 @@
                 </tbody>
             </table>
 
-            <button type="submit" class="btn btn-primary" name="mark-prepared">Mark Prepared</button>
+            <button type="submit" class="btn btn-primary" name="mark-prepared">{{ 'item.mark_as_prepared'|trans }}</button>
             <hr />
         </form>
     {% else %}
-        <p>No items to prepare</p>
+        <p>{{ 'chef.no_items'|trans }}</p>
     {% endfor %}
 {% endblock %}
